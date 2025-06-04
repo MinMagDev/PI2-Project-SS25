@@ -21,10 +21,7 @@ public abstract class Particle {
         }
         public Vector2D getVelocity(){
             trim();
-            Vector2D velocity = new Vector2D(0, 0);
-            for(Vector2D force : forces){
-                velocity.add(force);
-            }
+            Vector2D velocity = Vector2D.massSum(forces);
             return velocity;
         }
     }
@@ -49,7 +46,9 @@ public abstract class Particle {
     }
 
     public void update(){
+        Vector2D oldPosition = position;
         position.add(getVelocity());
+        //System.out.println("Old: " + oldPosition.toString() + " New: " + position.toString());
     }
 
 }

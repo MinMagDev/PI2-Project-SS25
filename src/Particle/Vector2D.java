@@ -1,5 +1,7 @@
 package Particle;
 
+import java.util.List;
+
 public class Vector2D {
     private double x;
     private double y;
@@ -86,6 +88,18 @@ public class Vector2D {
         }
         return result;
     }
+    /**
+     * If you need to add more Vectors together
+     * @param vecs an Array of Vectors to add
+     * @return the sum of all Vectors
+     */
+    public static Vector2D massSum(List<Vector2D> vecs){
+        Vector2D result = new Vector2D();
+        for(final Vector2D vec : vecs){
+            add(result, vec, result);
+        }
+        return result;
+    }
 
     //------------------------------------------------------------
     //Different Methods to substract Vectors from another
@@ -126,10 +140,9 @@ public class Vector2D {
 
     //---------------------------------------------------------------------
 
-    public Vector2D multiplyBy(double lambda) {
+    public void multiplyBy(double lambda) {
         this.x *= lambda;
         this.y *= lambda;
-        return this;
     }
 
     public double distanceTo(Vector2D other){
@@ -138,6 +151,11 @@ public class Vector2D {
 
     public Vector2D to(Vector2D v) {
         return new Vector2D(v.x - this.x, v.y - this.y);
+    }
+
+    @Override
+    public String toString(){
+        return "(" + this.x + ", " + this.y + ")";
     }
 
 }

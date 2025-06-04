@@ -36,7 +36,9 @@ public class DebugParticle extends Particle implements DrawableSocialParticle {
 
     @Override
     public void interactWith(SocialEntity interactee) {
-        addForce(getPosition().to(interactee.getPosition()).multiplyBy(0.0001));
+        Vector2D toInteractee = getPosition().to(interactee.getPosition());
+        toInteractee.multiplyBy(0.001);
+        addForce(toInteractee);
     }
 
     public int radius;
