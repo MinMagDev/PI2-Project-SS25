@@ -1,7 +1,6 @@
 package Particle;
 
 
-import Canvas.*;
 import Social.DrawableSocialParticle;
 import Social.SocialEntity;
 
@@ -37,7 +36,7 @@ public class DebugParticle extends Particle implements DrawableSocialParticle {
     @Override
     public void interactWith(SocialEntity interactee) {
         Vector2D toInteractee = getPosition().to(interactee.getPosition());
-        toInteractee.multiplyBy(0.001);
+        toInteractee.mul(0.001);
         addForce(toInteractee);
     }
 

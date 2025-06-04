@@ -21,6 +21,10 @@ public class Vector2D {
         this.y = y;
     }
 
+    public Vector2D(Vector2D vec) {
+        this.set(vec);
+    }
+
 
     public double getX() {
         return x;
@@ -138,11 +142,73 @@ public class Vector2D {
     //---------------------------------------------------------------------
     //Multiply functions
 
-    //---------------------------------------------------------------------
-
-    public void multiplyBy(double lambda) {
+    /**
+     * Multilpies this by a skalar
+     * @param lambda The skalar
+     */
+    public void mul(double lambda) {
         this.x *= lambda;
         this.y *= lambda;
+    }
+
+    /**
+     * Multiplies a given Vector by a skalar and saves it into an output Vector
+     * @param lambda The skalar
+     * @param in The input Vector
+     * @param out The Vector to save the product to.
+     */
+    public static void mul(double lambda, Vector2D in, Vector2D out){
+        out.x = in.x * lambda;
+        out.y = in.y * lambda;
+    }
+
+    /**
+     * returns a new Vector, that is a Skalar of an Input vector
+     * @param lambda The Skalar
+     * @param vec the input
+     * @return The Product Vector
+     */
+    public static Vector2D mul(double lambda, Vector2D vec){
+        Vector2D out = new Vector2D();
+        mul(lambda, vec, out);
+        return out;
+    }
+
+    //------------------------------------------------------------------------
+    //Copy/set Methods:
+
+    /**
+     * Sets x and y equal to the input Vector
+     * @param in The reference Vector
+     */
+    public void set(Vector2D in) {
+        this.x = in.x;
+        this.y = in.y;
+    }
+
+    /**
+     * Copys the values of this into an out Vector
+     * @param out The Vector to Copy the Vector in
+     */
+    public void copy(Vector2D out){
+        out.x = this.x;
+        out.y = this.y;
+    }
+
+    /**
+     * Copys an Vector into another
+     * @param vec1 Input Vector
+     * @param vec2 Output Vector
+     */
+    public static void  copy(Vector2D vec1, Vector2D vec2){
+        vec1.copy(vec2);
+    }
+
+    //----------------------------------------------------------------
+
+    public void normalize() {
+        double length = this.length();
+        this.mul(1/length);
     }
 
     public double distanceTo(Vector2D other){
@@ -156,6 +222,10 @@ public class Vector2D {
     @Override
     public String toString(){
         return "(" + this.x + ", " + this.y + ")";
+    }
+
+    public void print(){
+        System.out.println(this.toString());
     }
 
 }
