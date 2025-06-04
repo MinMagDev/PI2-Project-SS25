@@ -1,0 +1,16 @@
+package Canvas;
+
+import javax.swing.*;
+
+public class CanvasDemo {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Circle Display");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(400, 400);
+            frame.add(new RendererPanel(400, 400, DebugParticle.createExampleArray(10, 400, 400)));
+            frame.setVisible(true);
+
+        });
+    }
+}
