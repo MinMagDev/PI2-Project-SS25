@@ -1,5 +1,8 @@
 package Canvas;
 
+import Particle.DebugParticle;
+import Social.SocialParticleRenderer;
+
 import javax.swing.*;
 
 public class CanvasDemo {
@@ -8,7 +11,7 @@ public class CanvasDemo {
             JFrame frame = new JFrame("Circle Display");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(400, 400);
-            frame.add(new RendererPanel(400, 400, DebugParticle.createExampleArray(10, 400, 400)));
+            frame.add(new RendererPanel(400, 400, SocialParticleRenderer.createExample()));
             frame.setVisible(true);
 
         });
