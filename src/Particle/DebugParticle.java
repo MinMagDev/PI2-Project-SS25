@@ -57,6 +57,15 @@ public class DebugParticle extends Particle implements DrawableSocialParticle {
         this.color = Color.BLACK;
         //this.addForce(new Vector2D(random.nextDouble(), random.nextDouble()).multiplyBy(5));
     }
+
+    /**
+     * creates an example array of DebugParticles in a given start area
+     * @param size number of particles
+     * @param canvasWidth width of the start area
+     * @param canvasHeight height of the start area
+     * @return the example array
+     */
+
     public static DebugParticle[] createExampleArray(int size, double canvasWidth, double canvasHeight){
         DebugParticle[] particles = new DebugParticle[size];
         for(int i = 0; i < size; i++){

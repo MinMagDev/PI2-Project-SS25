@@ -25,6 +25,10 @@ public class ParticleRenderer implements Drawable {
         }
     }
 
+    /**
+     *  creates an example with 10 particles in a 400x400 area
+     * @return the example renderer
+     */
     public static ParticleRenderer createExample(){
         return new ParticleRenderer(Arrays.stream(DebugParticle.createExampleArray(10, 400, 400)).toList());
     }
