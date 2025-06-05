@@ -38,8 +38,8 @@ public class ParticleRenderer implements Drawable {
         g.clearRect(0,0, CanvasDemo.screenWidth,CanvasDemo.screenHeight);
         for (final DrawableParticle particle : particles) {
             g.setColor(particle.getColor());
-            final int particleDiameter = particle.getRadius() * 2;
-            g.fillOval(particle.getX(), particle.getY(), particleDiameter, particleDiameter);
+            final int particleDiameter = particle.getRadiusForDrawing() * 2;
+            g.fillOval(particle.getXForDrawing() - particle.getRadiusForDrawing(), particle.getYForDrawing() - particle.getRadiusForDrawing(), particleDiameter, particleDiameter);
         }
     }
 }

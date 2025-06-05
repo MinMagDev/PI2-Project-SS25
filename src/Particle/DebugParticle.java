@@ -9,18 +9,18 @@ import java.util.Random;
 
 public class DebugParticle extends Particle implements DrawableSocialParticle {
     @Override
-    public int getX() {
+    public int getXForDrawing() {
         return (int) position.getX();
     }
 
     @Override
-    public int getY() {
+    public int getYForDrawing() {
         return (int) position.getY();
     }
 
     @Override
-    public int getRadius() {
-        return radius;
+    public int getRadiusForDrawing() {
+        return (int) radius;
     }
 
     @Override
@@ -40,7 +40,6 @@ public class DebugParticle extends Particle implements DrawableSocialParticle {
         addForce(toInteractee);
     }
 
-    public int radius;
     public Color color;
 
     public DebugParticle(int x, int y, int radius, Color color){
@@ -55,7 +54,13 @@ public class DebugParticle extends Particle implements DrawableSocialParticle {
         this.position.setY(Math.round(random.nextDouble() * canvasHeight));
         this.radius = 5;
         this.color = Color.BLACK;
-        //this.addForce(new Vector2D(random.nextDouble(), random.nextDouble()).multiplyBy(5));
+        this.addForce(new Vector2D(0.5, 0.5));
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
     }
 
     /**
