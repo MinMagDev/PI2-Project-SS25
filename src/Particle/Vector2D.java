@@ -215,6 +215,12 @@ public class Vector2D {
         return sub(this, other).length();
     }
 
+    /**
+     * calculates the non-normalized direction to another vector
+     * @param v the other vector
+     * @return the direction
+     */
+
     public Vector2D to(Vector2D v) {
         return new Vector2D(v.x - this.x, v.y - this.y);
     }
