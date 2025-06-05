@@ -1,3 +1,4 @@
+package Cluster;
 
 public class ClusterCentroid extends DataPoint{
 

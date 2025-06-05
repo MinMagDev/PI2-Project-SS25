@@ -1,7 +1,6 @@
 package Canvas;
 
-import Particle.DebugParticle;
-import Social.SocialParticleRenderer;
+import World.World;
 
 import javax.swing.*;
 
@@ -18,7 +17,7 @@ public class CanvasDemo {
             screenWidth = frame.getWidth();
             screenHeight = frame.getHeight();
 
-            frame.add(new RendererPanel(400, 400, SocialParticleRenderer.createExample()));
+            frame.add(new RendererPanel(400, 400, World.createExample(400, 400)));
             frame.setVisible(true);
 
         });

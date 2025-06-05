@@ -1,12 +1,18 @@
 package Particle;
+import World.Collider;
+
 import java.util.LinkedList;
 import java.util.List;
 
 
-public abstract class Particle {
+public abstract class Particle implements Collider {
     private class ForceManager {
+        final double MAX_SPEED = 3;
+
 
         private List<Vector2D> forces;
+        private Vector2D velocity = new Vector2D(0, 0);
+
         public ForceManager(){
             forces = new LinkedList<Vector2D>();
         }
@@ -26,12 +32,26 @@ public abstract class Particle {
          * @return the velocity vector
          */
         public Vector2D getVelocity(){
-            Vector2D velocity = Vector2D.massSum(forces);
+             velocity.add(Vector2D.massSum(forces));
+             if(velocity.length() > MAX_SPEED){
+                 velocity.normalize();
+                 velocity.mul(MAX_SPEED);
+             }
             return velocity;
         }
     }
 
     protected Vector2D position;
+
+    @Override
+    public double getRadius() {
+        return radius;
+    }
+
+    protected double radius;
+
+
+
 
 
     private ForceManager forceManager;

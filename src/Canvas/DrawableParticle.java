@@ -6,17 +6,17 @@ public interface DrawableParticle {
     /**
      * @return the x-coordinate of the particle
      */
-    int getX();
+    int getXForDrawing();
 
     /**
      * @return the y-coordinate of the particle
      */
-    int getY();
+    int getYForDrawing();
 
     /**
      * @return the particle's radius
      */
-    int getRadius();
+    int getRadiusForDrawing();
 
     /**
      * @return the particle's color

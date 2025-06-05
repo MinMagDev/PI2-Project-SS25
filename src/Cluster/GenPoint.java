@@ -1,3 +1,5 @@
+package Cluster;
+
 public class GenPoint extends DataPoint{
 
     private float distanceToNearestCluster;
