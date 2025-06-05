@@ -19,6 +19,11 @@ public abstract class Particle implements Collider {
         public void add(Vector2D force){
             forces.add(force);
         }
+        public void setSpeed(double speed){
+            velocity.normalize();
+            velocity.mul(speed);
+        }
+
 
         /**
          * Clears the forces List.
@@ -27,16 +32,20 @@ public abstract class Particle implements Collider {
             forces.clear();
         }
 
+        private void updateVelocity(){
+            velocity.add(Vector2D.massSum(forces));
+            if(velocity.length() > MAX_SPEED){
+               setSpeed(MAX_SPEED);
+            }
+            clear();
+        }
+
         /**
          * calculates the velocity as the sum of all forces
          * @return the velocity vector
          */
         public Vector2D getVelocity(){
-             velocity.add(Vector2D.massSum(forces));
-             if(velocity.length() > MAX_SPEED){
-                 velocity.normalize();
-                 velocity.mul(MAX_SPEED);
-             }
+             updateVelocity();
             return velocity;
         }
     }
@@ -46,6 +55,24 @@ public abstract class Particle implements Collider {
     @Override
     public double getRadius() {
         return radius;
+    }
+
+    @Override
+    public double getSpeed() {
+        return getVelocity().length();
+    }
+
+    @Override
+    public void setSpeed(double speed) {
+        forceManager.setSpeed(speed);
+    }
+
+    @Override
+    public void checkCollision(Collider collider) {
+        Vector2D meToCollider = getPosition().to(collider.getPosition());
+        if(meToCollider.length() < collider.getRadius()){
+            collider.addForce(meToCollider);
+        }
     }
 
     protected double radius;
@@ -84,7 +111,6 @@ public abstract class Particle implements Collider {
     public void update(){
         Vector2D oldPosition = position;
         position.add(getVelocity());
-        forceManager.clear();
         //System.out.println("Old: " + oldPosition.toString() + " New: " + position.toString());
     }
 

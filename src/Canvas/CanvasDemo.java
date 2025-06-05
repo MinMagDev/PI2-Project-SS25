@@ -17,7 +17,7 @@ public class CanvasDemo {
             screenWidth = frame.getWidth();
             screenHeight = frame.getHeight();
 
-            frame.add(new RendererPanel(400, 400, World.createExample(400, 400)));
+            frame.add(new RendererPanel(400, 400, World.collisionDemo()));
             frame.setVisible(true);
 
         });
