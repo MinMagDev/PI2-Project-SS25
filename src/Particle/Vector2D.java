@@ -112,9 +112,10 @@ public class Vector2D {
      * Substraczs the values of another Vector from this Vector
      * @param other the Vector to substract
      */
-    public void sub(Vector2D other){
+    public Vector2D sub(Vector2D other){
         this.x -= other.x;
         this.y -= other.y;
+        return this;
     }
 
 
