@@ -5,33 +5,20 @@ import java.util.List;
 
 public abstract class Particle {
     private class ForceManager {
-        /**
-         *  to decrease runtime complexity we use a maximum number
-         *  of forces that can influence a particle at one time
-         */
-        private static final int MAX_FORCES = 5;
 
-        private final List<Vector2D> forces;
-
+        private List<Vector2D> forces;
         public ForceManager(){
             forces = new LinkedList<Vector2D>();
         }
-
-        /**
-         * adds a force to the particle
-         * @param force the force
-         */
         public void add(Vector2D force){
             forces.add(force);
         }
 
         /**
-         * trims the list of forces to conform with MAX_FORCES
+         * Clears the forces List.
          */
-        private void trim(){
-            while(forces.size() > MAX_FORCES){
-                forces.removeFirst();
-            }
+        public void clear() {
+            forces.clear();
         }
 
         /**
@@ -39,7 +26,6 @@ public abstract class Particle {
          * @return the velocity vector
          */
         public Vector2D getVelocity(){
-            trim();
             Vector2D velocity = Vector2D.massSum(forces);
             return velocity;
         }
@@ -78,6 +64,7 @@ public abstract class Particle {
     public void update(){
         Vector2D oldPosition = position;
         position.add(getVelocity());
+        forceManager.clear();
         //System.out.println("Old: " + oldPosition.toString() + " New: " + position.toString());
     }
 
