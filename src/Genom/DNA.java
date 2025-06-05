@@ -111,6 +111,29 @@ public class DNA {
         return (int)Math.pow(4,pow)-1;
     }
 
+    public void mutate(int amount) {
+        double probabilty = amount/dna.size();
+        mutate(probabilty);
+    }
+
+    /**
+     * Mutates the DNA with a given Probability
+     * @param probability the probabilty of one Nucleotid to mutate
+     */
+    public void mutate(double probability){
+        Nucleotid[] nucVals = Nucleotid.values();
+        Random r = new Random();
+        for (int i = 0; i < dna.size(); i++){
+            if(r.nextDouble() >= probability) continue;
+            int nuc = r.nextInt(nucVals.length + 1);
+            if(nuc == nucVals.length) {
+                dna.remove(i);
+                continue;
+            }
+            dna.set(i, nucVals[nuc]);
+        }
+    }
+
     /** Generates a String represenation of a DNA object
      * @return The String represantation
      */
