@@ -4,6 +4,7 @@ import Canvas.*;
 import Particle.DebugParticle;
 import Particle.Particle;
 import Particle.Vector2D;
+import Social.SocialParticleRenderer;
 
 
 import java.awt.*;
@@ -35,8 +36,8 @@ public class World implements Drawable {
         // draw the outlines of the world
         g.drawLine(0, 0, width, 0);
         g.drawLine(0, 0, 0, height);
-        g.drawLine(0, height, width, 0);
-        g.drawLine(width, 0, 0, height);
+        g.drawLine(0, height, width, height);
+        g.drawLine(width, 0, width, height);
         renderer.draw(g);
     }
 
@@ -113,13 +114,20 @@ public class World implements Drawable {
      * @return the demo world
      */
     public static Drawable collisionDemo() {
-        final List<DebugParticle> particles = Arrays.stream(DebugParticle.createExampleArray(2, 400, 400)).toList();
+        final List<DebugParticle> particles = Arrays.asList(DebugParticle.createExampleArray(2, 400, 400));
         Drawable renderer = new ParticleRenderer(particles);
         Particle p1 = particles.get(0);
         Particle p2 = particles.get(1);
 
         p1.addForce(p1.getPosition().to(p2.getPosition()));
         p2.addForce(p2.getPosition().to(p1.getPosition()));
+
+        return new World(400, 400, particles, renderer);
+    }
+
+    public static Drawable socialDemo() {
+        var particles = Arrays.asList(DebugParticle.createExampleArray(10, 400, 400));
+        var renderer = new SocialParticleRenderer(particles);
 
         return new World(400, 400, particles, renderer);
     }
