@@ -80,10 +80,6 @@ public class World implements Drawable {
 
 
         collider.addForce(force);
-
-        if(collision){
-            collider.setSpeed(collider.getSpeed() * speedFactor);
-        }
     }
 
     /**
