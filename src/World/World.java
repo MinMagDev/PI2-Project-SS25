@@ -59,18 +59,22 @@ public class World implements Drawable {
         boolean collision = false;
         if(collider.getPosition().getX() + collider.getRadius() > width){
             force.add(new Vector2D(-1, 0));
+            collider.setX(width - collider.getRadius());
             collision = true;
         }
         if(collider.getPosition().getY() + collider.getRadius() > height){
             force.add(new Vector2D(0, -1));
+            collider.setY(height - collider.getRadius());
             collision = true;
         }
         if(collider.getPosition().getX() - collider.getRadius() < 0){
             force.add(new Vector2D(1, 0));
+            collider.setX(0 + collider.getRadius());
             collision = true;
         }
         if(collider.getPosition().getY() - collider.getRadius() < 0){
             force.add(new Vector2D(0, 1));
+            collider.setY(0 + collider.getRadius());
             collision = true;
         }
 
