@@ -18,7 +18,7 @@ public class DemoPanel extends JPanel {
             entry("Collision of two particles", (Supplier<Drawable>)(World::collisionDemo)),
             entry("Physics", (Supplier<Drawable>)(() -> World.createExample(World.MAX_WIDTH, World.MAX_HEIGHT))),
             entry("Social behaviour", (Supplier<Drawable>)(World::socialDemo)),
-            entry("Species", (Supplier<Drawable>) (() -> Species.createDemo(8)))
+            entry("Species", (Supplier<Drawable>) (() -> Species.createDemo(12)))
     );
 
 

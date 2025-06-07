@@ -47,7 +47,7 @@ public abstract class Particle implements Collider {
          */
         public Vector2D getVelocity(){
              updateVelocity();
-             //velocity.mul(0.97);
+             velocity.mul(0.99);
             return velocity;
         }
     }
