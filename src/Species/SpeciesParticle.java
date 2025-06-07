@@ -1,14 +1,19 @@
-package Particle;
+package Species;
+
+import Particle.Vector2D;
 
 
+import Particle.Particle;
 import Social.DrawableSocialParticle;
 import Social.SocialEntity;
-import Species.Species;
 
 import java.awt.*;
 import java.util.Random;
 
-public class DebugParticle extends Particle implements DrawableSocialParticle {
+
+public class SpeciesParticle extends Particle implements DrawableSocialParticle {
+    private final Species species;
+
     @Override
     public int getXForDrawing() {
         return (int) position.getX();
@@ -36,30 +41,30 @@ public class DebugParticle extends Particle implements DrawableSocialParticle {
 
     @Override
     public void interactWith(SocialEntity interactee) {
+        int reaction = interactee.getSpecies().getInteractionWith(species);
         Vector2D toInteractee = getPosition().to(interactee.getPosition());
-        toInteractee.mul(0.001);
+        toInteractee.mul(reaction * 0.0001);
         addForce(toInteractee);
     }
 
     @Override
     public Species getSpecies() {
-        return null;
+        return species;
     }
 
-    public Color color;
+    private final Color color;
 
-    public DebugParticle(int x, int y, int radius, Color color){
-        super(x, y, radius);
-        this.color = color;
-    }
-    public DebugParticle(double canvasWidth, double canvasHeight){
+    public SpeciesParticle(double canvasWidth, double canvasHeight, Species species){
         super(0, 0, 5);
         Random random = new Random();
         this.position.setX(Math.round(random.nextDouble() * canvasWidth));
         this.position.setY(Math.round(random.nextDouble() * canvasHeight));
-        this.color = Color.BLACK;
+        this.color =  species.getColor();
         this.addForce(new Vector2D(0.5, 0.5));
+        this.species = species;
     }
+
+
 
     @Override
     public void update() {
@@ -67,21 +72,16 @@ public class DebugParticle extends Particle implements DrawableSocialParticle {
 
     }
 
-    /**
-     * creates an example array of DebugParticles in a given start area
-     * @param size number of particles
-     * @param canvasWidth width of the start area
-     * @param canvasHeight height of the start area
-     * @return the example array
-     */
-
-    public static DebugParticle[] createExampleArray(int size, double canvasWidth, double canvasHeight){
-        DebugParticle[] particles = new DebugParticle[size];
-        for(int i = 0; i < size; i++){
-            particles[i] = new DebugParticle(canvasWidth, canvasHeight);
+    static SpeciesParticle[] makeParticles(int amount, Species species, int width, int height) {
+        Random r = new Random();
+        SpeciesParticle[] result = new SpeciesParticle[amount];
+        for (int i = 0; i < amount; i++) {
+            result[i] = new SpeciesParticle(width, height, species);
         }
-        return particles;
+        return result;
     }
 
 
+
 }
+

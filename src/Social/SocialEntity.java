@@ -1,6 +1,7 @@
 package Social;
 
 import Particle.Vector2D;
+import Species.Species;
 
 import java.util.function.Consumer;
 
@@ -15,4 +16,9 @@ public interface SocialEntity {
      * @param interactee the other entity to interact with
      */
     void interactWith(SocialEntity interactee);
+
+    /**
+     * @return the other entity's species
+     */
+    Species getSpecies();
 }

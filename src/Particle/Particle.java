@@ -84,9 +84,20 @@ public abstract class Particle implements Collider {
     private ForceManager forceManager;
 
 
-    public Particle(double x, double y){
+    public Particle(double x, double y, double radius){
         this.position = new Vector2D(x, y);
+        this.radius = radius;
         this.forceManager = new ForceManager();
+    }
+
+    @Override
+    public void setX(double x) {
+        this.position.setX(x);
+    }
+
+    @Override
+    public void setY(double y) {
+        this.position.setY(y);
     }
 
     /**

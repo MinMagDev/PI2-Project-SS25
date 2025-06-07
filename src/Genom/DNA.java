@@ -101,9 +101,9 @@ public class DNA {
         int r = getIntValue(0,parts);
         int g = getIntValue(parts, 2*parts);
         int b = getIntValue(2*parts,dnaLength);
-        r *= (int) (255.0 /getMaxValue(parts));
-        g *= (int) (255.0 /getMaxValue(parts));
-        b *= (int) (255.0 /getMaxValue(parts));
+        r =  (r/getMaxValue(parts)) * 255;
+        g = (g/getMaxValue(parts)) * 255;
+        b = (b/getMaxValue(parts)) * 255;
         return new Color(r,g,b);
     }
 

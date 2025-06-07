@@ -1,6 +1,7 @@
 package UI;
 
 import Canvas.*;
+import Species.Species;
 import World.World;
 
 import javax.swing.*;
@@ -16,7 +17,8 @@ public class DemoPanel extends JPanel {
             entry("Basic particles", (Supplier<Drawable>)(ParticleRenderer::createExample)),
             entry("Collision of two particles", (Supplier<Drawable>)(World::collisionDemo)),
             entry("Physics", (Supplier<Drawable>)(() -> World.createExample(400, 400))),
-            entry("Social behaviour", (Supplier<Drawable>)(World::socialDemo))
+            entry("Social behaviour", (Supplier<Drawable>)(World::socialDemo)),
+            entry("Species", (Supplier<Drawable>) (() -> Species.createDemo(10)))
     );
 
 

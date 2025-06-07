@@ -45,4 +45,7 @@ public interface Collider {
      */
     void checkCollision(Collider collider);
 
+    void setX(double x);
+    void setY(double y);
+
 }
