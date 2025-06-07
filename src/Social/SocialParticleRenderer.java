@@ -3,6 +3,7 @@ package Social;
 import Canvas.DrawableParticle;
 import Canvas.ParticleRenderer;
 import Particle.DebugParticle;
+import World.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +18,7 @@ public class SocialParticleRenderer extends ParticleRenderer{
     private final SocialSystem socialSystem;
 
     public static SocialParticleRenderer createExample(){
-        return new SocialParticleRenderer(Arrays.stream(DebugParticle.createExampleArray(10, 400, 400)).toList());
+        return new SocialParticleRenderer(Arrays.stream(DebugParticle.createExampleArray(10, World.MAX_WIDTH, World.MAX_HEIGHT)).toList());
     }
 
     @Override

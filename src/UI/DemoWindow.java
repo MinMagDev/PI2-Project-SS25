@@ -1,5 +1,7 @@
 package UI;
 
+import World.World;
+
 import javax.swing.*;
 
 public class DemoWindow extends JFrame {
@@ -8,7 +10,7 @@ public class DemoWindow extends JFrame {
             JFrame frame = new JFrame("Demos");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setContentPane(new DemoPanel());
-            frame.setSize(600, 475);
+            frame.setSize(World.MAX_WIDTH + 200, World.MAX_HEIGHT+75);
             frame.setVisible(true);
         });
     }

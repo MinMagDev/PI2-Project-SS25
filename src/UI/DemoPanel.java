@@ -16,9 +16,9 @@ public class DemoPanel extends JPanel {
     static Map<String, Supplier<Drawable>> demos = Map.ofEntries(
             entry("Basic particles", (Supplier<Drawable>)(ParticleRenderer::createExample)),
             entry("Collision of two particles", (Supplier<Drawable>)(World::collisionDemo)),
-            entry("Physics", (Supplier<Drawable>)(() -> World.createExample(400, 400))),
+            entry("Physics", (Supplier<Drawable>)(() -> World.createExample(World.MAX_WIDTH, World.MAX_HEIGHT))),
             entry("Social behaviour", (Supplier<Drawable>)(World::socialDemo)),
-            entry("Species", (Supplier<Drawable>) (() -> Species.createDemo(10)))
+            entry("Species", (Supplier<Drawable>) (() -> Species.createDemo(8)))
     );
 
 
@@ -52,7 +52,7 @@ public class DemoPanel extends JPanel {
 
     private void showDemo(String name) {
         contentPanel.removeAll();
-        RendererPanel newPanel = new RendererPanel(400, 400, demos.get(name).get());
+        RendererPanel newPanel = new RendererPanel(World.MAX_WIDTH, World.MAX_HEIGHT, demos.get(name).get());
         contentPanel.add(newPanel, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();

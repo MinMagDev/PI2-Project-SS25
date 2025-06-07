@@ -90,14 +90,14 @@ public class Species {
         for(int i = 0; i < species; i++) {
             Species s = new Species(new DNA());
             s.setColor(colors[i]);
-            particles = Stream.concat(particles.stream(), Arrays.stream(SpeciesParticle.makeParticles(30, s, 400, 400))).toList();
+            particles = Stream.concat(particles.stream(), Arrays.stream(SpeciesParticle.makeParticles(30, s, World.MAX_WIDTH, World.MAX_HEIGHT))).toList();
         }
 
 
 
         var renderer = new SocialParticleRenderer(particles);
 
-        return new World(400, 400, particles, renderer);
+        return new World(World.MAX_WIDTH, World.MAX_HEIGHT, particles, renderer);
     }
 
 
