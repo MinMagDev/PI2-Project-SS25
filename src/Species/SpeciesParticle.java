@@ -43,7 +43,8 @@ public class SpeciesParticle extends Particle implements DrawableSocialParticle 
     public void interactWith(SocialEntity interactee) {
         int reaction = interactee.getSpecies().getInteractionWith(species);
         Vector2D toInteractee = getPosition().to(interactee.getPosition());
-        toInteractee.mul(reaction * 0.0001);
+        toInteractee.normalize();
+        toInteractee.mul(reaction * species.getSpeed());
         addForce(toInteractee);
     }
 

@@ -5,6 +5,7 @@ public class DNATest {
         DNA dna1 = new DNA();
         dna1.print();
         System.out.println(dna1.getSpeed());
+        System.out.println(dna1.getRadius());
         System.out.println(DNA.getMaxValue(6));
     }
 }

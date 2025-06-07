@@ -38,6 +38,7 @@ public abstract class Particle implements Collider {
                setSpeed(MAX_SPEED);
             }
             clear();
+
         }
 
         /**
@@ -46,6 +47,7 @@ public abstract class Particle implements Collider {
          */
         public Vector2D getVelocity(){
              updateVelocity();
+             velocity.mul(0.97);
             return velocity;
         }
     }
