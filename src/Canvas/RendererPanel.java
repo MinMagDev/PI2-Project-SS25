@@ -30,4 +30,10 @@ public class RendererPanel extends JPanel implements ActionListener {
         drawable.update();
         repaint();
     }
+
+    public void setDrawable(Drawable drawable) {
+        this.drawable = drawable;
+        repaint();
+    }
+
 }
