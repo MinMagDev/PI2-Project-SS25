@@ -13,8 +13,13 @@ public class SocialParticleRenderer extends ParticleRenderer{
     public SocialParticleRenderer(List<? extends DrawableSocialParticle> particles) {
         super(particles);
         socialSystem = new SocialSystem(particles);
-        System.out.println(socialSystem);
     }
+
+    public SocialParticleRenderer(List<? extends DrawableSocialParticle> particles, double interactionRadiusMultiplier) {
+        super(particles);
+        socialSystem = new SocialSystem(interactionRadiusMultiplier, particles);
+    }
+
     private final SocialSystem socialSystem;
 
     public static SocialParticleRenderer createExample(){

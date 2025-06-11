@@ -9,23 +9,32 @@ import javax.swing.*;
 import static java.util.Map.entry;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
 public class DemoPanel extends JPanel {
-    static Map<String, Supplier<Drawable>> demos = Map.ofEntries(
-            entry("Basic particles", (Supplier<Drawable>)(ParticleRenderer::createExample)),
-            entry("Collision of two particles", (Supplier<Drawable>)(World::collisionDemo)),
-            entry("Physics", (Supplier<Drawable>)(() -> World.createExample(World.MAX_WIDTH, World.MAX_HEIGHT))),
-            entry("Social behaviour", (Supplier<Drawable>)(World::socialDemo)),
-            entry("Species", (Supplier<Drawable>) (() -> Species.createDemo(8)))
-    );
+    Map<String, Demo> demos;
 
 
     private CardLayout cardLayout;
     private JPanel contentPanel;
+    private JPanel settingsPanel;
+
+    private String current;
+
 
     public DemoPanel() {
+        demos = new HashMap<>();
+        demos.put("Basic particles", new Demo(ParticleRenderer::createExample, (panel) -> {
+            panel.add(new JLabel("Keine Optionen"));
+            return panel;
+        }));
+        demos.put("Collision of two particles", new Demo(World::collisionDemo));
+        demos.put("Physics", new Demo(() -> World.createExample(400, 400)));
+        demos.put("Social behaviour", new Demo(World::socialDemo));
+        demos.put("Species", new SpeciesDemo(this::rerender, 5, 50, 50, 50));
+
         setLayout(new BorderLayout());
 
         String[] demoNames = demos.keySet().toArray(new String[0]);
@@ -39,6 +48,10 @@ public class DemoPanel extends JPanel {
         contentPanel = new JPanel(new BorderLayout());
         add(contentPanel, BorderLayout.CENTER);
 
+        settingsPanel = new JPanel(new BorderLayout());
+        settingsPanel.setPreferredSize(new Dimension(200, 0));
+        add(settingsPanel, BorderLayout.EAST);
+
         demoList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 String selected = demoList.getSelectedValue();
@@ -51,12 +64,26 @@ public class DemoPanel extends JPanel {
     }
 
     private void showDemo(String name) {
+        current = name;
         contentPanel.removeAll();
-        RendererPanel newPanel = new RendererPanel(World.MAX_WIDTH, World.MAX_HEIGHT, demos.get(name).get());
+        settingsPanel.removeAll();
+
+        Demo demo = demos.get(name);
+        JPanel settings = demo.getSettings();
+
+        RendererPanel newPanel = new RendererPanel(World.MAX_WIDTH, World.MAX_HEIGHT, demos.get(name).getScene());
+
         contentPanel.add(newPanel, BorderLayout.CENTER);
+        settingsPanel.add(settings, BorderLayout.CENTER);
+
         contentPanel.revalidate();
         contentPanel.repaint();
+        settingsPanel.revalidate();
+        settingsPanel.repaint();
     }
 
+    public void rerender() {
+        showDemo(current);
+    }
 
 }

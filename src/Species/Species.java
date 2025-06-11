@@ -2,6 +2,7 @@ package Species;
 
 import Genom.DNA;
 import Canvas.*;
+import Genom.InteractionType;
 import Particle.Particle;
 import Social.SocialParticleRenderer;
 import World.World;
@@ -12,7 +13,14 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class Species {
-    private static List<Species> species = new ArrayList<Species>();
+    private static final List<Species> species = new ArrayList<Species>();
+
+    public static void cleanUpSpecies(){
+        species.clear();
+    }
+
+    private final double interactionRadius, speed;
+
 
     private final DNA dna;
 
@@ -30,74 +38,40 @@ public class Species {
         return dna;
     }
 
-    private final Map<Species, Integer> interactions;
+    private final Map<Integer, InteractionType> interactions;
 
     public Species(DNA dna) {
         this.dna = dna;
         this.color = dna.getColor();
         this.interactions = new HashMap<>();
+        this.speed = dna.getSpeed();
+        this.interactionRadius = dna.getRadius();
         species.add(this);
+        id = species.size();
+
         for (Species s : species) {
             s.updateInteractions();
         }
     }
 
-    public int getInteractionWith(Species other) {
-        return interactions.get(other);
+    private final int id;
+
+    public InteractionType getInteractionWith(Species other) {
+        return interactions.get(other.id);
     }
 
     void updateInteractions(){
         for(int i = 0; i < species.size(); i++) {
-            interactions.put(species.get(i), dna.getInteraction(i));
+            interactions.put(species.get(i).id, dna.getInteraction(i));
         }
     }
 
     public double getSpeed() {
-        return dna.getSpeed();
+        return speed;
     }
 
     public double getInteractionRadius(){
-        return dna.getRadius();
-    }
-
-    public static Drawable createDemo(int species){
-
-
-        // list of all colors
-        Color[] colors = {
-                Color.BLACK,
-                Color.BLUE,
-                Color.CYAN,
-                Color.DARK_GRAY,
-                Color.GRAY,
-                Color.GREEN,
-                Color.LIGHT_GRAY,
-                Color.MAGENTA,
-                Color.ORANGE,
-                Color.PINK,
-                Color.RED,
-                Color.WHITE,
-                Color.YELLOW
-        };
-
-        List<SpeciesParticle> particles = new ArrayList<>();
-
-        if(species > colors.length) {
-            throw new IllegalArgumentException("Species " + species + " is out of bounds");
-
-        }
-
-        for(int i = 0; i < species; i++) {
-            Species s = new Species(new DNA());
-            s.setColor(colors[i]);
-            particles = Stream.concat(particles.stream(), Arrays.stream(SpeciesParticle.makeParticles(30, s, World.MAX_WIDTH, World.MAX_HEIGHT))).toList();
-        }
-
-
-
-        var renderer = new SocialParticleRenderer(particles);
-
-        return new World(World.MAX_WIDTH, World.MAX_HEIGHT, particles, renderer);
+        return interactionRadius;
     }
 
 

@@ -21,4 +21,6 @@ public interface SocialEntity {
      * @return the other entity's species
      */
     Species getSpecies();
+
+    void addForce(Vector2D force);
 }

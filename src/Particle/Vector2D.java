@@ -147,9 +147,10 @@ public class Vector2D {
      * Multilpies this by a skalar
      * @param lambda The skalar
      */
-    public void mul(double lambda) {
+    public Vector2D mul(double lambda) {
         this.x *= lambda;
         this.y *= lambda;
+        return this;
     }
 
     /**
@@ -196,6 +197,10 @@ public class Vector2D {
         out.y = this.y;
     }
 
+    public static Vector2D random(){
+        return new Vector2D(Math.random(), Math.random());
+    }
+
     /**
      * Copys an Vector into another
      * @param vec1 Input Vector
@@ -208,6 +213,9 @@ public class Vector2D {
     //----------------------------------------------------------------
 
     public void normalize() {
+        if(x == 0.0d && y == 0.0d){
+            return;
+        }
         double length = this.length();
         this.mul(1/length);
     }

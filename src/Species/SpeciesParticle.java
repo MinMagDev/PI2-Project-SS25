@@ -1,5 +1,6 @@
 package Species;
 
+import Genom.InteractionType;
 import Particle.Vector2D;
 
 
@@ -12,6 +13,7 @@ import java.util.Random;
 
 
 public class SpeciesParticle extends Particle implements DrawableSocialParticle {
+    private static final double SPRING_FORCE = 3;
     private final Species species;
 
     @Override
@@ -39,13 +41,34 @@ public class SpeciesParticle extends Particle implements DrawableSocialParticle 
         return super.position;
     }
 
+    public static double SPEED_MULTIPLIER = 10;
+
     @Override
     public void interactWith(SocialEntity interactee) {
-        int reaction = interactee.getSpecies().getInteractionWith(species);
+        InteractionType reaction = interactee.getSpecies().getInteractionWith(species);
         Vector2D toInteractee = getPosition().to(interactee.getPosition());
-        toInteractee.normalize();
-        toInteractee.mul(reaction * species.getSpeed());
-        addForce(toInteractee);
+        switch (reaction) {
+            case NEUTRAL:
+                break;
+            case ATTRACT:
+                toInteractee.normalize();
+                toInteractee.mul(species.getSpeed() * SPEED_MULTIPLIER);
+                this.addForce(toInteractee);
+                break;
+            case REPEL:
+                toInteractee.normalize();
+                toInteractee.mul(-1 * species.getSpeed() * SPEED_MULTIPLIER);
+                this.addForce(toInteractee);
+                break;
+            case SPRING:
+                final double distance = toInteractee.length();
+                final double force = (distance - species.getSpeed()) * SPRING_FORCE;
+                toInteractee.mul(force/distance);
+                interactee.addForce(toInteractee);
+                this.addForce(toInteractee.mul(-1));
+                break;
+        }
+
     }
 
     @Override
@@ -73,7 +96,7 @@ public class SpeciesParticle extends Particle implements DrawableSocialParticle 
 
     }
 
-    static SpeciesParticle[] makeParticles(int amount, Species species, int width, int height) {
+    public static SpeciesParticle[] makeParticles(int amount, Species species, int width, int height) {
         Random r = new Random();
         SpeciesParticle[] result = new SpeciesParticle[amount];
         for (int i = 0; i < amount; i++) {
