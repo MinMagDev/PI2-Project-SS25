@@ -1,5 +1,6 @@
 package Canvas;
 
+import LifeAndDeath.EntityManager;
 import Particle.DebugParticle;
 import World.World;
 
@@ -8,30 +9,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ParticleRenderer implements Drawable {
+public class ParticleRenderer<T extends DrawableParticle> implements Drawable, EntityManager<T> {
 
-    public List<? extends DrawableParticle> getParticles() {
+    public List<T> getParticles() {
         return particles;
     }
 
-    private List<? extends DrawableParticle> particles;
+    private List<T> particles;
 
-    public ParticleRenderer(List<? extends DrawableParticle> particles) {
-        this.particles = new ArrayList<>(particles);
-    }
-
-    @Override
-    public void update() {
-
-        List<DrawableParticle> toRemove = new ArrayList<>();
-        for (DrawableParticle particle : particles) {
-            if (!particle.isAlive()) {
-                toRemove.add(particle);
-                continue;
-            }
-            particle.update();
-        }
-        particles.removeAll(toRemove);
+    public ParticleRenderer(List<T> particles) {
+        this.particles = particles;
     }
 
     /**
@@ -50,5 +37,22 @@ public class ParticleRenderer implements Drawable {
             final int particleDiameter = particle.getRadiusForDrawing() * 2;
             g.fillOval(particle.getXForDrawing() - particle.getRadiusForDrawing(), particle.getYForDrawing() - particle.getRadiusForDrawing(), particleDiameter, particleDiameter);
         }
+    }
+
+    @Override
+    public void update() {
+        for (DrawableParticle particle : particles) {
+            particle.update();
+        }
+    }
+
+    @Override
+    public void addEntity(T e) {
+        particles.add(e);
+    }
+
+    @Override
+    public void removeEntity(T e) {
+        particles.remove(e);
     }
 }

@@ -1,6 +1,6 @@
 package UI;
 
-import Canvas.Drawable;
+import Canvas.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +13,10 @@ public class Demo {
     private Supplier<Drawable> scene;
     private Function<JPanel, JPanel> settings;
 
+    public Demo() {
+        this.scene = () -> new EmptyCanvas();
+        this.settings = panel -> panel;
+    }
 
 
     public Demo(Supplier<Drawable> scene, Function<JPanel, JPanel> settings) {
