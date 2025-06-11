@@ -33,7 +33,7 @@ public class DemoPanel extends JPanel {
         demos.put("Collision of two particles", new Demo(World::collisionDemo));
         demos.put("Physics", new Demo(() -> World.createExample(400, 400)));
         demos.put("Social behaviour", new Demo(World::socialDemo));
-        demos.put("Species", new SpeciesDemo(this::rerender, 5, 50, 10, 1));
+        demos.put("Species", new SpeciesDemo(this::rerender, 5, 50, 50, 50));
 
         setLayout(new BorderLayout());
 
@@ -71,7 +71,7 @@ public class DemoPanel extends JPanel {
         Demo demo = demos.get(name);
         JPanel settings = demo.getSettings();
 
-        RendererPanel newPanel = new RendererPanel(World.MAX_WIDTH, World.MAX_HEIGHT, demos.get(name).get());
+        RendererPanel newPanel = new RendererPanel(World.MAX_WIDTH, World.MAX_HEIGHT, demos.get(name).getScene());
 
         contentPanel.add(newPanel, BorderLayout.CENTER);
         settingsPanel.add(settings, BorderLayout.CENTER);
