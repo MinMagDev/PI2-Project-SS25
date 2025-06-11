@@ -3,8 +3,6 @@ package Social;
 import Particle.Vector2D;
 import Species.Species;
 
-import java.util.function.Consumer;
-
 public interface SocialEntity {
     /**
      * @return the entity's position in space (to calculate in whose interaction radius it is)

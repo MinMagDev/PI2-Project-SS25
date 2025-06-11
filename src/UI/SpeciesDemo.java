@@ -21,7 +21,6 @@ public class SpeciesDemo extends Demo{
     private Runnable rerender;
 
     public SpeciesDemo(Runnable rerender, int species, int specimens, int socialRadiusMultiplier, int speedMultiplier) {
-        super(() -> new EmptyCanvas());
 
         this.species = species;
 
