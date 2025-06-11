@@ -19,6 +19,9 @@ public class World implements Drawable {
     private final int width;
     private final int height;
 
+    public static final int MAX_WIDTH = 600;
+    public static final int MAX_HEIGHT = 600;
+
     List<? extends Collider> colliders;
 
     private final Drawable renderer;
@@ -32,6 +35,7 @@ public class World implements Drawable {
 
     @Override
     public void draw(Graphics g) {
+        g.clearRect(0,0,width,height);
         g.setColor(Color.black);
         // draw the outlines of the world
         g.drawLine(0, 0, width, 0);
@@ -114,7 +118,7 @@ public class World implements Drawable {
      * @return the demo world
      */
     public static Drawable collisionDemo() {
-        final List<DebugParticle> particles = Arrays.asList(DebugParticle.createExampleArray(2, 400, 400));
+        final List<DebugParticle> particles = Arrays.asList(DebugParticle.createExampleArray(2, MAX_WIDTH, MAX_HEIGHT));
         Drawable renderer = new ParticleRenderer(particles);
         Particle p1 = particles.get(0);
         Particle p2 = particles.get(1);
@@ -122,14 +126,14 @@ public class World implements Drawable {
         p1.addForce(p1.getPosition().to(p2.getPosition()).mul(10));
         p2.addForce(p2.getPosition().to(p1.getPosition()).mul(10));
 
-        return new World(400, 400, particles, renderer);
+        return new World(MAX_WIDTH, MAX_HEIGHT, particles, renderer);
     }
 
     public static Drawable socialDemo() {
-        var particles = Arrays.asList(DebugParticle.createExampleArray(10, 400, 400));
+        var particles = Arrays.asList(DebugParticle.createExampleArray(10, MAX_WIDTH, MAX_HEIGHT));
         var renderer = new SocialParticleRenderer(particles);
 
-        return new World(400, 400, particles, renderer);
+        return new World(MAX_WIDTH, MAX_HEIGHT, particles, renderer);
     }
 
 

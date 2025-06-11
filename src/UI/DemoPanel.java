@@ -69,8 +69,9 @@ public class DemoPanel extends JPanel {
         settingsPanel.removeAll();
 
         Demo demo = demos.get(name);
-        RendererPanel newPanel = new RendererPanel(400, 400, demo.getScene());
         JPanel settings = demo.getSettings();
+
+        RendererPanel newPanel = new RendererPanel(World.MAX_WIDTH, World.MAX_HEIGHT, demos.get(name).get());
 
         contentPanel.add(newPanel, BorderLayout.CENTER);
         settingsPanel.add(settings, BorderLayout.CENTER);

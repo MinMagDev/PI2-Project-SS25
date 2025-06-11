@@ -1,6 +1,7 @@
 package Canvas;
 
 import Particle.DebugParticle;
+import World.World;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -30,7 +31,7 @@ public class ParticleRenderer implements Drawable {
      * @return the example renderer
      */
     public static ParticleRenderer createExample(){
-        return new ParticleRenderer(Arrays.stream(DebugParticle.createExampleArray(10, 400, 400)).toList());
+        return new ParticleRenderer(Arrays.stream(DebugParticle.createExampleArray(10, World.MAX_WIDTH, World.MAX_HEIGHT)).toList());
     }
 
     public void draw(Graphics g) {
