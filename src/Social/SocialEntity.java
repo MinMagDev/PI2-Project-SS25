@@ -23,4 +23,7 @@ public interface SocialEntity {
     Species getSpecies();
 
     void kill();
+
+    void addForce(Vector2D force);
+
 }

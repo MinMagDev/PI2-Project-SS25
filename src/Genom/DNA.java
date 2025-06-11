@@ -47,7 +47,7 @@ public class DNA {
         result += getIntValue(SPEED_POSITION, SPEED_POSITION+6);
         result *= MAX_SPEED/(double)getMaxValue(6);
         if (result <= ZERO_SPEED_THREASHOLD) return 0.0d;
-        return result;
+        return result/10;
     }
 
     /**
@@ -74,20 +74,23 @@ public class DNA {
      * @param species The Species to interact with
      * @return -1: Flee, 0: ignore, 1: Hunt
      */
-    public int getInteraction(int species){
+    public InteractionType getInteraction(int species){
         Nucleotid nuc = dna.get(INTERACTION_POSITION + species);
         switch (nuc) {
             case A -> {
-                return -1;
+                return InteractionType.REPEL;
             }
-            case C, G -> {
-                return 0;
+            case C -> {
+                return InteractionType.NEUTRAL;
+            }
+            case G -> {
+                return InteractionType.NEUTRAL;
             }
             case T -> {
-                return 1;
+                return InteractionType.ATTRACT;
             }
         }
-        return 0;
+        return InteractionType.NEUTRAL;
     }
 
     /**

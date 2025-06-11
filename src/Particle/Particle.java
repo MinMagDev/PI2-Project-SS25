@@ -74,14 +74,26 @@ public abstract class Particle implements Collider {
 
     @Override
     public void checkCollision(Collider collider) {
+        if(collider.equals(this)){
+            return;
+        }
         Vector2D meToCollider = getPosition().to(collider.getPosition());
-        if(meToCollider.length() < collider.getRadius()){
+        final double distance = meToCollider.length();
+        if(distance < collider.getRadius()){
+            if(distance <= 0){
+                meToCollider = Vector2D.random().mul(10000);
+            } else {
+                meToCollider.normalize();
+                meToCollider.mul(1/distance * SPEED_MULTIPLIER);
+            }
+
             collider.addForce(meToCollider);
         }
     }
 
     protected double radius;
 
+    public static double SPEED_MULTIPLIER = 100.0;
 
     private ForceManager forceManager;
 

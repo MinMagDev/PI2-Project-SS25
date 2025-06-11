@@ -123,8 +123,8 @@ public class World implements Drawable {
         Particle p1 = particles.get(0);
         Particle p2 = particles.get(1);
 
-        p1.addForce(p1.getPosition().to(p2.getPosition()));
-        p2.addForce(p2.getPosition().to(p1.getPosition()));
+        p1.addForce(p1.getPosition().to(p2.getPosition()).mul(10));
+        p2.addForce(p2.getPosition().to(p1.getPosition()).mul(10));
 
         return new World(MAX_WIDTH, MAX_HEIGHT, particles, renderer);
     }
@@ -135,4 +135,9 @@ public class World implements Drawable {
 
         return new World(MAX_WIDTH, MAX_HEIGHT, particles, renderer);
     }
+
+
+
+
+
 }
