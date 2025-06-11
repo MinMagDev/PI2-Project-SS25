@@ -12,7 +12,9 @@ import java.util.Random;
 
 
 public class SpeciesParticle extends Particle implements DrawableSocialParticle {
+    private static final double EAT_THREASHOLD = 1;
     private final Species species;
+    private boolean alive = true;
 
     @Override
     public int getXForDrawing() {
@@ -41,8 +43,13 @@ public class SpeciesParticle extends Particle implements DrawableSocialParticle 
 
     @Override
     public void interactWith(SocialEntity interactee) {
+        if(interactee == this) return;
         int reaction = interactee.getSpecies().getInteractionWith(species);
         Vector2D toInteractee = getPosition().to(interactee.getPosition());
+        if (reaction == 1 && toInteractee.length() <= EAT_THREASHOLD) {
+            interactee.kill();
+            //System.out.println("Killed: " + interactee);
+        }
         toInteractee.normalize();
         toInteractee.mul(reaction * species.getSpeed());
         addForce(toInteractee);
@@ -52,6 +59,7 @@ public class SpeciesParticle extends Particle implements DrawableSocialParticle 
     public Species getSpecies() {
         return species;
     }
+
 
     private final Color color;
 
@@ -71,6 +79,14 @@ public class SpeciesParticle extends Particle implements DrawableSocialParticle 
     public void update() {
         super.update();
 
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void kill() {
+        this.alive = false;
     }
 
     static SpeciesParticle[] makeParticles(int amount, Species species, int width, int height) {

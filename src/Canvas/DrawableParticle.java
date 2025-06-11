@@ -27,4 +27,15 @@ public interface DrawableParticle {
      * Updates for the next frame
      */
     void update();
+
+    /**
+     *
+     * @return if the Paticle is still alive
+     */
+    boolean isAlive();
+
+    /**
+     * Kills the particle
+     */
+    void kill();
 }

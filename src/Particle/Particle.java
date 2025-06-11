@@ -6,6 +6,8 @@ import java.util.List;
 
 
 public abstract class Particle implements Collider {
+
+
     private class ForceManager {
         final double MAX_SPEED = 3;
 
@@ -54,6 +56,7 @@ public abstract class Particle implements Collider {
 
     protected Vector2D position;
 
+
     @Override
     public double getRadius() {
         return radius;
@@ -78,9 +81,6 @@ public abstract class Particle implements Collider {
     }
 
     protected double radius;
-
-
-
 
 
     private ForceManager forceManager;

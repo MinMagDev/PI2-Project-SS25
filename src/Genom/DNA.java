@@ -13,7 +13,7 @@ public class DNA {
     private final int INTERACTION_POSITION = 12;
 
     private final int MAX_SPEED = 10;
-    private final int MAX_FIELD_RADIUS = 60;
+    private final int MAX_FIELD_RADIUS = 40;
 
     private final double ZERO_SPEED_THREASHOLD = 0.3d;
 

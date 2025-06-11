@@ -99,6 +99,4 @@ public class Species {
 
         return new World(World.MAX_WIDTH, World.MAX_HEIGHT, particles, renderer);
     }
-
-
 }

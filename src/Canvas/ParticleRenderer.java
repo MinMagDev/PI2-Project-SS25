@@ -4,6 +4,7 @@ import Particle.DebugParticle;
 import World.World;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,14 +17,21 @@ public class ParticleRenderer implements Drawable {
     private List<? extends DrawableParticle> particles;
 
     public ParticleRenderer(List<? extends DrawableParticle> particles) {
-        this.particles = particles;
+        this.particles = new ArrayList<>(particles);
     }
 
     @Override
     public void update() {
+
+        List<DrawableParticle> toRemove = new ArrayList<>();
         for (DrawableParticle particle : particles) {
+            if (!particle.isAlive()) {
+                toRemove.add(particle);
+                continue;
+            }
             particle.update();
         }
+        particles.removeAll(toRemove);
     }
 
     /**
