@@ -12,8 +12,8 @@ public class DNA {
     private final int FORCEFIELD_RADIUS_POSITION = 6;
     private final int INTERACTION_POSITION = 12;
 
-    private final int MAX_SPEED = 2;
-    private final int MAX_FIELD_RADIUS = 10;
+    private final int MAX_SPEED = 10;
+    private final int MAX_FIELD_RADIUS = 40;
 
     private final double ZERO_SPEED_THREASHOLD = 0.3d;
 
@@ -45,7 +45,7 @@ public class DNA {
     public double getSpeed(){
         double result = 0.0d;
         result += getIntValue(SPEED_POSITION, SPEED_POSITION+6);
-        result *= MAX_SPEED/4095d;
+        result *= MAX_SPEED/(double)getMaxValue(6);
         if (result <= ZERO_SPEED_THREASHOLD) return 0.0d;
         return result/10;
     }
@@ -57,15 +57,14 @@ public class DNA {
     public double getRadius(){
         double result = 0.0d;
         result += getIntValue(FORCEFIELD_RADIUS_POSITION, FORCEFIELD_RADIUS_POSITION+6);
-        result *= MAX_FIELD_RADIUS / 4095d;
+        result *= MAX_FIELD_RADIUS / (double)getMaxValue(6);
         return result;
     }
 
     public int getIntValue(int start, int end){
         int result = 0;
         for(int i = start; i < end; i++){
-            int power =  end - i - 1;
-            result += dna.get(i).ordinal() * (int)Math.pow(4,power);
+            result += dna.get(i).ordinal();
         }
         return result;
     }
@@ -111,7 +110,7 @@ public class DNA {
     }
 
     public static int getMaxValue(int pow) {
-        return (int)Math.pow(4,pow)-1;
+        return 3*pow;
     }
 
     public void mutate(int amount) {

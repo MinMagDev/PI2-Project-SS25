@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class DemoPanel extends JPanel {
+
     Map<String, Demo> demos;
 
 

@@ -73,6 +73,4 @@ public class Species {
     public double getInteractionRadius(){
         return interactionRadius;
     }
-
-
 }

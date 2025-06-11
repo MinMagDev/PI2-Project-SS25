@@ -46,6 +46,11 @@ public class DebugParticle extends Particle implements DrawableSocialParticle {
         return null;
     }
 
+    @Override
+    public void kill() {
+
+    }
+
     public Color color;
 
     public DebugParticle(int x, int y, int radius, Color color){
@@ -65,6 +70,11 @@ public class DebugParticle extends Particle implements DrawableSocialParticle {
     public void update() {
         super.update();
 
+    }
+
+    @Override
+    public boolean isAlive() {
+        return true;
     }
 
     /**

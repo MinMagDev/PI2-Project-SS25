@@ -13,8 +13,10 @@ import java.util.Random;
 
 
 public class SpeciesParticle extends Particle implements DrawableSocialParticle {
+    private static final double EAT_THREASHOLD = 1;
     private static final double SPRING_FORCE = 3;
     private final Species species;
+    private boolean alive = true;
 
     @Override
     public int getXForDrawing() {
@@ -51,6 +53,7 @@ public class SpeciesParticle extends Particle implements DrawableSocialParticle 
             case NEUTRAL:
                 break;
             case ATTRACT:
+                if(toInteractee.length() <= EAT_THREASHOLD) interactee.kill();
                 toInteractee.normalize();
                 toInteractee.mul(species.getSpeed() * SPEED_MULTIPLIER);
                 this.addForce(toInteractee);
@@ -68,13 +71,13 @@ public class SpeciesParticle extends Particle implements DrawableSocialParticle 
                 this.addForce(toInteractee.mul(-1));
                 break;
         }
-
     }
 
     @Override
     public Species getSpecies() {
         return species;
     }
+
 
     private final Color color;
 
@@ -94,6 +97,14 @@ public class SpeciesParticle extends Particle implements DrawableSocialParticle 
     public void update() {
         super.update();
 
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void kill() {
+        this.alive = false;
     }
 
     public static SpeciesParticle[] makeParticles(int amount, Species species, int width, int height) {
