@@ -4,7 +4,7 @@ import Genom.InteractionType;
 import Particle.Vector2D;
 import Species.Species;
 
-public interface SocialEntity {
+public interface SocialEntity<Interactee extends SocialEntity> {
 
     double SPEED_MULTIPLIER = 1.0;
 
@@ -17,7 +17,7 @@ public interface SocialEntity {
      * the interact function that gets called on every entity in this entity's social radius
      * @param interactee the other entity to interact with
      */
-    default void interactWith(SocialEntity interactee){
+    default void interactWith(Interactee interactee ) {
         Vector2D toInteractee = getPosition().to(interactee.getPosition());
         toInteractee.normalize();
         toInteractee.mul(SPEED_MULTIPLIER);
@@ -26,10 +26,6 @@ public interface SocialEntity {
 
 
     double getInteractionRadius();
-
-    default InteractionType getInteractionTypeWith(SocialEntity other){
-        return InteractionType.ATTRACT;
-    }
 
     void kill();
 
