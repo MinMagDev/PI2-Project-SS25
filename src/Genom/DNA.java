@@ -1,5 +1,7 @@
 package Genom;
 
+import org.w3c.dom.css.RGBColor;
+
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -100,13 +102,14 @@ public class DNA {
     public Color getColor(){
         int dnaLength = dna.size();
         int parts = (int)dnaLength/3;
-        int r = getIntValue(0,parts);
-        int g = getIntValue(parts, 2*parts);
-        int b = getIntValue(2*parts,dnaLength);
-        r =  (r/getMaxValue(parts)) * 255;
-        g = (g/getMaxValue(parts)) * 255;
-        b = (b/getMaxValue(parts)) * 255;
-        return new Color(r,g,b);
+        float h = getIntValue(0,parts);
+        float s = getIntValue(parts, 2*parts);
+        float b = getIntValue(2*parts,dnaLength);
+        float maxVal = getMaxValue(parts);
+        h =  ((h/maxVal) * 255);
+        s = ((s/maxVal) * 255);
+        b = (b/maxVal) * 255;
+        return new Color(Color.HSBtoRGB(h,s,b));
     }
 
     public static int getMaxValue(int pow) {

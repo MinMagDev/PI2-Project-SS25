@@ -63,7 +63,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     private final Color color;
 
     public SpeciesParticle(double canvasWidth, double canvasHeight, Species species){
-        super(0, 0, 5);
+        super(0, 0, 3);
         Random random = new Random();
         this.position.setX(Math.round(random.nextDouble() * canvasWidth));
         this.position.setY(Math.round(random.nextDouble() * canvasHeight));

@@ -19,7 +19,7 @@ public class SpeciesDemo extends Demo{
 
     private Ecosystem ecosystem;
 
-    public SpeciesDemo(Runnable rerender, int species, int specimens, int socialRadiusMultiplier, int speedMultiplier) {
+    public SpeciesDemo(Runnable renderer, int species, int specimens, int socialRadiusMultiplier, int speedMultiplier) {
         this.ecosystem = new Ecosystem();
 
 
@@ -38,7 +38,7 @@ public class SpeciesDemo extends Demo{
 
             super.setScene(() -> createDemo(speciesAmount.getValue(), specimensAmount.getValue()));
 
-            rerender.run();
+            renderer.run();
         });
 
         super.setSettings((panel) -> {
@@ -66,32 +66,12 @@ public class SpeciesDemo extends Demo{
 
 
         // list of all colors
-        Color[] colors = {
-                Color.BLACK,
-                Color.BLUE,
-                Color.CYAN,
-                Color.DARK_GRAY,
-                Color.GRAY,
-                Color.GREEN,
-                Color.LIGHT_GRAY,
-                Color.MAGENTA,
-                Color.ORANGE,
-                Color.PINK,
-                Color.RED,
-                Color.WHITE,
-                Color.YELLOW
-        };
 
         List<SpeciesParticle> particles = new ArrayList<>();
 
-        if(species > colors.length) {
-            throw new IllegalArgumentException("Species " + species + " is out of bounds");
-
-        }
-
         for(int i = 0; i < species; i++) {
             Species s = new Species(new DNA(), ecosystem);
-            s.setColor(colors[i]);
+            //s.setColor(colors[i]);
             particles = Stream.concat(particles.stream(), Arrays.stream(SpeciesParticle.makeParticles(specimens, s, World.MAX_WIDTH, World.MAX_HEIGHT))).toList();
         }
 

@@ -37,6 +37,7 @@ public class DemoPanel extends JPanel {
         demos.put("Species", new SpeciesDemo(this::rerender, 5, 50, 50, 50));
         demos.put("Kill", new KillDemo());
 
+
         setLayout(new BorderLayout());
 
         String[] demoNames = demos.keySet().toArray(new String[0]);

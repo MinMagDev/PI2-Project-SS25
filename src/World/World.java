@@ -35,7 +35,8 @@ public class World implements Drawable {
 
     @Override
     public void draw(Graphics g) {
-        g.clearRect(0,0,width,height);
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(0,0,width,height);
         g.setColor(Color.black);
         // draw the outlines of the world
         g.drawLine(0, 0, width, 0);
