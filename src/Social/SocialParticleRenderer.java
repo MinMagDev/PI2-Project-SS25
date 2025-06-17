@@ -6,11 +6,10 @@ import LifeAndDeath.EntityManager;
 import Particle.DebugParticle;
 import World.World;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SocialParticleRenderer<T extends DrawableSocialParticle> extends ParticleRenderer<T> implements EntityManager<T> {
+public class SocialParticleRenderer<T extends DrawableParticle & SocialEntity> extends ParticleRenderer<T> implements EntityManager<T> {
     public SocialParticleRenderer(List<T> particles) {
         super(particles);
         socialSystem = new SocialSystem<T>(particles);

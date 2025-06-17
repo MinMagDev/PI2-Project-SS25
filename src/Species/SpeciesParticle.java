@@ -1,12 +1,9 @@
 package Species;
 
-import Genom.InteractionType;
 import Particle.Vector2D;
 
 
 import Particle.Particle;
-import Social.DrawableSocialParticle;
-import Social.SocialEntity;
 
 import java.awt.*;
 import java.util.Random;
