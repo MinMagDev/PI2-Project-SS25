@@ -10,13 +10,16 @@ import Social.SocialEntity;
 
 import java.awt.*;
 import java.util.Random;
+import Canvas.*;
 
 
-public class SpeciesParticle extends Particle implements DrawableSocialParticle {
-    private static final double EAT_THREASHOLD = 1;
-    private static final double SPRING_FORCE = 3;
+public class SpeciesParticle extends Particle implements SpeciesSocialEntity, DrawableParticle {
+
+
     private final Species species;
     private boolean alive = true;
+
+    private final double interactionRadius;
 
     @Override
     public int getXForDrawing() {
@@ -45,38 +48,16 @@ public class SpeciesParticle extends Particle implements DrawableSocialParticle 
 
     public static double SPEED_MULTIPLIER = 10;
 
-    @Override
-    public void interactWith(SocialEntity interactee) {
-        InteractionType reaction = interactee.getSpecies().getInteractionWith(species);
-        Vector2D toInteractee = getPosition().to(interactee.getPosition());
-        switch (reaction) {
-            case NEUTRAL:
-                break;
-            case ATTRACT:
-                if(toInteractee.length() <= EAT_THREASHOLD) interactee.kill();
-                toInteractee.normalize();
-                toInteractee.mul(species.getSpeed() * SPEED_MULTIPLIER);
-                this.addForce(toInteractee);
-                break;
-            case REPEL:
-                toInteractee.normalize();
-                toInteractee.mul(-1 * species.getSpeed() * SPEED_MULTIPLIER);
-                this.addForce(toInteractee);
-                break;
-            case SPRING:
-                final double distance = toInteractee.length();
-                final double force = (distance - species.getSpeed()) * SPRING_FORCE;
-                toInteractee.mul(force/distance);
-                interactee.addForce(toInteractee);
-                this.addForce(toInteractee.mul(-1));
-                break;
-        }
-    }
 
     @Override
+    public double getInteractionRadius() {
+        return interactionRadius;
+    }
+
     public Species getSpecies() {
         return species;
     }
+
 
 
     private final Color color;
@@ -87,6 +68,7 @@ public class SpeciesParticle extends Particle implements DrawableSocialParticle 
         this.position.setX(Math.round(random.nextDouble() * canvasWidth));
         this.position.setY(Math.round(random.nextDouble() * canvasHeight));
         this.color =  species.getColor();
+        this.interactionRadius = species.getInteractionRadius();
         this.addForce(new Vector2D(0.5, 0.5));
         this.species = species;
     }
@@ -115,6 +97,10 @@ public class SpeciesParticle extends Particle implements DrawableSocialParticle 
         }
         return result;
     }
+
+
+
+
 
 
 

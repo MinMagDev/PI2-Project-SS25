@@ -42,8 +42,8 @@ public class DebugParticle extends Particle implements DrawableSocialParticle {
     }
 
     @Override
-    public Species getSpecies() {
-        return null;
+    public double getInteractionRadius() {
+        return 100;
     }
 
     @Override

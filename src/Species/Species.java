@@ -13,11 +13,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class Species {
-    private static final List<Species> species = new ArrayList<Species>();
 
-    public static void cleanUpSpecies(){
-        species.clear();
-    }
 
     private final double interactionRadius, speed;
 
@@ -38,31 +34,30 @@ public class Species {
         return dna;
     }
 
-    private final Map<Integer, InteractionType> interactions;
+    private InteractionType[] interactions;
 
-    public Species(DNA dna) {
+    public Species(DNA dna, Ecosystem ecosystem) {
         this.dna = dna;
         this.color = dna.getColor();
-        this.interactions = new HashMap<>();
-        this.speed = dna.getSpeed();
-        this.interactionRadius = dna.getRadius();
-        species.add(this);
-        id = species.size();
+        this.speed = dna.getSpeed() * ecosystem.getSpeedMultiplier();
+        this.interactionRadius = dna.getRadius() * ecosystem.getSpeedMultiplier();
 
-        for (Species s : species) {
-            s.updateInteractions();
-        }
+        ecosystem.addSpecies(this);
+        id = ecosystem.getSpeciesCount() - 1;
+
+        ecosystem.updateInteractionMatrix();
     }
 
     private final int id;
 
     public InteractionType getInteractionWith(Species other) {
-        return interactions.get(other.id);
+        return interactions[other.id];
     }
 
-    void updateInteractions(){
-        for(int i = 0; i < species.size(); i++) {
-            interactions.put(species.get(i).id, dna.getInteraction(i));
+    void updateInteractions(int newSpeciesCount) {
+        interactions = new InteractionType[newSpeciesCount];
+        for(int i = 0; i < interactions.length; i++) {
+            interactions[i] = dna.getInteraction(i);
         }
     }
 

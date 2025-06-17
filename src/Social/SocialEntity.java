@@ -1,9 +1,13 @@
 package Social;
 
+import Genom.InteractionType;
 import Particle.Vector2D;
 import Species.Species;
 
 public interface SocialEntity {
+
+    double SPEED_MULTIPLIER = 1.0;
+
     /**
      * @return the entity's position in space (to calculate in whose interaction radius it is)
      */
@@ -13,12 +17,19 @@ public interface SocialEntity {
      * the interact function that gets called on every entity in this entity's social radius
      * @param interactee the other entity to interact with
      */
-    void interactWith(SocialEntity interactee);
+    default void interactWith(SocialEntity interactee){
+        Vector2D toInteractee = getPosition().to(interactee.getPosition());
+        toInteractee.normalize();
+        toInteractee.mul(SPEED_MULTIPLIER);
+        this.addForce(toInteractee);
+    }
 
-    /**
-     * @return the other entity's species
-     */
-    Species getSpecies();
+
+    double getInteractionRadius();
+
+    default InteractionType getInteractionTypeWith(SocialEntity other){
+        return InteractionType.ATTRACT;
+    }
 
     void kill();
 

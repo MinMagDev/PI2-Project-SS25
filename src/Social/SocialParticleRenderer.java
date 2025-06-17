@@ -18,7 +18,7 @@ public class SocialParticleRenderer<T extends DrawableSocialParticle> extends Pa
 
     public SocialParticleRenderer(List<T> particles, double interactionRadiusMultiplier) {
         super(particles);
-        socialSystem = new SocialSystem<T>(interactionRadiusMultiplier, particles);
+        socialSystem = new SocialSystem<T>(particles);
     }
 
     private final SocialSystem<T> socialSystem;

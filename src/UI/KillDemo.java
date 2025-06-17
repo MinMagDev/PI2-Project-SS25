@@ -3,25 +3,27 @@ package UI;
 import Canvas.Drawable;
 import Genom.DNA;
 import Social.SocialParticleRenderer;
-import Species.Species;
-import Species.SpeciesParticle;
+import Species.*;
 import World.World;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
+
 public class KillDemo extends Demo{
+
     public KillDemo() {
         super(KillDemo::createDemo);
     }
 
     private static Drawable createDemo(){
-        Species.cleanUpSpecies();
+        Ecosystem ecosystem = new Ecosystem();
 
-        final Species s1 = new Species(new DNA());
+        final Species s1 = new Species(new DNA(), ecosystem);
         s1.setColor(Color.BLUE);
-        final Species s2 = new Species(new DNA());
+        final Species s2 = new Species(new DNA(), ecosystem);
         s2.setColor(Color.RED);
 
         final SpeciesParticle p1 = new SpeciesParticle(World.MAX_WIDTH, World.MAX_HEIGHT, s1);
