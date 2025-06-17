@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class SpeciesDemo extends Demo{
-    static double ZAP_FACTOR = 1000d;
+    static double ZAP_FACTOR = 1000000d;
 
     private final JSlider socialRadiusMultiplier, speedMultiplier, speciesAmount, specimensAmount;
     private Runnable zap;
@@ -36,7 +36,7 @@ public class SpeciesDemo extends Demo{
         restartButton.addActionListener(e -> {
             ecosystem = new Ecosystem();
 
-            ecosystem.setSpeedMultiplier((double) this.speedMultiplier.getValue() / 10);
+            ecosystem.setSpeedMultiplier((double) this.speedMultiplier.getValue() / 5);
             ecosystem.setSocialRadiusMultiplier((double) this.socialRadiusMultiplier.getValue());
 
             super.setScene(() -> createDemo(speciesAmount.getValue(), specimensAmount.getValue()));

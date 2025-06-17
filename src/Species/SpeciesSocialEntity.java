@@ -4,15 +4,13 @@ import Genom.InteractionType;
 import Particle.Vector2D;
 import Social.SocialEntity;
 
-public interface SpeciesSocialEntity extends SocialEntity {
+public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
 
     double SPRING_FORCE = 2;
 
     Species getSpecies();
 
-
-
-
+    @Override
     default void interactWith(SpeciesSocialEntity interactee) {
         InteractionType reaction = getInteractionTypeWith(interactee);
         Vector2D toInteractee = getPosition().to(interactee.getPosition());
