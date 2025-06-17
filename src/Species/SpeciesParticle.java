@@ -2,7 +2,6 @@ package Species;
 
 import Particle.Vector2D;
 
-
 import Particle.Particle;
 
 import java.awt.*;

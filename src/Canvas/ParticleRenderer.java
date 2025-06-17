@@ -12,14 +12,14 @@ import java.util.function.Consumer;
 
 public class ParticleRenderer<T extends DrawableParticle> implements Drawable, EntityManager<T> {
 
-    public List<T> getParticles() {
+    public ArrayList<T> getParticles() {
         return particles;
     }
 
-    private List<T> particles;
+    private ArrayList<T> particles;
 
     public ParticleRenderer(List<T> particles) {
-        this.particles = particles;
+        this.particles = new ArrayList<>(particles);
     }
 
     /**
@@ -41,9 +41,15 @@ public class ParticleRenderer<T extends DrawableParticle> implements Drawable, E
 
     @Override
     public void update() {
+        List<DrawableParticle> toRemove = new ArrayList<>();
         for (DrawableParticle particle : particles) {
+            if (!particle.isAlive()) {
+                toRemove.add(particle);
+                continue;
+            }
             particle.update();
         }
+        particles.removeAll(toRemove);
     }
 
     @Override
@@ -53,6 +59,7 @@ public class ParticleRenderer<T extends DrawableParticle> implements Drawable, E
 
     @Override
     public void removeEntity(T e) {
+        System.out.println("Bye: " + e);
         particles.remove(e);
     }
 

@@ -23,6 +23,10 @@ public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
                 this.addForce(toInteractee);
                 break;
             case REPEL:
+                if(interactee.getSpecies() != this.getSpecies() && toInteractee.length() <= 1) {
+                    System.out.println("KILL");
+                    interactee.kill();
+                }
                 toInteractee.normalize();
                 toInteractee.mul(-1 * getSpecies().getSpeed());
                 this.addForce(toInteractee);
