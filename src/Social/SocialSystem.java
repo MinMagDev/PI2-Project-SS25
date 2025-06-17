@@ -3,6 +3,7 @@ package Social;
 import LifeAndDeath.EntityManager;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class SocialSystem<T extends SocialEntity> implements EntityManager<T> {
 
@@ -43,4 +44,10 @@ public class SocialSystem<T extends SocialEntity> implements EntityManager<T> {
    public void removeEntity(T e) {
       entities.remove(e);
    }
+
+   @Override
+   public void forEachEntity(Consumer<T> action) {
+      entities.forEach(action);
+   }
+
 }

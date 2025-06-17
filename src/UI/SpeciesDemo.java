@@ -1,6 +1,7 @@
 package UI;
 
 import Genom.DNA;
+import Particle.Vector2D;
 import Social.SocialParticleRenderer;
 import Species.*;
 import World.World;
@@ -14,8 +15,10 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class SpeciesDemo extends Demo{
+    static double ZAP_FACTOR = 1000d;
+
     private final JSlider socialRadiusMultiplier, speedMultiplier, speciesAmount, specimensAmount;
-    private Runnable rerender;
+    private Runnable zap;
 
     private Ecosystem ecosystem;
 
@@ -34,14 +37,22 @@ public class SpeciesDemo extends Demo{
             ecosystem = new Ecosystem();
 
             ecosystem.setSpeedMultiplier((double) this.speedMultiplier.getValue() / 10);
-            ecosystem.setSocialRadiusMultiplier((double) this.socialRadiusMultiplier.getValue() / 5);
+            ecosystem.setSocialRadiusMultiplier((double) this.socialRadiusMultiplier.getValue());
 
             super.setScene(() -> createDemo(speciesAmount.getValue(), specimensAmount.getValue()));
 
             rerender.run();
         });
 
+        JButton zapButton = new JButton("Zap");
+        zapButton.addActionListener(e -> {
+            zap.run();
+        });
+
+
         super.setSettings((panel) -> {
+            panel.add(zapButton);
+
             panel.add(new JLabel("Social radius multiplier: "));
             panel.add(this.socialRadiusMultiplier);
             panel.add(new JLabel("Speed multiplier: "));
@@ -97,7 +108,15 @@ public class SpeciesDemo extends Demo{
 
 
 
-        var renderer = new SocialParticleRenderer(particles);
+        var renderer = new SocialParticleRenderer<SpeciesParticle>(particles);
+
+        zap = () -> {
+            renderer.forEachEntity(particle -> {
+                particle.addForce(Vector2D.random().mul(ZAP_FACTOR));
+            });
+        };
+
+
 
         return new World(World.MAX_WIDTH, World.MAX_HEIGHT, particles, renderer);
     }

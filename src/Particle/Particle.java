@@ -8,14 +8,14 @@ import java.util.List;
 public abstract class Particle implements Collider {
 
 
-    private class ForceManager {
+    private static class ForceManager {
         final double MAX_SPEED = 3;
 
         /**
          * saves the sum of forces (the difference in velocity) between two frames
          */
-        private Vector2D deltaVelocity;
-        private Vector2D velocity = new Vector2D(0, 0);
+        private final Vector2D deltaVelocity;
+        private final Vector2D velocity = new Vector2D(0, 0);
 
         public ForceManager(){
             deltaVelocity = new Vector2D(0, 0);
@@ -97,7 +97,7 @@ public abstract class Particle implements Collider {
 
     public static double SPEED_MULTIPLIER = 100.0;
 
-    private ForceManager forceManager;
+    private final ForceManager forceManager;
 
 
     public Particle(double x, double y, double radius){

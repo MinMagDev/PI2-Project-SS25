@@ -209,7 +209,7 @@ public class Vector2D {
     }
 
     public static Vector2D random(){
-        return new Vector2D(Math.random(), Math.random());
+        return new Vector2D(Math.random() > 0.5 ? Math.random() : -1* Math.random(), Math.random() > 0.5 ? Math.random() : -1* Math.random());
     }
 
     /**

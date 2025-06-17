@@ -1,14 +1,13 @@
 package Particle;
 
 
-import Social.DrawableSocialParticle;
 import Social.SocialEntity;
-import Species.Species;
+import Canvas.DrawableParticle;
 
 import java.awt.*;
 import java.util.Random;
 
-public class DebugParticle extends Particle implements DrawableSocialParticle {
+public class DebugParticle extends Particle implements DrawableParticle, SocialEntity {
     @Override
     public int getXForDrawing() {
         return (int) position.getX();

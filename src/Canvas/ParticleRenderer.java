@@ -8,6 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ParticleRenderer<T extends DrawableParticle> implements Drawable, EntityManager<T> {
 
@@ -54,5 +55,10 @@ public class ParticleRenderer<T extends DrawableParticle> implements Drawable, E
     @Override
     public void removeEntity(T e) {
         particles.remove(e);
+    }
+
+    @Override
+    public void forEachEntity(Consumer<T> action) {
+        particles.forEach(action);
     }
 }
