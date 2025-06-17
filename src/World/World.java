@@ -19,8 +19,8 @@ public class World implements Drawable {
     private final int width;
     private final int height;
 
-    public static final int MAX_WIDTH = 600;
-    public static final int MAX_HEIGHT = 600;
+    public static final int MAX_WIDTH = 1000;
+    public static final int MAX_HEIGHT = 1000;
 
     List<? extends Collider> colliders;
 

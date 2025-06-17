@@ -98,11 +98,22 @@ public class Vector2D {
      * @return the sum of all Vectors
      */
     public static Vector2D massSum(List<Vector2D> vecs){
-        Vector2D result = new Vector2D();
+        double resultX = 0.0d;
+        double resultY = 0.0d;
         for(final Vector2D vec : vecs){
-            add(result, vec, result);
+            resultX += vec.x;
+            resultY += vec.y;
         }
-        return result;
+        return new Vector2D(resultX, resultY);
+    }
+
+    /**
+     * makes this vector (0, 0)
+     */
+
+    public void zero(){
+        x = 0.0d;
+        y = 0.0d;
     }
 
     //------------------------------------------------------------

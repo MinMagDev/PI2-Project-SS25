@@ -11,15 +11,17 @@ public abstract class Particle implements Collider {
     private class ForceManager {
         final double MAX_SPEED = 3;
 
-
-        private List<Vector2D> forces;
+        /**
+         * saves the sum of forces (the difference in velocity) between two frames
+         */
+        private Vector2D deltaVelocity;
         private Vector2D velocity = new Vector2D(0, 0);
 
         public ForceManager(){
-            forces = new LinkedList<Vector2D>();
+            deltaVelocity = new Vector2D(0, 0);
         }
         public void add(Vector2D force){
-            forces.add(force);
+            deltaVelocity.add(force);
         }
         public void setSpeed(double speed){
             velocity.normalize();
@@ -31,11 +33,11 @@ public abstract class Particle implements Collider {
          * Clears the forces List.
          */
         public void clear() {
-            forces.clear();
+            deltaVelocity.zero();
         }
 
         private void updateVelocity(){
-            velocity.add(Vector2D.massSum(forces));
+            velocity.add(deltaVelocity);
             if(velocity.length() > MAX_SPEED){
                setSpeed(MAX_SPEED);
             }
