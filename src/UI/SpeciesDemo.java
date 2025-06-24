@@ -1,6 +1,7 @@
 package UI;
 
 import Genom.DNA;
+import Particle.Particle;
 import Particle.Vector2D;
 import Social.SocialParticleRenderer;
 import Species.*;
@@ -15,9 +16,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class SpeciesDemo extends Demo{
-    static double ZAP_FACTOR = 1000000d;
+    static double ZAP_FACTOR = 100d;
 
-    private final JSlider socialRadiusMultiplier, speedMultiplier, speciesAmount, specimensAmount;
+    private final JSlider socialRadiusMultiplier, speedMultiplier, speciesAmount, specimensAmount, maxSpeed;
     private Runnable zap;
 
     private Ecosystem ecosystem;
@@ -28,6 +29,9 @@ public class SpeciesDemo extends Demo{
 
         this.socialRadiusMultiplier = new JSlider(JSlider.HORIZONTAL, 1, 100, socialRadiusMultiplier);
         this.speedMultiplier = new JSlider(JSlider.HORIZONTAL, 1, 100, speedMultiplier);
+        this.maxSpeed = new JSlider(JSlider.HORIZONTAL, 1, 100, (int) Particle.MAX_SPEED * 10);
+
+
 
         this.speciesAmount = new JSlider(JSlider.HORIZONTAL, 0, 10, species);
         this.specimensAmount = new JSlider(JSlider.HORIZONTAL, 1, 100, specimens);
@@ -35,6 +39,8 @@ public class SpeciesDemo extends Demo{
         JButton restartButton = new JButton("(Re)start simulation");
         restartButton.addActionListener(e -> {
             ecosystem = new Ecosystem();
+
+            Particle.MAX_SPEED = (double) this.maxSpeed.getValue() / 10;
 
             ecosystem.setSpeedMultiplier((double) this.speedMultiplier.getValue() / 5);
             ecosystem.setSocialRadiusMultiplier((double) this.socialRadiusMultiplier.getValue());
@@ -52,6 +58,9 @@ public class SpeciesDemo extends Demo{
 
         super.setSettings((panel) -> {
             panel.add(zapButton);
+
+            panel.add(new JLabel("Max speed:"));
+            panel.add(maxSpeed);
 
             panel.add(new JLabel("Social radius multiplier: "));
             panel.add(this.socialRadiusMultiplier);
@@ -92,7 +101,7 @@ public class SpeciesDemo extends Demo{
 
         zap = () -> {
             renderer.forEachEntity(particle -> {
-                particle.addForce(Vector2D.random().mul(ZAP_FACTOR));
+                particle.addUnlimitedForce(Vector2D.random().mul(ZAP_FACTOR));
             });
         };
 
