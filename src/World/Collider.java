@@ -48,4 +48,6 @@ public interface Collider {
     void setX(double x);
     void setY(double y);
 
+    void addUnlimitedForce(Vector2D force);
+
 }
