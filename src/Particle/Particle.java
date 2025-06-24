@@ -6,26 +6,32 @@ import java.util.List;
 
 
 public abstract class Particle implements Collider {
-
+    public static double MAX_SPEED = 3;
 
     private static class ForceManager {
-        final double MAX_SPEED = 3;
+
 
         /**
          * saves the sum of forces (the difference in velocity) between two frames
          */
-        private final Vector2D deltaVelocity;
+        private final Vector2D deltaVelocity= new Vector2D(0, 0);
+
+        /**
+         * saves a new sum of forces that's not constrained by MAX_SPEED
+         */
+        private final Vector2D unlimitedDeltaVelocity = new Vector2D(0, 0);
+
         private final Vector2D velocity = new Vector2D(0, 0);
 
-        public ForceManager(){
-            deltaVelocity = new Vector2D(0, 0);
-        }
         public void add(Vector2D force){
             deltaVelocity.add(force);
         }
         public void setSpeed(double speed){
             velocity.normalize();
             velocity.mul(speed);
+        }
+        public void addUnlimitedForce(Vector2D force){
+            unlimitedDeltaVelocity.add(force);
         }
 
 
@@ -34,6 +40,7 @@ public abstract class Particle implements Collider {
          */
         public void clear() {
             deltaVelocity.zero();
+            unlimitedDeltaVelocity.zero();
         }
 
         private void updateVelocity(){
@@ -41,6 +48,7 @@ public abstract class Particle implements Collider {
             if(velocity.length() > MAX_SPEED){
                setSpeed(MAX_SPEED);
             }
+            velocity.add(unlimitedDeltaVelocity);
             clear();
 
         }
@@ -83,13 +91,13 @@ public abstract class Particle implements Collider {
         final double distance = meToCollider.length();
         if(distance < collider.getRadius()){
             if(distance <= 0){
-                meToCollider = Vector2D.random().mul(10000);
+                meToCollider = Vector2D.random().mul(10);
             } else {
                 meToCollider.normalize();
-                meToCollider.mul(1/distance * SPEED_MULTIPLIER);
+                meToCollider.mul(1/distance);
             }
 
-            collider.addForce(meToCollider);
+            collider.addUnlimitedForce(meToCollider);
         }
     }
 
@@ -139,6 +147,10 @@ public abstract class Particle implements Collider {
         Vector2D oldPosition = position;
         position.add(getVelocity());
         //System.out.println("Old: " + oldPosition.toString() + " New: " + position.toString());
+    }
+
+    public void addUnlimitedForce(Vector2D force){
+        forceManager.addUnlimitedForce(force);
     }
 
 }

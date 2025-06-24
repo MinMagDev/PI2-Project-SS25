@@ -6,7 +6,7 @@ import Social.SocialEntity;
 
 public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
 
-    double SPRING_FORCE = 2;
+    double SPRING_FORCE = 1;
 
     Species getSpecies();
 
