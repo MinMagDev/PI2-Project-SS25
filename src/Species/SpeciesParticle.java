@@ -42,6 +42,11 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         return super.position;
     }
 
+    @Override
+    public void setPosition(Vector2D position) {
+        this.position = position;
+    }
+
     public static double SPEED_MULTIPLIER = 10;
 
 
