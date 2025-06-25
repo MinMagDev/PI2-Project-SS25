@@ -86,7 +86,7 @@ public class DNA {
                 return InteractionType.NEUTRAL;
             }
             case G -> {
-                return InteractionType.SPRING;
+                return InteractionType.NEUTRAL;
             }
             case T -> {
                 return InteractionType.ATTRACT;

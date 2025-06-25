@@ -90,14 +90,13 @@ public abstract class Particle implements Collider {
         Vector2D meToCollider = getPosition().to(collider.getPosition());
         final double distance = meToCollider.length();
         if(distance < collider.getRadius()){
-            if(distance <= 0){
-                meToCollider = Vector2D.random().mul(10);
-            } else {
-                meToCollider.normalize();
-                meToCollider.mul(1/distance);
-            }
-
-            collider.addUnlimitedForce(meToCollider);
+            meToCollider.normalize();
+            meToCollider.mul(getRadius() + collider.getRadius());
+            Vector2D myPosition = getPosition();
+            Vector2D newPosition = Vector2D.add(myPosition, meToCollider);
+            collider.setPosition(newPosition);
+            collider.addForce(meToCollider);
+            this.addForce(meToCollider.mul(-1));
         }
     }
 
