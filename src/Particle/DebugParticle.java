@@ -33,6 +33,11 @@ public class DebugParticle extends Particle implements DrawableParticle, SocialE
         return super.position;
     }
 
+    @Override
+    public void setPosition(Vector2D position) {
+        this.position = position;
+    }
+
 
     @Override
     public double getInteractionRadius() {
