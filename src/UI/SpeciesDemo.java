@@ -1,5 +1,6 @@
 package UI;
 
+import Editor.EditorWindow;
 import Genom.DNA;
 import Particle.Particle;
 import Particle.Vector2D;
@@ -55,8 +56,16 @@ public class SpeciesDemo extends Demo{
             zap.run();
         });
 
+        JButton editorButton = new JButton("Open editor");
+        editorButton.addActionListener(e -> {
+            new EditorWindow();
+        });
+
 
         super.setSettings((panel) -> {
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+            panel.add(editorButton);
             panel.add(zapButton);
 
             panel.add(new JLabel("Max speed:"));

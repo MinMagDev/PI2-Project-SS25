@@ -1,18 +1,32 @@
 package Genom;
 
-import org.w3c.dom.css.RGBColor;
-
 import java.awt.*;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
+
+import static java.util.Map.entry;
+
 
 public class DNA {
     private List<Nucleotid> dna;
+    /**
+     * the index of the first nucleotide relevant for speed value calculation
+     */
+    public static final int SPEED_DNA_POSITION = 0;
+    /**
+     * the amount of nucleotides following SPEED_DNA_POSITION relevant for speed value calculation
+     */
+    public static final int SPEED_DNA_LENGTH = 6;
+    /**
+     * the index of the first nucleotide relevant for interaction radius calculation
+     */
+    public static final int INTERACTION_RADIUS_DNA_POSITION = 6;
+    /**
+     * the amount of nucleotides following SPEED_DNA_POSITION relevant for interaction radius calculation
+     */
+    public static final int INTERACTION_RADIUS_DNA_LENGTH = 6;
 
-    private final int SPEED_POSITION = 0;
-    private final int FORCEFIELD_RADIUS_POSITION = 6;
-    private final int INTERACTION_POSITION = 12;
+    public static final int INTERACTION_TYPES_POSITION = 12;
 
     private final int MAX_SPEED = 10;
     private final int MAX_FIELD_RADIUS = 40;
@@ -23,6 +37,36 @@ public class DNA {
     public DNA() {
         dna = generateRandomDNA(128);
     }
+
+    private DNA(List<Nucleotid> dna) {
+        this.dna = dna;
+    }
+
+    public static final Map<Character, Nucleotid> nucleotideDictionary = Map.ofEntries(
+            entry('a', Nucleotid.A),
+            entry('c', Nucleotid.C),
+            entry('g', Nucleotid.G),
+            entry('t', Nucleotid.T),
+            entry('A', Nucleotid.A),
+            entry('C', Nucleotid.C),
+            entry('G', Nucleotid.G),
+            entry('T', Nucleotid.T)
+    );
+
+    public static DNA fromString(String dna) {
+        dna = dna.trim();
+        List<Nucleotid> nucleotides = new ArrayList<>();
+
+        for(char c: dna.toCharArray()) {
+            if(!nucleotideDictionary.containsKey(c)) {
+                throw new IllegalArgumentException("Illegal Character: " + c);
+            }
+            nucleotides.add(nucleotideDictionary.get(c));
+        }
+
+        return new DNA(nucleotides);
+    }
+
 
     /**
      * Generates a new random DNA-Strang
@@ -46,7 +90,7 @@ public class DNA {
      */
     public double getSpeed(){
         double result = 0.0d;
-        result += getIntValue(SPEED_POSITION, SPEED_POSITION+6);
+        result += getIntValue(SPEED_DNA_POSITION, SPEED_DNA_POSITION + SPEED_DNA_LENGTH);
         result *= MAX_SPEED/(double)getMaxValue(6);
         if (result <= ZERO_SPEED_THREASHOLD) return 0.0d;
         return result/10;
@@ -58,10 +102,17 @@ public class DNA {
      */
     public double getRadius(){
         double result = 0.0d;
-        result += getIntValue(FORCEFIELD_RADIUS_POSITION, FORCEFIELD_RADIUS_POSITION+6);
+        result += getIntValue(INTERACTION_RADIUS_DNA_POSITION, INTERACTION_RADIUS_DNA_POSITION + INTERACTION_RADIUS_DNA_LENGTH);
         result *= MAX_FIELD_RADIUS / (double)getMaxValue(6);
         return result;
     }
+
+    /**
+     * returns an int corresponding to a specific sequence of DNA
+     * @param start the first nucleotide to be considered
+     * @param end the index after the last nucleotide to be considered
+     * @return the int value
+     */
 
     public int getIntValue(int start, int end){
         int result = 0;
@@ -74,10 +125,10 @@ public class DNA {
     /**
      * Returns how the species should interact to other species
      * @param species The Species to interact with
-     * @return -1: Flee, 0: ignore, 1: Hunt
+     * @return interaction type
      */
     public InteractionType getInteraction(int species){
-        Nucleotid nuc = dna.get(INTERACTION_POSITION + species);
+        Nucleotid nuc = dna.get(INTERACTION_TYPES_POSITION + species);
         switch (nuc) {
             case A -> {
                 return InteractionType.REPEL;

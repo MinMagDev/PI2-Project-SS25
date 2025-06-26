@@ -68,4 +68,8 @@ public class Species {
     public double getInteractionRadius(){
         return interactionRadius;
     }
+
+    public int getId() {
+        return id;
+    }
 }

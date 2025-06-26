@@ -100,6 +100,10 @@ public abstract class Particle implements Collider {
         }
     }
 
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
     protected double radius;
 
     public static double SPEED_MULTIPLIER = 100.0;
