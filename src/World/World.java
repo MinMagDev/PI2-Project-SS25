@@ -4,11 +4,16 @@ import Canvas.*;
 import Particle.DebugParticle;
 import Particle.Particle;
 import Particle.Vector2D;
+import Genom.DNA;
 import Social.SocialParticleRenderer;
+import Species.Species;
+import Species.SpeciesParticle;
 
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -51,6 +56,7 @@ public class World implements Drawable {
         simulateCollisions();
         renderer.update();
     }
+
 
 
     static final double speedFactor = .2;

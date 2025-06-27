@@ -1,12 +1,15 @@
 package Species;
 
+import Genom.DNA;
 import Particle.Vector2D;
 
 import Particle.Particle;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Random;
 import Canvas.*;
+import World.World;
 
 
 public class SpeciesParticle extends Particle implements SpeciesSocialEntity, DrawableParticle {
@@ -14,6 +17,11 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
     private final Species species;
     private boolean alive = true;
+    private boolean reproduce = false;
+
+    private int reproductionCount = 0;
+    private final int MAX_REPRO_COUNT = 100;
+    public final int EXPECTED_MUTATIONS = 2;
 
     private final double interactionRadius;
 
@@ -60,6 +68,21 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     }
 
 
+    public double getSize() {
+        return radius;
+    }
+
+    public void setSize(double size) {
+        setRadius(size);
+    }
+
+    public void growConst(double size) {
+        this.setSize(radius + size);
+    }
+
+    public void growFac(double factor) {
+        this.setSize(radius + radius * factor);
+    }
 
     private final Color color;
 
@@ -70,7 +93,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         this.position.setY(Math.round(random.nextDouble() * canvasHeight));
         this.color =  species.getColor();
         this.interactionRadius = species.getInteractionRadius();
-        this.addForce(new Vector2D(0.5, 0.5));
+        this.addForce(new Vector2D(true));
         this.species = species;
     }
 
@@ -79,7 +102,13 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     @Override
     public void update() {
         super.update();
-
+        growConst(-species.getHunger());
+        if (getSize() <= 0) this.kill();
+        if (Math.random() <= species.getReproductionProb()) reproductionCount++;
+        if (reproductionCount >= MAX_REPRO_COUNT){
+            System.out.println("Reproduce");
+            reproduce = true;
+        }
     }
 
     public boolean isAlive() {
@@ -100,10 +129,22 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     }
 
 
+    public boolean isReproducing() {
+        return reproduce;
+    }
 
+    public void setReproducing(boolean reproduce) {
+        this.reproduce = reproduce;
+    }
 
-
-
-
+    @Override
+    public SpeciesParticle newChild() {
+        DNA newDNA = new DNA(species.getDNA().mutate(EXPECTED_MUTATIONS));
+        Species newSpecies = getSpecies();
+        newSpecies.setDNA(newDNA);
+        SpeciesParticle newParticle = new SpeciesParticle(0,0, newSpecies);
+        newParticle.setPosition(position);
+        return newParticle;
+    }
 }
 

@@ -1,10 +1,12 @@
 package Particle;
 
 import java.util.List;
+import java.util.Random;
 
 public class Vector2D {
     private double x;
     private double y;
+
 
     public Vector2D() {
         this.x = 0.0d;
@@ -23,6 +25,12 @@ public class Vector2D {
 
     public Vector2D(Vector2D vec) {
         this.set(vec);
+    }
+
+    public Vector2D(boolean random){
+        Random r = new Random();
+        this.x = r.nextDouble(2)-1;
+        this.y = r.nextDouble(2)-1;
     }
 
 
