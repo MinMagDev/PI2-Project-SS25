@@ -16,14 +16,16 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
 
     private final Species species;
+    private DNA dna;
+
     private boolean alive = true;
     private boolean reproduce = false;
 
     private int reproductionCount = 0;
-    private final int MAX_REPRO_COUNT = 100;
-    public final int EXPECTED_MUTATIONS = 2;
+    private final int MAX_REPRO_COUNT = 200;
+    public final int EXPECTED_MUTATIONS = 20;
 
-    private final double interactionRadius;
+    private double interactionRadius;
 
     @Override
     public int getXForDrawing() {
@@ -67,6 +69,10 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         return species;
     }
 
+    public DNA getDNA() {
+        return dna;
+    }
+
 
     public double getSize() {
         return radius;
@@ -95,6 +101,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         this.interactionRadius = species.getInteractionRadius();
         this.addForce(new Vector2D(true));
         this.species = species;
+        this.dna = species.getDNA();
     }
 
 
@@ -102,12 +109,13 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     @Override
     public void update() {
         super.update();
-        growConst(-species.getHunger());
+        growConst(-dna.getHunger());
         if (getSize() <= 0) this.kill();
-        if (Math.random() <= species.getReproductionProb()) reproductionCount++;
+        if (Math.random() <= dna.getReproductionProbability()) reproductionCount++;
         if (reproductionCount >= MAX_REPRO_COUNT){
             System.out.println("Reproduce");
             reproduce = true;
+            reproductionCount = 0;
         }
     }
 
@@ -139,12 +147,27 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
     @Override
     public SpeciesParticle newChild() {
-        DNA newDNA = new DNA(species.getDNA().mutate(EXPECTED_MUTATIONS));
+        DNA newDNA = new DNA(dna.mutate(EXPECTED_MUTATIONS));
+        if(newDNA.getDNA().size() == 0) {
+            return null;
+        }
         Species newSpecies = getSpecies();
-        newSpecies.setDNA(newDNA);
         SpeciesParticle newParticle = new SpeciesParticle(0,0, newSpecies);
+        newParticle.setDna(newDNA);
         newParticle.setPosition(position);
         return newParticle;
+    }
+
+    public void updateValues(){
+        interactionRadius = dna.getRadius();
+    }
+
+    public DNA getDna() {
+        return dna;
+    }
+
+    public void setDna(DNA dna) {
+        this.dna = dna;
     }
 }
 

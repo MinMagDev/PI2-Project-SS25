@@ -31,9 +31,6 @@ public class DemoPanel extends JPanel {
             panel.add(new JLabel("Keine Optionen"));
             return panel;
         }));
-        demos.put("Collision of two particles", new Demo(World::collisionDemo));
-        demos.put("Physics", new Demo(() -> World.createExample(400, 400)));
-        demos.put("Social behaviour", new Demo(World::socialDemo));
         demos.put("Species", new SpeciesDemo(this::rerender, 5, 50, 50, 50));
         demos.put("Kill", new KillDemo());
 

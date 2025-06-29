@@ -46,31 +46,9 @@ public class ParticleRenderer<T extends DrawableParticle> implements Drawable, E
 
     @Override
     public void update() {
-        List<DrawableParticle> toRemove = new ArrayList<>();
-        List<DrawableParticle> allMoms = new ArrayList<>();
-        for (DrawableParticle particle : particles) {
-            if (!particle.isAlive()) {
-                toRemove.add(particle);
-                continue;
-            }
-            if(particle.isReproducing()){
-                particle.setReproducing(false);
-                allMoms.add(particle);
-            }
+        for (DrawableParticle particle: particles){
             particle.update();
         }
-        particles.removeAll(toRemove);
-        createNewChilds(allMoms);
-    }
-
-    private void createNewChilds(List<DrawableParticle> allMoms) {
-        for (DrawableParticle mom: allMoms){
-            createNewChild(mom);
-        }
-    }
-
-    private void createNewChild(DrawableParticle mom) {
-        particles.add((T)mom.newChild());
     }
     @Override
     public void addEntity(T e) {
@@ -79,7 +57,7 @@ public class ParticleRenderer<T extends DrawableParticle> implements Drawable, E
 
     @Override
     public void removeEntity(T e) {
-        System.out.println("Bye: " + e);
+        //System.out.println("Bye: " + e);
         particles.remove(e);
     }
 

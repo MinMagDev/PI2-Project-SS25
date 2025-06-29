@@ -64,6 +64,10 @@ public class Species {
 
     private final int id;
 
+    public int getId() {
+        return id;
+    }
+
     public InteractionType getInteractionWith(Species other) {
         return interactions[other.id];
     }

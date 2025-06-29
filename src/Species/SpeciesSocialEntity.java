@@ -1,5 +1,6 @@
 package Species;
 
+import Genom.DNA;
 import Genom.InteractionType;
 import Particle.Vector2D;
 import Social.SocialEntity;
@@ -9,6 +10,7 @@ public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
     double SPRING_FORCE = 1;
 
     Species getSpecies();
+    DNA getDNA();
 
     @Override
     default void interactWith(SpeciesSocialEntity interactee) {
@@ -26,19 +28,20 @@ public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
                     interactee.kill();
                     this.growFac(interactee.getSize() * 0.1d);
                 }
+                if(interactee.getSpecies() == this.getSpecies()) break;
                 toInteractee.normalize();
-                toInteractee.mul(getSpecies().getSpeed());
+                toInteractee.mul(getDNA().getSpeed());
                 this.addForce(toInteractee);
                 break;
             case REPEL:
 
                 toInteractee.normalize();
-                toInteractee.mul(-1 * getSpecies().getSpeed());
+                toInteractee.mul(-1 * getDNA().getSpeed());
                 this.addForce(toInteractee);
                 break;
             case SPRING:
                 final double distance = toInteractee.length();
-                final double force = (distance - getSpecies().getSpeed()) * SPRING_FORCE;
+                final double force = (distance - getDNA().getSpeed()) * SPRING_FORCE;
                 toInteractee.mul(force/distance);
                 interactee.addForce(toInteractee);
                 this.addForce(toInteractee.mul(-1));
@@ -51,7 +54,7 @@ public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
 
 
     default InteractionType getInteractionTypeWith(SpeciesSocialEntity other){
-        return getSpecies().getInteractionWith(other.getSpecies());
+        return getDNA().getInteractionWith(other.getSpecies());
     }
 
 }

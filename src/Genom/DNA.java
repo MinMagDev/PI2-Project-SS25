@@ -1,5 +1,6 @@
 package Genom;
 
+import Species.Species;
 import org.w3c.dom.css.RGBColor;
 
 import java.awt.*;
@@ -22,6 +23,8 @@ public class DNA {
     private final double MAX_HUNGER = 0.005;
 
     private final double ZERO_SPEED_THREASHOLD = 0.3d;
+
+    private InteractionType[] interactions;
 
 
     public DNA() {
@@ -81,6 +84,9 @@ public class DNA {
         return getValue(REPRO_PROBABILITY_POSITION,6,1);
     }
 
+    public InteractionType getInteractionWith(Species other) {
+        return getInteraction(other.getId());
+    }
 
     private double getValue(int start, int length, double max){
         double result = 0.0d;
@@ -104,8 +110,12 @@ public class DNA {
      * @return -1: Flee, 0: ignore, 1: Hunt
      */
     public InteractionType getInteraction(int species){
-        System.out.println("Species to get Interaction: " + species);
-        Nucleotid nuc = dna.get(INTERACTION_POSITION + species);
+        //System.out.println("Species to get Interaction: " + species);
+        if (dna.size() == 0) {
+            System.out.println("DNA SIZE IS ZERO, from DNA: " + this);
+            return InteractionType.NEUTRAL;
+        }
+        Nucleotid nuc = dna.get((INTERACTION_POSITION + species) % dna.size());
         switch (nuc) {
             case A -> {
                 return InteractionType.REPEL;
@@ -114,7 +124,7 @@ public class DNA {
                 return InteractionType.NEUTRAL;
             }
             case G -> {
-                return InteractionType.NEUTRAL;
+                return InteractionType.SPRING;
             }
             case T -> {
                 return InteractionType.ATTRACT;
@@ -163,13 +173,18 @@ public class DNA {
         List<Nucleotid> newDNA = new LinkedList<Nucleotid>();
         Random r = new Random();
         for (int i = 0; i < dna.size(); i++){
-            if(r.nextDouble() >= probability) continue;
+            if(r.nextDouble() >= probability) {
+                newDNA.add(dna.get(i));
+                continue;
+            }
             int nuc = r.nextInt(nucVals.length + 1);
+            System.out.println("Random Chosen: " + nuc);
             if(nuc == nucVals.length) {
                 continue;
             }
             newDNA.add(nucVals[nuc]);
         }
+        System.out.println("New DNA: " + newDNA);
         return newDNA;
     }
 

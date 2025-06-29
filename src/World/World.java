@@ -11,9 +11,7 @@ import Species.SpeciesParticle;
 
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -27,14 +25,15 @@ public class World implements Drawable {
     public static final int MAX_WIDTH = 1000;
     public static final int MAX_HEIGHT = 1000;
 
-    List<? extends Collider> colliders;
+    //Fuck it, who needs Wildcards
+    List<SpeciesParticle> colliders;
 
     private final Drawable renderer;
 
-    public World(int width, int height, List<? extends Collider> colliders, Drawable renderer) {
+    public World(int width, int height, List<SpeciesParticle> colliders, Drawable renderer) {
         this.width = width;
         this.height = height;
-        this.colliders = colliders;
+        this.colliders = new ArrayList<>(colliders);
         this.renderer = renderer;
     }
 
@@ -53,11 +52,54 @@ public class World implements Drawable {
 
     @Override
     public void update() {
+        updateParticles();
         simulateCollisions();
         renderer.update();
     }
 
+    private void updateParticles() {
+        List<SpeciesParticle> toRemove = new ArrayList<>();
+        List<SpeciesParticle> allMoms = new ArrayList<>();
+        for (int i = 0; i < colliders.size(); i++) {
+            if (colliders.get(i) instanceof  SpeciesParticle) {
+                SpeciesParticle particle = (SpeciesParticle) colliders.get(i);
+                if (!particle.isAlive()) {
+                    toRemove.add(particle);
+                    if(renderer instanceof ParticleRenderer){
+                        ((ParticleRenderer<SpeciesParticle>) renderer).removeEntity(particle);
+                    }
+                    continue;
+                }
+                if(particle.isReproducing()){
+                    particle.setReproducing(false);
+                    allMoms.add(particle);
+              }
+            }
+        }
+        for(SpeciesParticle child : createNewChilds(allMoms)){
+            colliders.add(child);
+            if(renderer instanceof ParticleRenderer){
+                ((ParticleRenderer<SpeciesParticle>) renderer).addEntity(child);
+            }
+        }
+    }
 
+    private List<SpeciesParticle> createNewChilds(List<SpeciesParticle> allMoms) {
+        List<SpeciesParticle> childs = new ArrayList<>();
+        for (SpeciesParticle mom: allMoms){
+             SpeciesParticle child = createNewChild(mom);
+            if (child == null) continue;
+            childs.add(child);
+        }
+        return childs;
+    }
+
+    private SpeciesParticle createNewChild(SpeciesParticle mom) {
+        SpeciesParticle child = mom.newChild();
+        if (child == null) return child;
+        child.updateValues();
+        return child;
+    }
 
     static final double speedFactor = .2;
     /**
@@ -105,46 +147,4 @@ public class World implements Drawable {
 
         }
     }
-
-    /**
-     * creates an example world with 10 debug particles
-     * @param width the world's width
-     * @param height the world's width
-     * @return the example world
-     */
-
-    public static Drawable createExample(int width, int height) {
-        final List<DebugParticle> particles = Arrays.stream(DebugParticle.createExampleArray(10, width, height)).toList();
-        Drawable renderer = new ParticleRenderer(particles);
-
-        return new World(width, height, particles, renderer);
-    }
-
-    /**
-     * creates a demo where two particles bounce off each other
-     * @return the demo world
-     */
-    public static Drawable collisionDemo() {
-        final List<DebugParticle> particles = Arrays.asList(DebugParticle.createExampleArray(2, MAX_WIDTH, MAX_HEIGHT));
-        Drawable renderer = new ParticleRenderer(particles);
-        Particle p1 = particles.get(0);
-        Particle p2 = particles.get(1);
-
-        p1.addForce(p1.getPosition().to(p2.getPosition()).mul(10));
-        p2.addForce(p2.getPosition().to(p1.getPosition()).mul(10));
-
-        return new World(MAX_WIDTH, MAX_HEIGHT, particles, renderer);
-    }
-
-    public static Drawable socialDemo() {
-        var particles = Arrays.asList(DebugParticle.createExampleArray(10, MAX_WIDTH, MAX_HEIGHT));
-        var renderer = new SocialParticleRenderer(particles);
-
-        return new World(MAX_WIDTH, MAX_HEIGHT, particles, renderer);
-    }
-
-
-
-
-
 }
