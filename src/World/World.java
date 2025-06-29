@@ -24,6 +24,7 @@ public class World implements Drawable {
 
     public static final int MAX_WIDTH = 1000;
     public static final int MAX_HEIGHT = 1000;
+    public static final int MAX_ENTITY_COUNT = 1000;
 
     //Fuck it, who needs Wildcards
     List<SpeciesParticle> colliders;
@@ -77,6 +78,7 @@ public class World implements Drawable {
             }
         }
         for(SpeciesParticle child : createNewChilds(allMoms)){
+            if (colliders.size() >= MAX_ENTITY_COUNT) break;
             colliders.add(child);
             if(renderer instanceof ParticleRenderer){
                 ((ParticleRenderer<SpeciesParticle>) renderer).addEntity(child);
