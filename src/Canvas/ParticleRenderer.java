@@ -62,6 +62,14 @@ public class ParticleRenderer<T extends DrawableParticle> implements Drawable, E
     }
 
     @Override
+    public void massRemoveEntities(List<T> es) {
+        for (T e: es){
+            removeEntity(e);
+        }
+    }
+
+
+    @Override
     public void forEachEntity(Consumer<T> action) {
         particles.forEach(action);
     }

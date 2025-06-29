@@ -58,6 +58,14 @@ public class World implements Drawable {
         renderer.update();
     }
 
+    /**
+     * Aktualisiert den Zustand aller {@link SpeciesParticle}-Instanzen in der {@code colliders}-Liste.
+     * <p>
+     * Entfernt tote Partikel, verarbeitet reproduzierende Partikel (als Mütter) und erzeugt neue Kind-Partikel.
+     * Neue Partikel werden zur Liste hinzugefügt (sofern {@code MAX_ENTITY_COUNT} nicht überschritten wird).
+     * Tote Partikel werden entfernt und alle Änderungen optional an den zugehörigen Renderer übergeben.
+     * (D.R.E.C.K)
+     */
     private void updateParticles() {
         List<SpeciesParticle> toRemove = new ArrayList<>();
         List<SpeciesParticle> allMoms = new ArrayList<>();
@@ -84,8 +92,22 @@ public class World implements Drawable {
                 ((ParticleRenderer<SpeciesParticle>) renderer).addEntity(child);
             }
         }
+        colliders.removeAll(toRemove);
+        if(renderer instanceof ParticleRenderer){
+            ((ParticleRenderer<SpeciesParticle>) renderer).massRemoveEntities(toRemove);
+        }
     }
 
+    /**
+     * Erzeugt neue Kind-Partikel aus einer Liste von Mutter-Partikeln.
+     * <p>
+     * Jeder Mutterpartikel ruft {@code newChild()} auf sich selbst auf. Falls ein Kind erzeugt wurde,
+     * wird es mittels {@link #createNewChild(SpeciesParticle)} weiterverarbeitet.
+     *
+     * @param allMoms Eine Liste von {@link SpeciesParticle}-Instanzen, die reproduzieren sollen.
+     * @return Eine Liste aller erfolgreich erzeugten Kind-Partikel.
+     * D.R.E.C.K
+     */
     private List<SpeciesParticle> createNewChilds(List<SpeciesParticle> allMoms) {
         List<SpeciesParticle> childs = new ArrayList<>();
         for (SpeciesParticle mom: allMoms){
@@ -96,6 +118,16 @@ public class World implements Drawable {
         return childs;
     }
 
+    /**
+     * Erzeugt ein neues Kind-Partikel auf Basis eines Mutterpartikels.
+     * <p>
+     * Das Kind wird durch den Aufruf von {@code mom.newChild()} erzeugt. Falls ein Kind erzeugt wird,
+     * werden anschließend mit {@code updateValues()} zusätzliche Werte aktualisiert.
+     *
+     * @param mom Der {@link SpeciesParticle}, der das Kind erzeugt.
+     * @return Ein neues {@link SpeciesParticle}-Kind oder {@code null}, wenn keins erzeugt wurde.
+     * D.R.E.C.K.
+     */
     private SpeciesParticle createNewChild(SpeciesParticle mom) {
         SpeciesParticle child = mom.newChild();
         if (child == null) return child;
