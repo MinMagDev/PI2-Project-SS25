@@ -3,9 +3,10 @@ package Genom;
 import Species.Species;
 import org.w3c.dom.css.RGBColor;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.*;
 
 import static java.util.Map.entry;
 
@@ -49,11 +50,8 @@ public class DNA {
     public DNA() {
         dna = generateRandomDNA(128);
     }
-    public DNA(List<Nucleotid> dna){
-        this.dna = dna;
-    }
 
-    private DNA(List<Nucleotid> dna) {
+    public DNA(List<Nucleotid> dna) {
         this.dna = dna;
     }
 
@@ -104,7 +102,7 @@ public class DNA {
      * @return speeeed
      */
     public double getSpeed(){
-        double result = getValue(SPEED_POSITION, SPEED_DNA_LENGTH, MAX_SPEED);
+        double result = getValue(SPEED_DNA_POSITION, SPEED_DNA_LENGTH, MAX_SPEED);
       
         if (result <= ZERO_SPEED_THREASHOLD) return 0.0d;
         return result/10;
@@ -115,7 +113,7 @@ public class DNA {
      * @return forcefield Radius
      */
     public double getRadius(){
-        return getValue(FORCEFIELD_RADIUS_POSITION, 6, MAX_FIELD_RADIUS);
+        return getValue(INTERACTION_RADIUS_DNA_POSITION, INTERACTION_RADIUS_DNA_LENGTH, MAX_FIELD_RADIUS);
     }
 
     /**
@@ -140,7 +138,7 @@ public class DNA {
   /**
      * returns a scaled value corresponding to a specific sequence of DNA
      * @param start the first nucleotide to be considered
-     * @param end the index after the last nucleotide to be considered
+     * @param length the amount of nucleotides to be considered
      * @param max the maximum allowed value
      * @return the corresponding double
      */
@@ -172,7 +170,7 @@ public class DNA {
             System.out.println("DNA SIZE IS ZERO, from DNA: " + this);
             return InteractionType.NEUTRAL;
         }
-        Nucleotid nuc = dna.get((INTERACTION_POSITION + species) % dna.size());
+        Nucleotid nuc = dna.get((INTERACTION_TYPES_POSITION + species) % dna.size());
       
         switch (nuc) {
             case A -> {

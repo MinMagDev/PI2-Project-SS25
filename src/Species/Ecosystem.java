@@ -50,9 +50,13 @@ public class Ecosystem {
     public static Ecosystem createExampleEcosystem(int speciesCount){
         Ecosystem ecosystem = new Ecosystem();
         for(int i = 0; i < speciesCount; i++){
-            ecosystem.addSpecies(new Species(new DNA(), ecosystem));
+         new Species(new DNA(), ecosystem);
         }
         return ecosystem;
+    }
+
+    public Species getSpecies(int id){
+        return species.get(id);
     }
 
 }
