@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public abstract class Particle implements Collider {
+public abstract class Particle implements Collider, Entity {
     public static double MAX_SPEED = 3;
 
     private static class ForceManager {
@@ -70,6 +70,9 @@ public abstract class Particle implements Collider {
     @Override
     public double getRadius() {
         return radius;
+    }
+    public void setRadius(double r) {
+        this.radius = r;
     }
 
     @Override

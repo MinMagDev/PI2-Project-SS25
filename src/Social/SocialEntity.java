@@ -1,10 +1,11 @@
 package Social;
 
 import Genom.InteractionType;
+import Particle.Entity;
 import Particle.Vector2D;
 import Species.Species;
 
-public interface SocialEntity<Interactee extends SocialEntity> {
+public interface SocialEntity<Interactee extends SocialEntity> extends Entity {
 
     double SPEED_MULTIPLIER = 1.0;
 
@@ -26,8 +27,6 @@ public interface SocialEntity<Interactee extends SocialEntity> {
 
 
     double getInteractionRadius();
-
-    void kill();
 
     void addForce(Vector2D force);
 

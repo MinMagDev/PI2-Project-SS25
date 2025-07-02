@@ -4,11 +4,14 @@ import Canvas.*;
 import Particle.DebugParticle;
 import Particle.Particle;
 import Particle.Vector2D;
+import Genom.DNA;
 import Social.SocialParticleRenderer;
+import Species.Species;
+import Species.SpeciesParticle;
 
 
 import java.awt.*;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -21,15 +24,17 @@ public class World implements Drawable {
 
     public static final int MAX_WIDTH = 1000;
     public static final int MAX_HEIGHT = 1000;
+    public static final int MAX_ENTITY_COUNT = 1000;
 
-    List<? extends Collider> colliders;
+    //Fuck it, who needs Wildcards
+    List<SpeciesParticle> colliders;
 
     private final Drawable renderer;
 
-    public World(int width, int height, List<? extends Collider> colliders, Drawable renderer) {
+    public World(int width, int height, List<SpeciesParticle> colliders, Drawable renderer) {
         this.width = width;
         this.height = height;
-        this.colliders = colliders;
+        this.colliders = new ArrayList<>(colliders);
         this.renderer = renderer;
     }
 
@@ -48,10 +53,87 @@ public class World implements Drawable {
 
     @Override
     public void update() {
+        updateParticles();
         simulateCollisions();
         renderer.update();
     }
 
+    /**
+     * Aktualisiert den Zustand aller {@link SpeciesParticle}-Instanzen in der {@code colliders}-Liste.
+     * <p>
+     * Entfernt tote Partikel, verarbeitet reproduzierende Partikel (als Mütter) und erzeugt neue Kind-Partikel.
+     * Neue Partikel werden zur Liste hinzugefügt (sofern {@code MAX_ENTITY_COUNT} nicht überschritten wird).
+     * Tote Partikel werden entfernt und alle Änderungen optional an den zugehörigen Renderer übergeben.
+     * (D.R.E.C.K)
+     */
+    private void updateParticles() {
+        List<SpeciesParticle> toRemove = new ArrayList<>();
+        List<SpeciesParticle> allMoms = new ArrayList<>();
+        for (int i = 0; i < colliders.size(); i++) {
+            if (colliders.get(i) instanceof  SpeciesParticle) {
+                SpeciesParticle particle = (SpeciesParticle) colliders.get(i);
+                if (!particle.isAlive()) {
+                    toRemove.add(particle);
+                    if(renderer instanceof ParticleRenderer){
+                        ((ParticleRenderer<SpeciesParticle>) renderer).removeEntity(particle);
+                    }
+                    continue;
+                }
+                if(particle.isReproducing()){
+                    particle.setReproducing(false);
+                    allMoms.add(particle);
+              }
+            }
+        }
+        for(SpeciesParticle child : createNewChilds(allMoms)){
+            if (colliders.size() >= MAX_ENTITY_COUNT) break;
+            colliders.add(child);
+            if(renderer instanceof ParticleRenderer){
+                ((ParticleRenderer<SpeciesParticle>) renderer).addEntity(child);
+            }
+        }
+        colliders.removeAll(toRemove);
+        if(renderer instanceof ParticleRenderer){
+            ((ParticleRenderer<SpeciesParticle>) renderer).massRemoveEntities(toRemove);
+        }
+    }
+
+    /**
+     * Erzeugt neue Kind-Partikel aus einer Liste von Mutter-Partikeln.
+     * <p>
+     * Jeder Mutterpartikel ruft {@code newChild()} auf sich selbst auf. Falls ein Kind erzeugt wurde,
+     * wird es mittels {@link #createNewChild(SpeciesParticle)} weiterverarbeitet.
+     *
+     * @param allMoms Eine Liste von {@link SpeciesParticle}-Instanzen, die reproduzieren sollen.
+     * @return Eine Liste aller erfolgreich erzeugten Kind-Partikel.
+     * D.R.E.C.K
+     */
+    private List<SpeciesParticle> createNewChilds(List<SpeciesParticle> allMoms) {
+        List<SpeciesParticle> childs = new ArrayList<>();
+        for (SpeciesParticle mom: allMoms){
+             SpeciesParticle child = createNewChild(mom);
+            if (child == null) continue;
+            childs.add(child);
+        }
+        return childs;
+    }
+
+    /**
+     * Erzeugt ein neues Kind-Partikel auf Basis eines Mutterpartikels.
+     * <p>
+     * Das Kind wird durch den Aufruf von {@code mom.newChild()} erzeugt. Falls ein Kind erzeugt wird,
+     * werden anschließend mit {@code updateValues()} zusätzliche Werte aktualisiert.
+     *
+     * @param mom Der {@link SpeciesParticle}, der das Kind erzeugt.
+     * @return Ein neues {@link SpeciesParticle}-Kind oder {@code null}, wenn keins erzeugt wurde.
+     * D.R.E.C.K.
+     */
+    private SpeciesParticle createNewChild(SpeciesParticle mom) {
+        SpeciesParticle child = mom.newChild();
+        if (child == null) return child;
+        child.updateValues();
+        return child;
+    }
 
     static final double speedFactor = .2;
     /**
@@ -99,46 +181,4 @@ public class World implements Drawable {
 
         }
     }
-
-    /**
-     * creates an example world with 10 debug particles
-     * @param width the world's width
-     * @param height the world's width
-     * @return the example world
-     */
-
-    public static Drawable createExample(int width, int height) {
-        final List<DebugParticle> particles = Arrays.stream(DebugParticle.createExampleArray(10, width, height)).toList();
-        Drawable renderer = new ParticleRenderer(particles);
-
-        return new World(width, height, particles, renderer);
-    }
-
-    /**
-     * creates a demo where two particles bounce off each other
-     * @return the demo world
-     */
-    public static Drawable collisionDemo() {
-        final List<DebugParticle> particles = Arrays.asList(DebugParticle.createExampleArray(2, MAX_WIDTH, MAX_HEIGHT));
-        Drawable renderer = new ParticleRenderer(particles);
-        Particle p1 = particles.get(0);
-        Particle p2 = particles.get(1);
-
-        p1.addForce(p1.getPosition().to(p2.getPosition()).mul(10));
-        p2.addForce(p2.getPosition().to(p1.getPosition()).mul(10));
-
-        return new World(MAX_WIDTH, MAX_HEIGHT, particles, renderer);
-    }
-
-    public static Drawable socialDemo() {
-        var particles = Arrays.asList(DebugParticle.createExampleArray(10, MAX_WIDTH, MAX_HEIGHT));
-        var renderer = new SocialParticleRenderer(particles);
-
-        return new World(MAX_WIDTH, MAX_HEIGHT, particles, renderer);
-    }
-
-
-
-
-
 }

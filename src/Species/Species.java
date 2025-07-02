@@ -15,10 +15,11 @@ import java.util.stream.Stream;
 public class Species {
 
 
-    private final double interactionRadius, speed;
+    private double interactionRadius, speed, hunger, reproductionProb;
+    private final Ecosystem ecosystem;
 
 
-    private final DNA dna;
+    private DNA dna;
 
     public void setColor(Color color) {
         this.color = color;
@@ -33,14 +34,17 @@ public class Species {
     public DNA getDNA() {
         return dna;
     }
+    public void setDNA(DNA dna) {
+        this.dna = dna;
+        updateValues();
+    }
 
     private InteractionType[] interactions;
 
     public Species(DNA dna, Ecosystem ecosystem) {
         this.dna = dna;
-        this.color = dna.getColor();
-        this.speed = dna.getSpeed() * ecosystem.getSpeedMultiplier();
-        this.interactionRadius = dna.getRadius() * ecosystem.getSpeedMultiplier();
+        this.ecosystem = ecosystem;
+        updateValues();
 
         ecosystem.addSpecies(this);
         id = ecosystem.getSpeciesCount() - 1;
@@ -48,7 +52,21 @@ public class Species {
         ecosystem.updateInteractionMatrix();
     }
 
+    public void updateValues(){
+
+        this.color = dna.getColor();
+        this.speed = dna.getSpeed() * ecosystem.getSpeedMultiplier();
+        this.hunger = dna.getHunger();
+        this.reproductionProb = dna.getReproductionProbability();
+        this.interactionRadius = dna.getRadius() * ecosystem.getSpeedMultiplier();
+
+    }
+
     private final int id;
+
+    public int getId() {
+        return id;
+    }
 
     public InteractionType getInteractionWith(Species other) {
         return interactions[other.id];
@@ -68,6 +86,17 @@ public class Species {
     public double getInteractionRadius(){
         return interactionRadius;
     }
+
+    public double getHunger() {
+        return hunger;
+    }
+
+    public double getReproductionProb() {
+        return reproductionProb;
+    }
+
+    public Ecosystem getEcosystem() {
+        return ecosystem;
 
     public int getId() {
         return id;
