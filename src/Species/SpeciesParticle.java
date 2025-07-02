@@ -148,7 +148,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     @Override
     public SpeciesParticle newChild() {
         DNA newDNA = new DNA(dna.mutate(EXPECTED_MUTATIONS));
-        if(newDNA.getDNA().size() == 0) {
+        if(newDNA.getDNA().isEmpty()) {
             return null;
         }
         Species newSpecies = getSpecies();
