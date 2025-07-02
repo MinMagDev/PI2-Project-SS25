@@ -6,17 +6,36 @@ import org.w3c.dom.css.RGBColor;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+
+import static java.util.Map.entry;
+
 
 public class DNA {
     private List<Nucleotid> dna;
-
-    private final int SPEED_POSITION = 0;
-    private final int FORCEFIELD_RADIUS_POSITION = 6;
-    private final int INTERACTION_POSITION = 24;
+    /**
+     * the index of the first nucleotide relevant for speed value calculation
+     */
+    public static final int SPEED_DNA_POSITION = 0;
+    /**
+     * the amount of nucleotides following SPEED_DNA_POSITION relevant for speed value calculation
+     */
+    public static final int SPEED_DNA_LENGTH = 6;
+    /**
+     * the index of the first nucleotide relevant for interaction radius calculation
+     */
+    public static final int INTERACTION_RADIUS_DNA_POSITION = 6;
+    /**
+     * the amount of nucleotides following SPEED_DNA_POSITION relevant for interaction radius calculation
+     */
+    public static final int INTERACTION_RADIUS_DNA_LENGTH = 6;
+  
+  // TODO: add to editor
     private final int HUNGER_POSITION = 12;
     private final int REPRO_PROBABILITY_POSITION = 18;
+  
+
+    public static final int INTERACTION_TYPES_POSITION = 24;
+
 
     private final int MAX_SPEED = 10;
     private final int MAX_FIELD_RADIUS = 40;
@@ -33,6 +52,36 @@ public class DNA {
     public DNA(List<Nucleotid> dna){
         this.dna = dna;
     }
+
+    private DNA(List<Nucleotid> dna) {
+        this.dna = dna;
+    }
+
+    public static final Map<Character, Nucleotid> nucleotideDictionary = Map.ofEntries(
+            entry('a', Nucleotid.A),
+            entry('c', Nucleotid.C),
+            entry('g', Nucleotid.G),
+            entry('t', Nucleotid.T),
+            entry('A', Nucleotid.A),
+            entry('C', Nucleotid.C),
+            entry('G', Nucleotid.G),
+            entry('T', Nucleotid.T)
+    );
+
+    public static DNA fromString(String dna) {
+        dna = dna.trim();
+        List<Nucleotid> nucleotides = new ArrayList<>();
+
+        for(char c: dna.toCharArray()) {
+            if(!nucleotideDictionary.containsKey(c)) {
+                throw new IllegalArgumentException("Illegal Character: " + c);
+            }
+            nucleotides.add(nucleotideDictionary.get(c));
+        }
+
+        return new DNA(nucleotides);
+    }
+
 
     /**
      * Generates a new random DNA-Strang
@@ -55,7 +104,8 @@ public class DNA {
      * @return speeeed
      */
     public double getSpeed(){
-        double result = getValue(SPEED_POSITION,6,MAX_SPEED);
+        double result = getValue(SPEED_POSITION, SPEED_DNA_LENGTH, MAX_SPEED);
+      
         if (result <= ZERO_SPEED_THREASHOLD) return 0.0d;
         return result/10;
     }
@@ -87,7 +137,14 @@ public class DNA {
     public InteractionType getInteractionWith(Species other) {
         return getInteraction(other.getId());
     }
-
+  /**
+     * returns a scaled value corresponding to a specific sequence of DNA
+     * @param start the first nucleotide to be considered
+     * @param end the index after the last nucleotide to be considered
+     * @param max the maximum allowed value
+     * @return the corresponding double
+     */
+  
     private double getValue(int start, int length, double max){
         double result = 0.0d;
         result += getIntValue(start, start+length);
@@ -107,15 +164,16 @@ public class DNA {
     /**
      * Returns how the species should interact to other species
      * @param species The Species to interact with
-     * @return -1: Flee, 0: ignore, 1: Hunt
+     * @return interaction type
      */
     public InteractionType getInteraction(int species){
-        //System.out.println("Species to get Interaction: " + species);
+
         if (dna.size() == 0) {
             System.out.println("DNA SIZE IS ZERO, from DNA: " + this);
             return InteractionType.NEUTRAL;
         }
         Nucleotid nuc = dna.get((INTERACTION_POSITION + species) % dna.size());
+      
         switch (nuc) {
             case A -> {
                 return InteractionType.REPEL;

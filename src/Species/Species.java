@@ -97,5 +97,8 @@ public class Species {
 
     public Ecosystem getEcosystem() {
         return ecosystem;
+
+    public int getId() {
+        return id;
     }
 }
