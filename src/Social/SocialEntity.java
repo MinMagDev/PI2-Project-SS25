@@ -17,7 +17,7 @@ public interface SocialEntity<Interactee extends SocialEntity> {
      * the interact function that gets called on every entity in this entity's social radius
      * @param interactee the other entity to interact with
      */
-    default void interactWith(Interactee interactee ) {
+    default void interactWith(Interactee interactee) {
         Vector2D toInteractee = getPosition().to(interactee.getPosition());
         toInteractee.normalize();
         toInteractee.mul(SPEED_MULTIPLIER);
