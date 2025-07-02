@@ -2,6 +2,7 @@ package Editor;
 
 import Genom.DNA;
 import Species.Ecosystem;
+import Species.Species;
 
 import javax.swing.*;
 
@@ -20,7 +21,8 @@ public class EditorWindow extends JFrame {
         });
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(new DNADisplay(new DNA()));
+        Ecosystem ecosystem = Ecosystem.createExampleEcosystem(3);
+        panel.add(new DNADisplay(new Species(new DNA(), ecosystem)));
         panel.add(zapButton);
         add(panel);
 

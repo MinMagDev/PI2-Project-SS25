@@ -16,5 +16,16 @@ public enum InteractionType {
     /**
      * the entities should not interact with each other
      */
-    NEUTRAL
+    NEUTRAL;
+
+    @Override
+    public String toString() {
+        return switch (this) {
+            case ATTRACT -> "→←";
+            case REPEL -> "←→";
+            case SPRING -> "spring";
+            case NEUTRAL -> "◌";
+        };
+    }
+
 }

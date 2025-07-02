@@ -2,6 +2,7 @@ package Editor;
 
 import Genom.DNA;
 import Species.Ecosystem;
+import Species.Species;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -20,22 +21,31 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
     private static final SimpleAttributeSet standardAttributeSet = new SimpleAttributeSet();
     private static final Font DNAFont = new Font(Font.SANS_SERIF, Font.PLAIN, 25);
 
+    private final Ecosystem ecosystem;
+    private Species species;
+
 
 
     private final JTextPane textPane;
     private final StyledDocument doc;
 
     private final AttributeLabel speedLabel, interactionRadiusLabel;
+    private final InteractionMatrixDisplay interactionMatrixDisplay;
 
     private String text;
 
     private int lastClickedPos = -1;
     private boolean editable = false;
 
-    private int count = 0;
 
-    public DNADisplay(DNA dna) {
 
+
+    public DNADisplay(Species species) {
+        this.species = species;
+
+        DNA dna = species.getDNA();
+
+        this.ecosystem = species.getEcosystem();
 
         var fixedSites = new InterestingDNASite[]{
                 new InterestingDNASite("speed", Color.CYAN,  DNA.SPEED_DNA_POSITION, DNA.SPEED_DNA_LENGTH),
@@ -43,7 +53,7 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
         };
 
         var fixedSitesStream = Arrays.stream(fixedSites);
-        var interactionSites = SpeciesInteractionNucleotidePosition.fromEcosystem(Ecosystem.createExampleEcosystem(3));
+        var interactionSites = SpeciesInteractionNucleotidePosition.fromEcosystem(ecosystem);
         var interactionSitesStream = interactionSites.stream();
 
         interestingDNASites = Stream.concat(fixedSitesStream, interactionSitesStream).toArray(InterestingDNASite[]::new);
@@ -86,7 +96,9 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
         interactionRadiusLabel = new AttributeLabel("Interaction radius", String.valueOf(dna.getRadius()));
         add(interactionRadiusLabel);
 
+        this.interactionMatrixDisplay = new InteractionMatrixDisplay(ecosystem);
 
+        add(interactionMatrixDisplay);
 
     }
 
@@ -137,6 +149,8 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
         DNA dna = DNA.fromString(text.replace("\n", ""));
         speedLabel.setText(String.valueOf(dna.getSpeed()));
         interactionRadiusLabel.setText(String.valueOf(dna.getRadius()));
+        species.setDNA(dna);
+        interactionMatrixDisplay.repaint();
         repaint();
     }
 
