@@ -64,6 +64,7 @@ public class World implements Drawable {
      * Entfernt tote Partikel, verarbeitet reproduzierende Partikel (als Mütter) und erzeugt neue Kind-Partikel.
      * Neue Partikel werden zur Liste hinzugefügt (sofern {@code MAX_ENTITY_COUNT} nicht überschritten wird).
      * Tote Partikel werden entfernt und alle Änderungen optional an den zugehörigen Renderer übergeben.
+     * <p>
      * (D.R.E.C.K)
      */
     private void updateParticles() {
@@ -106,6 +107,7 @@ public class World implements Drawable {
      *
      * @param allMoms Eine Liste von {@link SpeciesParticle}-Instanzen, die reproduzieren sollen.
      * @return Eine Liste aller erfolgreich erzeugten Kind-Partikel.
+     * <p>
      * D.R.E.C.K
      */
     private List<SpeciesParticle> createNewChilds(List<SpeciesParticle> allMoms) {
@@ -126,6 +128,7 @@ public class World implements Drawable {
      *
      * @param mom Der {@link SpeciesParticle}, der das Kind erzeugt.
      * @return Ein neues {@link SpeciesParticle}-Kind oder {@code null}, wenn keins erzeugt wurde.
+     * <p>
      * D.R.E.C.K.
      */
     private SpeciesParticle createNewChild(SpeciesParticle mom) {

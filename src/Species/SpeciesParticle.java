@@ -23,7 +23,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
     private int reproductionCount = 0;
     private final int MAX_REPRO_COUNT = 200;
-    public final int EXPECTED_MUTATIONS = 20;
+    public final int EXPECTED_MUTATIONS = 2;
 
     private double interactionRadius;
 
@@ -90,7 +90,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         this.setSize(radius + radius * factor);
     }
 
-    private final Color color;
+    private Color color;
 
     public SpeciesParticle(double canvasWidth, double canvasHeight, Species species){
         super(0, 0, 3);
@@ -99,7 +99,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         this.position.setY(Math.round(random.nextDouble() * canvasHeight));
         this.color =  species.getColor();
         this.interactionRadius = species.getInteractionRadius();
-        this.addForce(new Vector2D(true));
+        this.addForce(new Vector2D());
         this.species = species;
         this.dna = species.getDNA();
     }
@@ -160,6 +160,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
     public void updateValues(){
         interactionRadius = dna.getRadius();
+        //color = dna.getColor();
     }
 
     public DNA getDna() {

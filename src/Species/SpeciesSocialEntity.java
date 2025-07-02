@@ -16,34 +16,34 @@ public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
     default void interactWith(SpeciesSocialEntity interactee) {
         InteractionType reaction = getInteractionTypeWith(interactee);
         Vector2D toInteractee = getPosition().to(interactee.getPosition());
+        double distanceToInteractee = toInteractee.length();
         switch (reaction) {
             case NEUTRAL:
                 break;
             case ATTRACT:
                 if(interactee.getSpecies() != this.getSpecies()
-                        && toInteractee.length() <= 1
+                        && distanceToInteractee <= 1
                         && interactee.getSize() <= this.getSize()
                 ) {
                     System.out.println("KILL");
                     interactee.kill();
                     this.growFac(interactee.getSize() * 0.1d);
                 }
-                if(interactee.getSpecies() == this.getSpecies()) break;
+                if(interactee.getSpecies() == this.getSpecies()
+                && distanceToInteractee <= 4) break;
                 toInteractee.normalize();
                 toInteractee.mul(getDNA().getSpeed());
                 this.addForce(toInteractee);
                 break;
             case REPEL:
-
                 toInteractee.normalize();
-                toInteractee.mul(-1 * getDNA().getSpeed());
+                toInteractee.mul(-1 * getDNA().getSpeed() * 1/distanceToInteractee);
                 this.addForce(toInteractee);
                 break;
             case SPRING:
-                final double distance = toInteractee.length();
-                final double force = (distance - getDNA().getSpeed()) * SPRING_FORCE;
-                toInteractee.mul(force/distance);
-                interactee.addForce(toInteractee);
+                final double force = (distanceToInteractee - getDNA().getSpeed()) * SPRING_FORCE;
+                toInteractee.mul(force/distanceToInteractee);
+                //interactee.addForce(toInteractee);
                 this.addForce(toInteractee.mul(-1));
                 break;
         }

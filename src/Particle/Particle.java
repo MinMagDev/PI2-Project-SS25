@@ -99,12 +99,8 @@ public abstract class Particle implements Collider, Entity {
             Vector2D newPosition = Vector2D.add(myPosition, meToCollider);
             collider.setPosition(newPosition);
             collider.addForce(meToCollider);
-            this.addForce(meToCollider.mul(-1));
+            this.addForce(meToCollider.mul(-0.1 * distance));
         }
-    }
-
-    public void setRadius(double radius) {
-        this.radius = radius;
     }
 
     protected double radius;
