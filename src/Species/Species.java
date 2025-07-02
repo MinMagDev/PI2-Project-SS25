@@ -60,6 +60,7 @@ public class Species {
         this.reproductionProb = dna.getReproductionProbability();
         this.interactionRadius = dna.getRadius() * ecosystem.getSpeedMultiplier();
 
+        ecosystem.updateInteractionMatrix();
     }
 
     private final int id;
@@ -97,5 +98,9 @@ public class Species {
 
     public Ecosystem getEcosystem() {
         return ecosystem;
+    }
+
+    public Object[] getInteractionMatrixRow() {
+        return Stream.concat(Stream.of("●"), Arrays.stream(interactions)).toArray();
     }
 }
