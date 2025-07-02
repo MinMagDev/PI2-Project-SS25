@@ -1,6 +1,10 @@
 package Canvas;
 
+import Species.SpeciesParticle;
+
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface DrawableParticle {
     /**
@@ -35,7 +39,14 @@ public interface DrawableParticle {
     boolean isAlive();
 
     /**
-     * Kills the particle
+     *
+     * @return if the particle should reproduce
      */
-    void kill();
+    boolean isReproducing();
+    void setReproducing(boolean b);
+
+    default SpeciesParticle newChild(){
+        return null;
+    }
+
 }

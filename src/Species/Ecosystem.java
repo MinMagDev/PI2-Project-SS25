@@ -1,7 +1,10 @@
 package Species;
 
+import Genom.DNA;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class Ecosystem {
     private final List<Species> species = new ArrayList<Species>();
@@ -40,9 +43,20 @@ public class Ecosystem {
             species.updateInteractions(speciesCount);
         }
     }
+    public void forEachSpecies(Consumer<Species> consumer) {
+        species.forEach(consumer);
+    }
 
+    public static Ecosystem createExampleEcosystem(int speciesCount){
+        Ecosystem ecosystem = new Ecosystem();
+        for(int i = 0; i < speciesCount; i++){
+         new Species(new DNA(), ecosystem);
+        }
+        return ecosystem;
+    }
 
-
-
+    public Species getSpecies(int id){
+        return species.get(id);
+    }
 
 }

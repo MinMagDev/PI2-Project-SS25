@@ -2,6 +2,7 @@ package Social;
 
 import LifeAndDeath.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -13,7 +14,7 @@ public class SocialSystem<T extends SocialEntity> implements EntityManager<T> {
    List<T> entities;
 
    public SocialSystem(List<T> entities) {
-      this.entities = entities;
+      this.entities = new ArrayList<>(entities);
    }
 
    /**
@@ -43,6 +44,13 @@ public class SocialSystem<T extends SocialEntity> implements EntityManager<T> {
    @Override
    public void removeEntity(T e) {
       entities.remove(e);
+   }
+
+   @Override
+   public void massRemoveEntities(List<T> es) {
+      for (T e : es) {
+         removeEntity(e);
+      }
    }
 
    @Override

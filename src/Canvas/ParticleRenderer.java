@@ -1,12 +1,17 @@
 package Canvas;
 
+import Genom.DNA;
 import LifeAndDeath.EntityManager;
 import Particle.DebugParticle;
+import Particle.Vector2D;
+import Species.Species;
+import Species.SpeciesParticle;
 import World.World;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -41,17 +46,10 @@ public class ParticleRenderer<T extends DrawableParticle> implements Drawable, E
 
     @Override
     public void update() {
-        List<DrawableParticle> toRemove = new ArrayList<>();
-        for (DrawableParticle particle : particles) {
-            if (!particle.isAlive()) {
-                toRemove.add(particle);
-                continue;
-            }
+        for (DrawableParticle particle: particles){
             particle.update();
         }
-        particles.removeAll(toRemove);
     }
-
     @Override
     public void addEntity(T e) {
         particles.add(e);
@@ -59,9 +57,17 @@ public class ParticleRenderer<T extends DrawableParticle> implements Drawable, E
 
     @Override
     public void removeEntity(T e) {
-        System.out.println("Bye: " + e);
+        //System.out.println("Bye: " + e);
         particles.remove(e);
     }
+
+    @Override
+    public void massRemoveEntities(List<T> es) {
+        for (T e: es){
+            removeEntity(e);
+        }
+    }
+
 
     @Override
     public void forEachEntity(Consumer<T> action) {

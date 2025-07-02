@@ -38,15 +38,26 @@ public class DebugParticle extends Particle implements DrawableParticle, SocialE
         this.position = position;
     }
 
+    public double getSize() {
+        return radius;
+    }
+
+    public void setSize(double size) {
+        setRadius(size);
+    }
+
+    public void growConst(double size) {
+        this.setSize(radius + size);
+    }
+
+    public void growFac(double factor) {
+        this.setSize(radius + radius * factor);
+    }
+
 
     @Override
     public double getInteractionRadius() {
         return 100;
-    }
-
-    @Override
-    public void kill() {
-
     }
 
     public Color color;
@@ -73,6 +84,14 @@ public class DebugParticle extends Particle implements DrawableParticle, SocialE
     @Override
     public boolean isAlive() {
         return true;
+    }
+
+    public boolean isReproducing() {
+        return false;
+    }
+
+    public void setReproducing(boolean b) {
+
     }
 
     /**

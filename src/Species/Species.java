@@ -15,7 +15,8 @@ import java.util.stream.Stream;
 public class Species {
 
 
-    private final double interactionRadius, speed;
+    private double interactionRadius;
+    private double speed;
 
 
     private final DNA dna;
@@ -34,6 +35,8 @@ public class Species {
         return dna;
     }
 
+    private final Ecosystem ecosystem;
+
     private InteractionType[] interactions;
 
     public Species(DNA dna, Ecosystem ecosystem) {
@@ -41,6 +44,8 @@ public class Species {
         this.color = dna.getColor();
         this.speed = dna.getSpeed() * ecosystem.getSpeedMultiplier();
         this.interactionRadius = dna.getRadius() * ecosystem.getSpeedMultiplier();
+
+        this.ecosystem = ecosystem;
 
         ecosystem.addSpecies(this);
         id = ecosystem.getSpeciesCount() - 1;
@@ -67,5 +72,25 @@ public class Species {
 
     public double getInteractionRadius(){
         return interactionRadius;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Ecosystem getEcosystem() {
+        return ecosystem;
+    }
+
+    public void setDNA(DNA dna) {
+        this.color = dna.getColor();
+        this.speed = dna.getSpeed() * ecosystem.getSpeedMultiplier();
+        this.interactionRadius = dna.getRadius() * ecosystem.getSpeedMultiplier();
+
+        ecosystem.updateInteractionMatrix();
+    }
+
+    public Object[] getInteractionMatrixRow() {
+        return Stream.concat(Stream.of("●"), Arrays.stream(interactions)).toArray();
     }
 }

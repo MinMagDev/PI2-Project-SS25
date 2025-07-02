@@ -4,6 +4,9 @@ import World.World;
 
 import javax.swing.*;
 
+/**
+ * D.R.E.C.K Steht für Durch Rechner Erstellter Code-Kommentar
+ */
 public class DemoWindow extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
