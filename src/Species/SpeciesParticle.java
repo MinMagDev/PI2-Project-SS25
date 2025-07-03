@@ -90,7 +90,13 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         this.setSize(radius + radius * factor);
     }
 
-    private final Color color;
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    private Color color;
+
+
 
     public SpeciesParticle(double canvasWidth, double canvasHeight, Species species){
         super(0, 0, 3);

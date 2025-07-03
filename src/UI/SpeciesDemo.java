@@ -23,6 +23,12 @@ public class SpeciesDemo extends Demo{
 
     private Ecosystem ecosystem;
 
+    public SocialParticleRenderer<SpeciesParticle> getRenderer() {
+        return renderer;
+    }
+
+    private SocialParticleRenderer<SpeciesParticle> renderer;
+
     public SpeciesDemo(Runnable renderer, Runnable[] pause, int species, int specimens, int socialRadiusMultiplier, int speedMultiplier) {
         this.ecosystem = new Ecosystem();
 
@@ -111,7 +117,7 @@ public class SpeciesDemo extends Demo{
 
 
 
-        var renderer = new SocialParticleRenderer<SpeciesParticle>(particles);
+        this.renderer = new SocialParticleRenderer<SpeciesParticle>(particles);
 
         zap = () -> {
             renderer.forEachEntity(particle -> {

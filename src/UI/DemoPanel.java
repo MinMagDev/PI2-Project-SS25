@@ -1,14 +1,20 @@
 package UI;
 
 import Canvas.*;
+import Editor.EditorWindow;
+import Particle.Entity;
+import Particle.Vector2D;
 import Species.Species;
 import World.World;
+import Species.SpeciesParticle;
 
 import javax.swing.*;
 
 import static java.util.Map.entry;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -88,6 +94,25 @@ public class DemoPanel extends JPanel {
                 isRunning[0] = true;
             }
         };
+
+        newPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(isRunning[0]) {
+                    super.mouseClicked(e);
+                    return;
+                }
+                Point relativeClickPosition = e.getPoint();
+                if(demo instanceof SpeciesDemo) {
+                   SpeciesParticle particle = ((SpeciesDemo) demo).getRenderer().getEntityAt(Vector2D.fromPoint(relativeClickPosition));
+
+                   if(particle != null) {
+                       new EditorWindow(particle);
+                   }
+                }
+                super.mouseClicked(e);
+            }
+        });
 
         contentPanel.add(newPanel, BorderLayout.CENTER);
         settingsPanel.add(settings, BorderLayout.CENTER);

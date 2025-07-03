@@ -14,8 +14,11 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.function.Consumer;
+import Particle.Entity;
 
-public class ParticleRenderer<T extends DrawableParticle> implements Drawable, EntityManager<T> {
+
+
+public class ParticleRenderer<T extends DrawableParticle & Entity> implements Drawable, EntityManager<T> {
 
     public ArrayList<T> getParticles() {
         return particles;

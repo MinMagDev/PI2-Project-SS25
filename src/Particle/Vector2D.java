@@ -1,5 +1,6 @@
 package Particle;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Random;
 
@@ -260,6 +261,13 @@ public class Vector2D {
 
     public void print(){
         System.out.println(this.toString());
+    }
+
+    /**
+     * converts java.awt.point to a Vector2D
+     */
+    public static Vector2D fromPoint(Point point){
+        return new Vector2D(point.x, point.y);
     }
 
 }

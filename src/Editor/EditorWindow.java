@@ -2,18 +2,14 @@ package Editor;
 
 import Genom.DNA;
 import Species.Ecosystem;
-import Species.Species;
+import Species.*;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class EditorWindow extends JFrame {
-    private Ecosystem ecosystem;
 
     public EditorWindow(){
-        setTitle("Zweites Fenster");
-        setSize(1200, 150);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // nur dieses Fenster schließen
 
         JButton zapButton = new JButton("Zap");
         zapButton.addActionListener(e -> {
@@ -22,13 +18,37 @@ public class EditorWindow extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         Ecosystem ecosystem = Ecosystem.createExampleEcosystem(3);
-        panel.add(new DNADisplay(new Species(new DNA(), ecosystem)));
+        panel.add(new DNADisplay(new Species(new DNA(), ecosystem), null, (dna) -> {}));
         panel.add(zapButton);
         add(panel);
+
+        setUp();
+    }
+
+    public EditorWindow(SpeciesParticle particle) {
+        var species = particle.getSpecies();
+        var display = new DNADisplay(species, particle.getDNA(), (dna) -> {
+            particle.setDna(dna);
+            particle.setColor(Color.CYAN);
+            dispose();
+        });
+
+        add(display);
+
+        setUp();
+    }
+
+    private void setUp(){
+        setTitle("DNA Editor");
+        setSize(1200, 150);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // nur dieses Fenster schließen
 
 
         setVisible(true);
     }
+
+
 
     public static void main(String[] args) {
         new EditorWindow();
