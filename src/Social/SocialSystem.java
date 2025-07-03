@@ -48,7 +48,7 @@ public class SocialSystem<T extends SocialEntity> implements EntityManager<T> {
 
    @Override
    public void massRemoveEntities(List<T> es) {
-      for (T e : es) {
+      for (T e: es){
          removeEntity(e);
       }
    }

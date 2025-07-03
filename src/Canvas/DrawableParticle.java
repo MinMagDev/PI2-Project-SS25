@@ -3,8 +3,6 @@ package Canvas;
 import Species.SpeciesParticle;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public interface DrawableParticle {
     /**
