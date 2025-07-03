@@ -12,4 +12,5 @@ public class EmptyCanvas implements Drawable {
     public void update() {
         // empty
     }
+
 }

@@ -12,6 +12,7 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 
@@ -37,13 +38,23 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
     private int lastClickedPos = -1;
     private boolean editable = false;
 
+    private final Consumer<DNA> confirmEditHandler;
+    private DNA currentDNA;
 
 
 
-    public DNADisplay(Species species) {
+
+    public DNADisplay(Species species, DNA dna, Consumer<DNA> confirmEditHandler) {
+        this.confirmEditHandler = confirmEditHandler;
+
         this.species = species;
 
-        DNA dna = species.getDNA();
+        if (dna == null) {
+            dna = species.getDNA();
+        }
+
+        currentDNA = dna;
+
 
         this.ecosystem = species.getEcosystem();
 
@@ -100,6 +111,13 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
 
         add(interactionMatrixDisplay);
 
+        JButton confirmButton = new JButton("Confirm");
+        confirmButton.addActionListener(e -> {
+            confirmEditHandler.accept(currentDNA);
+        });
+        add(confirmButton);
+
+
     }
 
     @Override
@@ -146,10 +164,10 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
     }
 
     private void handleEdit(){
-        DNA dna = DNA.fromString(text.replace("\n", ""));
-        speedLabel.setText(String.valueOf(dna.getSpeed()));
-        interactionRadiusLabel.setText(String.valueOf(dna.getRadius()));
-        species.setDNA(dna);
+        currentDNA = DNA.fromString(text.replace("\n", ""));
+        speedLabel.setText(String.valueOf(currentDNA.getSpeed()));
+        interactionRadiusLabel.setText(String.valueOf(currentDNA.getRadius()));
+        species.setDNA(currentDNA);
         interactionMatrixDisplay.repaint();
         repaint();
     }

@@ -10,7 +10,6 @@ import World.World;
 import Canvas.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +23,13 @@ public class SpeciesDemo extends Demo{
 
     private Ecosystem ecosystem;
 
-    public SpeciesDemo(Runnable renderer, int species, int specimens, int socialRadiusMultiplier, int speedMultiplier) {
+    public SocialParticleRenderer<SpeciesParticle> getRenderer() {
+        return renderer;
+    }
+
+    private SocialParticleRenderer<SpeciesParticle> renderer;
+
+    public SpeciesDemo(Runnable renderer, Runnable[] pause, int species, int specimens, int socialRadiusMultiplier, int speedMultiplier) {
         this.ecosystem = new Ecosystem();
 
 
@@ -59,12 +64,18 @@ public class SpeciesDemo extends Demo{
             new EditorWindow();
         });
 
+        JButton pauseButton = new JButton("Pause");
+        pauseButton.addActionListener(e -> {
+            pause[0].run();
+        });
+
 
         super.setSettings((panel) -> {
             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
             panel.add(editorButton);
             panel.add(zapButton);
+            panel.add(pauseButton);
 
             panel.add(new JLabel("Max speed:"));
             panel.add(maxSpeed);
@@ -101,7 +112,7 @@ public class SpeciesDemo extends Demo{
 
 
 
-        var renderer = new SocialParticleRenderer<SpeciesParticle>(particles);
+        this.renderer = new SocialParticleRenderer<SpeciesParticle>(particles);
 
         zap = () -> {
             renderer.forEachEntity(particle -> {

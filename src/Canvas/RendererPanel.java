@@ -36,4 +36,11 @@ public class RendererPanel extends JPanel implements ActionListener {
         repaint();
     }
 
+    public void pause(){
+        timer.stop();
+    }
+
+    public void resume(){
+        timer.start();
+    }
 }
