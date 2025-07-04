@@ -23,7 +23,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
     private int reproductionCount = 0;
     private final int MAX_REPRO_COUNT = 200;
-    public final int EXPECTED_MUTATIONS = 2;
+    public final int EXPECTED_MUTATIONS = 1;
 
     private double interactionRadius;
 
@@ -167,10 +167,6 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     public void updateValues(){
         interactionRadius = dna.getRadius();
         //color = dna.getColor();
-    }
-
-    public DNA getDna() {
-        return dna;
     }
 
     public void setDna(DNA dna) {

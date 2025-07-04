@@ -1,11 +1,13 @@
 package Cluster;
 
+import Genom.DNA;
+
 public class ClusterCentroid extends DataPoint{
 
     private GenPoint[] clusteredPoints;
 
-    public ClusterCentroid(float pA, float mA, int totalPoints, String name) {
-        super(pA, mA, name);
+    public ClusterCentroid(DNA dna, int totalPoints) {
+        super(dna);
         clusteredPoints = new GenPoint[totalPoints];
     }
 
@@ -45,36 +47,17 @@ public class ClusterCentroid extends DataPoint{
     }
 
     public boolean updatePosition() {
-        float newPlus = 0.0f;
-        float newMinus= 0.0f;
+        int[] newPosition = new int[MAX_COMPARABLE_BINARY_VECOTR_LENGTH];
         GenPoint[] onlyClusteredPoints = getClusteredPoints();
         for (GenPoint genPoint: onlyClusteredPoints) {
-            newPlus += genPoint.getPlusAnti();
-            newMinus += genPoint.getMinusAnti();
+            newPosition = addBinaryVectors(genPoint.getBinaryVector(), newPosition);
         }
-        int size = onlyClusteredPoints.length;
-        newPlus /= size;
-        newMinus /= size;
 
-        boolean changed = !(newPlus == this.getPlusAnti() && newMinus == this.getMinusAnti());
+        newPosition = findMean(newPosition);
 
-        this.setPlusAnti(newPlus);
-        this.setMinusAnti(newMinus);
+        boolean changed = !compare(newPosition,this.getBinaryVector());
+
+        this.setBinaryVector(newPosition);
         return changed;
     }
-
-    public void printClusterWithDistance() {
-        System.out.println("----------------------------------------------------");
-        System.out.println("All points with distance in " + this.getPointName() +
-                "(" + this.getPlusAnti() + ", " + this.getMinusAnti() + "):");
-        for (GenPoint point: getClusteredPoints()) {
-            System.out.println(point.getPointName() +
-                    ":\t" +
-                    point.getPlusAnti() + ", " + point.getMinusAnti() +
-                    "\t" +
-                    "d: "+ point.getDistanceToNearestCluster());
-        }
-    }
-
-
 }
