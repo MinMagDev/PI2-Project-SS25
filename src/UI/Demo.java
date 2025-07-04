@@ -1,23 +1,25 @@
 package UI;
 
 import Canvas.*;
+import Editor.EditorWindow;
+import Particle.Vector2D;
+import Species.SpeciesParticle;
+import World.World;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Demo {
 
 
-    private Supplier<Drawable> scene;
-    private Function<JPanel, JPanel> settings;
+    private Supplier<Drawable> scene = () -> new EmptyCanvas();
+    private Function<JPanel, JPanel> settings = panel -> panel;
 
-    public Demo() {
-        this.scene = () -> new EmptyCanvas();
-        this.settings = panel -> panel;
-    }
-
+    public Demo() {}
 
     public Demo(Supplier<Drawable> scene, Function<JPanel, JPanel> settings) {
         this.scene = scene;
@@ -42,8 +44,8 @@ public class Demo {
         this.settings = settings;
     }
 
-    public Drawable getScene() {
-        return scene.get();
+    public RendererPanel getScene() {
+        return new RendererPanel(World.MAX_WIDTH, World.MAX_HEIGHT, scene.get());
     }
 
     public void setScene(Supplier<Drawable> scene) {

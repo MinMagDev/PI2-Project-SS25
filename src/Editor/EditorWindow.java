@@ -6,6 +6,7 @@ import Species.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class EditorWindow extends JFrame {
 
@@ -26,16 +27,21 @@ public class EditorWindow extends JFrame {
     }
 
     public EditorWindow(SpeciesParticle particle) {
+        this(particle, (dna) -> {});
+    }
+
+    public EditorWindow(SpeciesParticle particle, Consumer<DNA> confirmEditHandler) {
         var species = particle.getSpecies();
-        var display = new DNADisplay(species, particle.getDNA(), (dna) -> {
+        var display = new DNADisplay(species, particle.getDNA(), confirmEditHandler.andThen((dna) -> {
             particle.setDna(dna);
             particle.setColor(Color.CYAN);
             dispose();
-        });
+        }));
 
         add(display);
 
         setUp();
+
     }
 
     private void setUp(){

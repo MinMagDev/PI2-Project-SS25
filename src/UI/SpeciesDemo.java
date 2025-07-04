@@ -10,6 +10,9 @@ import World.World;
 import Canvas.*;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +22,7 @@ public class SpeciesDemo extends Demo{
     static double ZAP_FACTOR = 100d;
 
     private final JSlider socialRadiusMultiplier, speedMultiplier, speciesAmount, specimensAmount, maxSpeed;
-    private Runnable zap;
+    private Runnable zap, pause;
 
     private Ecosystem ecosystem;
 
@@ -29,7 +32,7 @@ public class SpeciesDemo extends Demo{
 
     private SocialParticleRenderer<SpeciesParticle> renderer;
 
-    public SpeciesDemo(Runnable renderer, Runnable[] pause, int species, int specimens, int socialRadiusMultiplier, int speedMultiplier) {
+    public SpeciesDemo(Runnable renderer, int species, int specimens, int socialRadiusMultiplier, int speedMultiplier) {
         this.ecosystem = new Ecosystem();
 
 
@@ -68,7 +71,7 @@ public class SpeciesDemo extends Demo{
 
         JButton pauseButton = new JButton("Pause");
         pauseButton.addActionListener(e -> {
-            pause[0].run();
+            pause.run();
         });
 
 
@@ -100,6 +103,41 @@ public class SpeciesDemo extends Demo{
 
 
 
+    }
+
+    @Override
+    public RendererPanel getScene() {
+        RendererPanel panel = super.getScene();
+
+        Reference<Boolean> isRunning = new Reference<>(true);
+
+        pause = () -> {
+            if (isRunning.get()) {
+                panel.pause();
+                isRunning.set(false);
+            } else {
+                panel.resume();
+                isRunning.set(true);
+            }
+        };
+
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(isRunning.get()) {
+                    super.mouseClicked(e);
+                    return;
+                }
+                Point relativeClickPosition = e.getPoint();
+                SpeciesParticle particle = getRenderer().getEntityAt(Vector2D.fromPoint(relativeClickPosition));
+                if(particle != null) {
+                    new EditorWindow(particle);
+                }
+                super.mouseClicked(e);
+            }
+        });
+
+        return panel;
     }
 
     private Drawable createDemo(int species, int specimens){
