@@ -89,8 +89,4 @@ public class Species {
 
         ecosystem.updateInteractionMatrix();
     }
-
-    public Object[] getInteractionMatrixRow() {
-        return Stream.concat(Stream.of("●"), Arrays.stream(interactions)).toArray();
-    }
 }

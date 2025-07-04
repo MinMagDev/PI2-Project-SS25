@@ -1,5 +1,6 @@
 package Editor;
 
+import Genom.DNA;
 import Species.Ecosystem;
 
 import javax.swing.*;
@@ -17,13 +18,18 @@ public class InteractionMatrixDisplay extends JPanel {
 
     private static final Font bigCirlceFont = new Font("Arial", Font.PLAIN, 30);
 
-    public InteractionMatrixDisplay(Ecosystem ecosystem) {
+
+    public InteractionMatrixDisplay(Ecosystem ecosystem, DNA dna) {
         this.ecosystem = ecosystem;
 
+        this.model = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
-        this.model = new DefaultTableModel();
-
-        updateTable();
+        updateTable(dna);
 
         JTable table = new JTable(model);
 
@@ -32,7 +38,7 @@ public class InteractionMatrixDisplay extends JPanel {
         int cellSize = 50;
         table.setRowHeight(cellSize);
 
-        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+        /*table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
                                                            boolean isSelected, boolean hasFocus,
@@ -49,7 +55,7 @@ public class InteractionMatrixDisplay extends JPanel {
 
                 return c;
             }
-        });
+        });*/
 
         JTableHeader header = table.getTableHeader();
         header.setDefaultRenderer(new DefaultTableCellRenderer() {
@@ -58,36 +64,36 @@ public class InteractionMatrixDisplay extends JPanel {
                                                            boolean isSelected, boolean hasFocus,
                                                            int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                if (column > 0) {
                     JLabel label = (JLabel) c;
-                    label.setForeground(ecosystem.getSpecies(column - 1).getColor());
+                    label.setForeground(ecosystem.getSpecies(column).getColor());
                     label.setFont(bigCirlceFont);
                     return c;
-                }
-                return new JLabel("");
 
             }
         });
 
+        JScrollPane scrollPanel = new JScrollPane(table);
 
+        scrollPanel.setSize(new Dimension(400, 100));
 
-        add(new JScrollPane(table));
+        add(scrollPanel);
+        setSize(new Dimension(400, 100));
     }
 
-    private void updateTable() {
-        Object[] header = createTableHeader(ecosystem.getSpeciesCount() + 1);
-        this.interactionMatrix = new Object[ecosystem.getSpeciesCount()][header.length];
+    private void updateTable(DNA dna) {
+        Object[] header = createTableHeader(ecosystem.getSpeciesCount());
+        this.interactionMatrix = new Object[1][header.length];
         ecosystem.forEachSpecies(species -> {
-            interactionMatrix[species.getId()] = species.getInteractionMatrixRow();
+            interactionMatrix[0][species.getId()] = dna.getInteraction(species.getId()).toString();
         });
 
         model.setDataVector(interactionMatrix, header);
     }
 
-    @Override
-    public void repaint() {
+
+    public void update(DNA dna) {
         if(ecosystem != null) {
-            updateTable();
+            updateTable(dna);
         }
         super.repaint();
     }

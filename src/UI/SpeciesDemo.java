@@ -59,28 +59,31 @@ public class SpeciesDemo extends Demo{
             renderer.run();
         });
 
-        JButton zapButton = new JButton("Zap");
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+
+        JButton zapButton = new JButton("⚡");
         zapButton.addActionListener(e -> {
             zap.run();
         });
 
-        JButton editorButton = new JButton("Open editor");
-        editorButton.addActionListener(e -> {
-            new EditorWindow();
-        });
+        buttonPanel.add(zapButton);
 
-        JButton pauseButton = new JButton("Pause");
+
+        JButton pauseButton = new JButton("⏯");
         pauseButton.addActionListener(e -> {
             pause.run();
         });
 
+        buttonPanel.add(pauseButton);
 
         super.setSettings((panel) -> {
+
+            buttonPanel.setBackground(panel.getBackground());
+
             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-            panel.add(editorButton);
-            panel.add(zapButton);
-            panel.add(pauseButton);
+            panel.add(buttonPanel);
 
             panel.add(new JLabel("Max speed:"));
             panel.add(maxSpeed);
@@ -131,7 +134,9 @@ public class SpeciesDemo extends Demo{
                 Point relativeClickPosition = e.getPoint();
                 SpeciesParticle particle = getRenderer().getEntityAt(Vector2D.fromPoint(relativeClickPosition));
                 if(particle != null) {
-                    new EditorWindow(particle);
+                    new EditorWindow(particle, (dna) -> {
+                        panel.repaint();
+                    });
                 }
                 super.mouseClicked(e);
             }
@@ -142,14 +147,10 @@ public class SpeciesDemo extends Demo{
 
     private Drawable createDemo(int species, int specimens){
 
-
-        // list of all colors
-
         List<SpeciesParticle> particles = new ArrayList<>();
 
         for(int i = 0; i < species; i++) {
             Species s = new Species(new DNA(), ecosystem);
-            //s.setColor(colors[i]);
             particles = Stream.concat(particles.stream(), Arrays.stream(SpeciesParticle.makeParticles(specimens, s, World.MAX_WIDTH, World.MAX_HEIGHT))).toList();
         }
 

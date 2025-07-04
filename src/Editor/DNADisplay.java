@@ -3,6 +3,7 @@ package Editor;
 import Genom.DNA;
 import Species.Ecosystem;
 import Species.Species;
+import UI.Reference;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -11,8 +12,10 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 
@@ -38,14 +41,16 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
     private int lastClickedPos = -1;
     private boolean editable = false;
 
-    private final Consumer<DNA> confirmEditHandler;
+    private final Reference<Consumer<DNA>> confirmEditHandler = new Reference<>(null);
     private DNA currentDNA;
 
-
-
-
     public DNADisplay(Species species, DNA dna, Consumer<DNA> confirmEditHandler) {
-        this.confirmEditHandler = confirmEditHandler;
+        this(species, dna, confirmEditHandler, () -> {});
+    }
+
+
+    public DNADisplay(Species species, DNA dna, Consumer<DNA> confirmEditHandler, Runnable markAction) {
+        this.confirmEditHandler.set(confirmEditHandler);
 
         this.species = species;
 
@@ -107,15 +112,29 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
         interactionRadiusLabel = new AttributeLabel("Interaction radius", String.valueOf(dna.getRadius()));
         add(interactionRadiusLabel);
 
-        this.interactionMatrixDisplay = new InteractionMatrixDisplay(ecosystem);
+        this.interactionMatrixDisplay = new InteractionMatrixDisplay(ecosystem, currentDNA);
 
         add(interactionMatrixDisplay);
 
+        JPanel buttonPanel = new JPanel();
+
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+
+        JButton markButton = new JButton("Mark");
+        buttonPanel.add(markButton);
+        markButton.addActionListener(e -> {
+            this.confirmEditHandler.set(confirmEditHandler.andThen((_dna) -> {
+                markAction.run();
+            }));
+        });
+
         JButton confirmButton = new JButton("Confirm");
         confirmButton.addActionListener(e -> {
-            confirmEditHandler.accept(currentDNA);
+            this.confirmEditHandler.get().accept(currentDNA);
         });
-        add(confirmButton);
+        buttonPanel.add(confirmButton);
+
+        add(buttonPanel);
 
 
     }
@@ -133,8 +152,6 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
             }
         }
     }
-
-
 
 
     private SimpleAttributeSet getAttributeSetFor(int pos) {
@@ -167,8 +184,7 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
         currentDNA = DNA.fromString(text.replace("\n", ""));
         speedLabel.setText(String.valueOf(currentDNA.getSpeed()));
         interactionRadiusLabel.setText(String.valueOf(currentDNA.getRadius()));
-        species.setDNA(currentDNA);
-        interactionMatrixDisplay.repaint();
+        interactionMatrixDisplay.update(currentDNA);
         repaint();
     }
 

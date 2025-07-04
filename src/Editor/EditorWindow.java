@@ -34,9 +34,10 @@ public class EditorWindow extends JFrame {
         var species = particle.getSpecies();
         var display = new DNADisplay(species, particle.getDNA(), confirmEditHandler.andThen((dna) -> {
             particle.setDna(dna);
-            particle.setColor(Color.CYAN);
             dispose();
-        }));
+        }), () -> {
+            particle.setColor(Color.CYAN);
+        });
 
         add(display);
 
@@ -46,7 +47,7 @@ public class EditorWindow extends JFrame {
 
     private void setUp(){
         setTitle("DNA Editor");
-        setSize(1200, 150);
+        setSize(1250, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // nur dieses Fenster schließen
 
