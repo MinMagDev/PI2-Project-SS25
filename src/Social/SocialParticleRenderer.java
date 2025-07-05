@@ -34,13 +34,11 @@ public class SocialParticleRenderer<T extends DrawableParticle & SocialEntity> e
 
     @Override
     public void addEntity(T e) {
-        socialSystem.addEntity(e);
         super.addEntity(e);
     }
 
     @Override
     public void removeEntity(T e) {
-        socialSystem.removeEntity(e);
         super.removeEntity(e);
     }
 }

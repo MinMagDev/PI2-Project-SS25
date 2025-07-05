@@ -145,11 +145,11 @@ public class SpeciesDemo extends Demo{
 
     private Drawable createDemo(int species, int specimens){
 
-        List<SpeciesParticle> particles = new ArrayList<>();
+        ArrayList<SpeciesParticle> particles = new ArrayList<>();
 
         for(int i = 0; i < species; i++) {
             Species s = new Species(new DNA(), ecosystem);
-            particles = Stream.concat(particles.stream(), Arrays.stream(SpeciesParticle.makeParticles(specimens, s, World.MAX_WIDTH, World.MAX_HEIGHT))).toList();
+            particles = new ArrayList<>(Stream.concat(particles.stream(), Arrays.stream(SpeciesParticle.makeParticles(specimens, s, World.MAX_WIDTH, World.MAX_HEIGHT))).toList());
         }
 
 

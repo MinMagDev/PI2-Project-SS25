@@ -1,6 +1,7 @@
 package Species;
 
 import Genom.DNA;
+import LifeAndDeath.ReproducingParticle;
 import Particle.Vector2D;
 
 import Particle.Particle;
@@ -12,7 +13,7 @@ import Canvas.*;
 import World.World;
 
 
-public class SpeciesParticle extends Particle implements SpeciesSocialEntity, DrawableParticle {
+public class SpeciesParticle extends Particle implements SpeciesSocialEntity, DrawableParticle, ReproducingParticle {
 
 
     private final Species species;
@@ -142,11 +143,12 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         return result;
     }
 
-
+    @Override
     public boolean isReproducing() {
         return reproduce;
     }
 
+    @Override
     public void setReproducing(boolean reproduce) {
         this.reproduce = reproduce;
     }

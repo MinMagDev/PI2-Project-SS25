@@ -7,7 +7,7 @@ import Canvas.DrawableParticle;
 import java.awt.*;
 import java.util.Random;
 
-public class DebugParticle extends Particle implements DrawableParticle, SocialEntity {
+public class DebugParticle extends Particle implements DrawableParticle, SocialEntity<DebugParticle> {
     @Override
     public int getXForDrawing() {
         return (int) position.getX();
@@ -81,18 +81,6 @@ public class DebugParticle extends Particle implements DrawableParticle, SocialE
 
     }
 
-    @Override
-    public boolean isAlive() {
-        return true;
-    }
-
-    public boolean isReproducing() {
-        return false;
-    }
-
-    public void setReproducing(boolean b) {
-
-    }
 
     /**
      * creates an example array of DebugParticles in a given start area
