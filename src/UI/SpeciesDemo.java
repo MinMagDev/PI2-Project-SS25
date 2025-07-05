@@ -40,8 +40,6 @@ public class SpeciesDemo extends Demo{
         this.speedMultiplier = new JSlider(JSlider.HORIZONTAL, 1, 100, speedMultiplier);
         this.maxSpeed = new JSlider(JSlider.HORIZONTAL, 1, 100, (int) Particle.MAX_SPEED * 10);
 
-
-
         this.speciesAmount = new JSlider(JSlider.HORIZONTAL, 0, 10, species);
         this.specimensAmount = new JSlider(JSlider.HORIZONTAL, 1, 100, specimens);
 

@@ -1,6 +1,7 @@
 package Genom;
 
 import Species.Species;
+import org.w3c.dom.css.RGBColor;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -28,26 +29,10 @@ public class DNA {
      * the amount of nucleotides following SPEED_DNA_POSITION relevant for interaction radius calculation
      */
     public static final int INTERACTION_RADIUS_DNA_LENGTH = 6;
-
-    /**
-     * the index of the first nucleotide relevant for hunger rate calculation
-     */
-    public static final int HUNGER_DNA_POSITION = 12;
-
-    /**
-     * the amount of nucleotides following HUNGER_DNA_POSITION relevant for hunger rate calculation
-     */
-    public static final int HUNGER_DNA_LENGTH = 6;
-
-    /**
-     * the index of the first nucleotide relevant for reproduction probability calculation
-     */
-    public static final int REPRODUCTION_PROBABILITY_DNA_POSITION = 18;
-
-    /**
-     * the amount of nucleotides following REPRODUCTION_PROBABILITY_DNA_POSITION relevant for reproduction probability calculation
-     */
-    public static final int REPRODUCTION_PROBABILITY_DNA_LENGTH = 6;
+  
+  // TODO: add to editor
+    private final int HUNGER_POSITION = 12;
+    private final int REPRO_PROBABILITY_POSITION = 18;
   
 
     public static final int INTERACTION_TYPES_POSITION = 24;
@@ -136,7 +121,7 @@ public class DNA {
      * @return
      */
     public double getHunger(){
-        return getValue(HUNGER_DNA_POSITION, 6, MAX_HUNGER);
+        return getValue(HUNGER_POSITION, 6, MAX_HUNGER);
     }
 
     /**
@@ -144,7 +129,7 @@ public class DNA {
      * @return
      */
     public double getReproductionProbability(){
-        return getValue(REPRODUCTION_PROBABILITY_DNA_POSITION,6,1);
+        return getValue(REPRO_PROBABILITY_POSITION,6,1);
     }
 
     public InteractionType getInteractionWith(Species other) {
