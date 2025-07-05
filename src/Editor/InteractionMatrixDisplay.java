@@ -38,24 +38,6 @@ public class InteractionMatrixDisplay extends JPanel {
         int cellSize = 50;
         table.setRowHeight(cellSize);
 
-        /*table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                                                           boolean isSelected, boolean hasFocus,
-                                                           int row, int column) {
-                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-                if (column == 0) {
-                    JLabel label = (JLabel) c;
-                    label.setForeground(ecosystem.getSpecies(row).getColor());
-                    label.setFont(bigCirlceFont);
-                } else {
-                    c.setForeground(Color.BLACK);
-                }
-
-                return c;
-            }
-        });*/
 
         JTableHeader header = table.getTableHeader();
         header.setDefaultRenderer(new DefaultTableCellRenderer() {
@@ -71,13 +53,17 @@ public class InteractionMatrixDisplay extends JPanel {
 
             }
         });
+        header.setReorderingAllowed(false);
 
         JScrollPane scrollPanel = new JScrollPane(table);
 
-        scrollPanel.setSize(new Dimension(400, 100));
+        scrollPanel.setPreferredSize(new Dimension(400, 100));
 
-        add(scrollPanel);
-        setSize(new Dimension(400, 100));
+        setLayout(new BorderLayout());
+
+        add(new JLabel("Interactions"), BorderLayout.NORTH);
+
+        add(scrollPanel, BorderLayout.CENTER);
     }
 
     private void updateTable(DNA dna) {

@@ -33,8 +33,8 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
     private final JTextPane textPane;
     private final StyledDocument doc;
 
-    private final AttributeLabel speedLabel, interactionRadiusLabel;
     private final InteractionMatrixDisplay interactionMatrixDisplay;
+    private final AttributeDisplay attributeDisplay;
 
     private String text;
 
@@ -63,9 +63,11 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
 
         this.ecosystem = species.getEcosystem();
 
-        var fixedSites = new InterestingDNASite[]{
-                new InterestingDNASite("speed", Color.CYAN,  DNA.SPEED_DNA_POSITION, DNA.SPEED_DNA_LENGTH),
-                new InterestingDNASite("interaction radius", Color.GREEN, DNA.INTERACTION_RADIUS_DNA_POSITION, DNA.INTERACTION_RADIUS_DNA_LENGTH),
+        var fixedSites = new AttributeDNASite[]{
+                new AttributeDNASite("speed", Color.CYAN,  DNA.SPEED_DNA_POSITION, DNA.SPEED_DNA_LENGTH, () -> String.valueOf(currentDNA.getSpeed())),
+                new AttributeDNASite("interaction radius", Color.GREEN, DNA.INTERACTION_RADIUS_DNA_POSITION, DNA.INTERACTION_RADIUS_DNA_LENGTH, () -> String.valueOf(currentDNA.getRadius())),
+                new AttributeDNASite("hunger", Color.ORANGE, DNA.HUNGER_DNA_POSITION, DNA.HUNGER_DNA_LENGTH, (() -> String.valueOf(currentDNA.getHunger()))),
+                new AttributeDNASite("reproduction pobability", Color.MAGENTA, DNA.REPRODUCTION_PROBABILITY_DNA_POSITION, DNA.REPRODUCTION_PROBABILITY_DNA_LENGTH, () -> String.valueOf(currentDNA.getReproductionProbability())),
         };
 
         var fixedSitesStream = Arrays.stream(fixedSites);
@@ -104,18 +106,30 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
         textPane.addMouseListener(this);
         textPane.addKeyListener(this);
 
+        textPane.setAlignmentX(CENTER_ALIGNMENT);
         add(textPane);
 
-        speedLabel = new AttributeLabel("Speed", String.valueOf(dna.getSpeed()));
-        add(speedLabel);
-
-        interactionRadiusLabel = new AttributeLabel("Interaction radius", String.valueOf(dna.getRadius()));
-        add(interactionRadiusLabel);
-
         this.interactionMatrixDisplay = new InteractionMatrixDisplay(ecosystem, currentDNA);
+        this.attributeDisplay = new AttributeDisplay(fixedSites);
 
-        add(interactionMatrixDisplay);
+        JPanel tablePanel = new JPanel();
+        tablePanel.setLayout(new BoxLayout(tablePanel, BoxLayout.X_AXIS));
 
+        tablePanel.add(interactionMatrixDisplay);
+        tablePanel.add(attributeDisplay);
+
+        tablePanel.setMaximumSize(new Dimension(800, 10));
+
+        add(tablePanel);
+
+        JPanel buttonPanel = makeButtonPanel(confirmEditHandler, markAction);
+
+        add(buttonPanel);
+
+
+    }
+
+    private JPanel makeButtonPanel(Consumer<DNA> confirmEditHandler, Runnable markAction) {
         JPanel buttonPanel = new JPanel();
 
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
@@ -133,10 +147,7 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
             this.confirmEditHandler.get().accept(currentDNA);
         });
         buttonPanel.add(confirmButton);
-
-        add(buttonPanel);
-
-
+        return buttonPanel;
     }
 
     @Override
@@ -182,9 +193,8 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
 
     private void handleEdit(){
         currentDNA = DNA.fromString(text.replace("\n", ""));
-        speedLabel.setText(String.valueOf(currentDNA.getSpeed()));
-        interactionRadiusLabel.setText(String.valueOf(currentDNA.getRadius()));
         interactionMatrixDisplay.update(currentDNA);
+        attributeDisplay.updateTable();
         repaint();
     }
 

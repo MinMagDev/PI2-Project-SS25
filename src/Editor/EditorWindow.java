@@ -39,7 +39,11 @@ public class EditorWindow extends JFrame {
             particle.setColor(Color.CYAN);
         });
 
-        add(display);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(display);
+
+        add(panel);
 
         setUp();
 
@@ -47,7 +51,7 @@ public class EditorWindow extends JFrame {
 
     private void setUp(){
         setTitle("DNA Editor");
-        setSize(1250, 500);
+        setSize(1150, 250);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // nur dieses Fenster schließen
 
