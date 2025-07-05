@@ -14,7 +14,7 @@ public class SocialSystem<T extends SocialEntity> implements EntityManager<T> {
    List<T> entities;
 
    public SocialSystem(List<T> entities) {
-      this.entities = new ArrayList<>(entities);
+      this.entities = entities;
    }
 
    /**

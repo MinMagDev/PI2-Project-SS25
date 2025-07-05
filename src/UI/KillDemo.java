@@ -34,9 +34,9 @@ public class KillDemo extends Demo{
         p1.addForce(p1Top2);
         p2.addForce(p1Top2.mul(-1));
 
-        var particles = Arrays.asList(p1, p2);
+        var particles =new ArrayList<SpeciesParticle>(Arrays.asList(p1, p2));
 
-        var renderer = new SocialParticleRenderer(particles);
+        var renderer = new SocialParticleRenderer<SpeciesParticle>(particles);
 
         return new World(World.MAX_WIDTH, World.MAX_HEIGHT, particles, renderer);
     }

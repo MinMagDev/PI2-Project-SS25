@@ -1,6 +1,8 @@
 package World;
 
 import Canvas.*;
+import LifeAndDeath.EntityManager;
+import LifeAndDeath.ReproducingParticle;
 import Particle.DebugParticle;
 import Particle.Particle;
 import Particle.Vector2D;
@@ -13,12 +15,13 @@ import Species.SpeciesParticle;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
   * A drawable class that simulates the very crude "physics" involved
  */
 
-public class World implements Drawable {
+public class World<T extends Particle & ReproducingParticle> implements Drawable, EntityManager<T> {
     private final int width;
     private final int height;
 
@@ -26,15 +29,14 @@ public class World implements Drawable {
     public static final int MAX_HEIGHT = 1000;
     public static final int MAX_ENTITY_COUNT = 1000;
 
-    //Fuck it, who needs Wildcards
-    List<SpeciesParticle> colliders;
+    ArrayList<T> colliders;
 
     private final Drawable renderer;
 
-    public World(int width, int height, List<SpeciesParticle> colliders, Drawable renderer) {
+    public World(int width, int height, ArrayList<T> colliders, Drawable renderer) {
         this.width = width;
         this.height = height;
-        this.colliders = new ArrayList<>(colliders);
+        this.colliders = colliders;
         this.renderer = renderer;
     }
 
@@ -68,75 +70,33 @@ public class World implements Drawable {
      * (D.R.E.C.K)
      */
     private void updateParticles() {
-        List<SpeciesParticle> toRemove = new ArrayList<>();
-        List<SpeciesParticle> allMoms = new ArrayList<>();
-        for (int i = 0; i < colliders.size(); i++) {
-            if (colliders.get(i) instanceof  SpeciesParticle) {
-                SpeciesParticle particle = (SpeciesParticle) colliders.get(i);
-                if (!particle.isAlive()) {
-                    toRemove.add(particle);
-                    if(renderer instanceof ParticleRenderer){
-                        ((ParticleRenderer<SpeciesParticle>) renderer).removeEntity(particle);
-                    }
-                    continue;
+        List<Runnable> actions = new LinkedList<>();
+        for(var particle : colliders) {
+            if(!particle.isAlive()){
+                actions.add(() -> this.removeEntity(particle));
+                continue;
+            }
+            if(particle.isReproducing()){
+                T child = particle.newChild();
+                particle.setReproducing(false);
+                if(child != null){
+                    child.updateValues();
+                    actions.add(() -> {
+                        if(colliders.size() < MAX_ENTITY_COUNT) {
+                            this.addEntity(child);
+                        }
+                    });
                 }
-                if(particle.isReproducing()){
-                    particle.setReproducing(false);
-                    allMoms.add(particle);
-              }
             }
         }
-        for(SpeciesParticle child : createNewChilds(allMoms)){
-            if (colliders.size() >= MAX_ENTITY_COUNT) break;
-            colliders.add(child);
-            if(renderer instanceof ParticleRenderer){
-                ((ParticleRenderer<SpeciesParticle>) renderer).addEntity(child);
-            }
+
+        for(var action : actions) {
+            action.run();
         }
-        colliders.removeAll(toRemove);
-        if(renderer instanceof ParticleRenderer){
-            ((ParticleRenderer<SpeciesParticle>) renderer).massRemoveEntities(toRemove);
-        }
+
     }
 
-    /**
-     * Erzeugt neue Kind-Partikel aus einer Liste von Mutter-Partikeln.
-     * <p>
-     * Jeder Mutterpartikel ruft {@code newChild()} auf sich selbst auf. Falls ein Kind erzeugt wurde,
-     * wird es mittels {@link #createNewChild(SpeciesParticle)} weiterverarbeitet.
-     *
-     * @param allMoms Eine Liste von {@link SpeciesParticle}-Instanzen, die reproduzieren sollen.
-     * @return Eine Liste aller erfolgreich erzeugten Kind-Partikel.
-     * <p>
-     * D.R.E.C.K
-     */
-    private List<SpeciesParticle> createNewChilds(List<SpeciesParticle> allMoms) {
-        List<SpeciesParticle> childs = new ArrayList<>();
-        for (SpeciesParticle mom: allMoms){
-             SpeciesParticle child = createNewChild(mom);
-            if (child == null) continue;
-            childs.add(child);
-        }
-        return childs;
-    }
 
-    /**
-     * Erzeugt ein neues Kind-Partikel auf Basis eines Mutterpartikels.
-     * <p>
-     * Das Kind wird durch den Aufruf von {@code mom.newChild()} erzeugt. Falls ein Kind erzeugt wird,
-     * werden anschließend mit {@code updateValues()} zusätzliche Werte aktualisiert.
-     *
-     * @param mom Der {@link SpeciesParticle}, der das Kind erzeugt.
-     * @return Ein neues {@link SpeciesParticle}-Kind oder {@code null}, wenn keins erzeugt wurde.
-     * <p>
-     * D.R.E.C.K.
-     */
-    private SpeciesParticle createNewChild(SpeciesParticle mom) {
-        SpeciesParticle child = mom.newChild();
-        if (child == null) return child;
-        child.updateValues();
-        return child;
-    }
 
     static final double speedFactor = .2;
     /**
@@ -146,26 +106,22 @@ public class World implements Drawable {
 
     private void addBorderCollisionForce(Collider collider) {
         Vector2D force = new Vector2D();
-        boolean collision = false;
+
         if(collider.getPosition().getX() + collider.getRadius() > width){
             force.add(new Vector2D(-1, 0));
             collider.setX(width - collider.getRadius());
-            collision = true;
         }
         if(collider.getPosition().getY() + collider.getRadius() > height){
             force.add(new Vector2D(0, -1));
             collider.setY(height - collider.getRadius());
-            collision = true;
         }
         if(collider.getPosition().getX() - collider.getRadius() < 0){
             force.add(new Vector2D(1, 0));
             collider.setX(0 + collider.getRadius());
-            collision = true;
         }
         if(collider.getPosition().getY() - collider.getRadius() < 0){
             force.add(new Vector2D(0, 1));
             collider.setY(0 + collider.getRadius());
-            collision = true;
         }
 
 
@@ -183,5 +139,25 @@ public class World implements Drawable {
             }
 
         }
+    }
+
+    @Override
+    public void addEntity(T e) {
+        colliders.add(e);
+    }
+
+    @Override
+    public void removeEntity(T e) {
+        colliders.remove(e);
+    }
+
+    @Override
+    public void massRemoveEntities(List<T> es) {
+
+    }
+
+    @Override
+    public void forEachEntity(Consumer<T> action) {
+        colliders.forEach(action);
     }
 }

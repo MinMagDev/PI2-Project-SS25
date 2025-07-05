@@ -20,14 +20,14 @@ import Particle.Entity;
 
 public class ParticleRenderer<T extends DrawableParticle & Entity> implements Drawable, EntityManager<T> {
 
-    public ArrayList<T> getParticles() {
+    public List<T> getParticles() {
         return particles;
     }
 
-    private ArrayList<T> particles;
+    private List<T> particles;
 
     public ParticleRenderer(List<T> particles) {
-        this.particles = new ArrayList<>(particles);
+        this.particles = particles;
     }
 
     /**
@@ -60,7 +60,6 @@ public class ParticleRenderer<T extends DrawableParticle & Entity> implements Dr
 
     @Override
     public void removeEntity(T e) {
-        //System.out.println("Bye: " + e);
         particles.remove(e);
     }
 

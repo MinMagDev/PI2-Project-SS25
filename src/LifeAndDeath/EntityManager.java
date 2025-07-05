@@ -20,6 +20,8 @@ public interface EntityManager<T extends Entity> {
      */
     void removeEntity(T e);
 
+
+
     /**
      * Removes all given entites
      * @param es List of Entities
