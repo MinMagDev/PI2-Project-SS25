@@ -15,11 +15,11 @@ import java.util.stream.Stream;
 public class Species {
 
 
-    private double interactionRadius, speed, hunger, reproductionProb;
-    private final Ecosystem ecosystem;
+    private double interactionRadius;
+    private double speed;
 
 
-    private DNA dna;
+    private final DNA dna;
 
     public void setColor(Color color) {
         this.color = color;
@@ -34,17 +34,18 @@ public class Species {
     public DNA getDNA() {
         return dna;
     }
-    public void setDNA(DNA dna) {
-        this.dna = dna;
-        updateValues();
-    }
+
+    private final Ecosystem ecosystem;
 
     private InteractionType[] interactions;
 
     public Species(DNA dna, Ecosystem ecosystem) {
         this.dna = dna;
+        this.color = dna.getColor();
+        this.speed = dna.getSpeed() * ecosystem.getSpeedMultiplier();
+        this.interactionRadius = dna.getRadius() * ecosystem.getSpeedMultiplier();
+
         this.ecosystem = ecosystem;
-        updateValues();
 
         ecosystem.addSpecies(this);
         id = ecosystem.getSpeciesCount() - 1;
@@ -52,22 +53,7 @@ public class Species {
         ecosystem.updateInteractionMatrix();
     }
 
-    public void updateValues(){
-
-        this.color = dna.getColor();
-        this.speed = dna.getSpeed() * ecosystem.getSpeedMultiplier();
-        this.hunger = dna.getHunger();
-        this.reproductionProb = dna.getReproductionProbability();
-        this.interactionRadius = dna.getRadius() * ecosystem.getSpeedMultiplier();
-
-        ecosystem.updateInteractionMatrix();
-    }
-
     private final int id;
-
-    public int getId() {
-        return id;
-    }
 
     public InteractionType getInteractionWith(Species other) {
         return interactions[other.id];
@@ -88,16 +74,20 @@ public class Species {
         return interactionRadius;
     }
 
-    public double getHunger() {
-        return hunger;
-    }
-
-    public double getReproductionProb() {
-        return reproductionProb;
+    public int getId() {
+        return id;
     }
 
     public Ecosystem getEcosystem() {
         return ecosystem;
+    }
+
+    public void setDNA(DNA dna) {
+        this.color = dna.getColor();
+        this.speed = dna.getSpeed() * ecosystem.getSpeedMultiplier();
+        this.interactionRadius = dna.getRadius() * ecosystem.getSpeedMultiplier();
+
+        ecosystem.updateInteractionMatrix();
     }
 
     public Object[] getInteractionMatrixRow() {

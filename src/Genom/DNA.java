@@ -1,11 +1,11 @@
 package Genom;
 
 import Species.Species;
-import org.w3c.dom.css.RGBColor;
 
-import java.awt.*;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.*;
-import java.util.List;
 
 import static java.util.Map.entry;
 
@@ -29,10 +29,26 @@ public class DNA {
      */
     public static final int INTERACTION_RADIUS_DNA_LENGTH = 6;
 
-  // TODO: add to editor
-    private final int HUNGER_POSITION = 12;
-    private final int REPRO_PROBABILITY_POSITION = 18;
+    /**
+     * the index of the first nucleotide relevant for hunger rate calculation
+     */
+    public static final int HUNGER_DNA_POSITION = 12;
 
+    /**
+     * the amount of nucleotides following HUNGER_DNA_POSITION relevant for hunger rate calculation
+     */
+    public static final int HUNGER_DNA_LENGTH = 6;
+
+    /**
+     * the index of the first nucleotide relevant for reproduction probability calculation
+     */
+    public static final int REPRODUCTION_PROBABILITY_DNA_POSITION = 18;
+
+    /**
+     * the amount of nucleotides following REPRODUCTION_PROBABILITY_DNA_POSITION relevant for reproduction probability calculation
+     */
+    public static final int REPRODUCTION_PROBABILITY_DNA_LENGTH = 6;
+  
 
     public static final int INTERACTION_TYPES_POSITION = 24;
 
@@ -49,7 +65,8 @@ public class DNA {
     public DNA() {
         dna = generateRandomDNA(128);
     }
-    public DNA(List<Nucleotid> dna){
+
+    public DNA(List<Nucleotid> dna) {
         this.dna = dna;
     }
 
@@ -101,7 +118,7 @@ public class DNA {
      */
     public double getSpeed(){
         double result = getValue(SPEED_DNA_POSITION, SPEED_DNA_LENGTH, MAX_SPEED);
-
+      
         if (result <= ZERO_SPEED_THREASHOLD) return 0.0d;
         return result/10;
     }
@@ -111,9 +128,7 @@ public class DNA {
      * @return forcefield Radius
      */
     public double getRadius(){
-        return getValue(INTERACTION_RADIUS_DNA_POSITION,
-                INTERACTION_RADIUS_DNA_LENGTH,
-                MAX_FIELD_RADIUS);
+        return getValue(INTERACTION_RADIUS_DNA_POSITION, INTERACTION_RADIUS_DNA_LENGTH, MAX_FIELD_RADIUS);
     }
 
     /**
@@ -121,7 +136,7 @@ public class DNA {
      * @return
      */
     public double getHunger(){
-        return getValue(HUNGER_POSITION, 6, MAX_HUNGER);
+        return getValue(HUNGER_DNA_POSITION, 6, MAX_HUNGER);
     }
 
     /**
@@ -129,36 +144,20 @@ public class DNA {
      * @return
      */
     public double getReproductionProbability(){
-        return getValue(REPRO_PROBABILITY_POSITION,6,1);
+        return getValue(REPRODUCTION_PROBABILITY_DNA_POSITION,6,1);
     }
 
-    /**
-     * Returns the Interaction of the Particle to another particle.
-     * @param other The Species of the Particle to interact with
-     * @return The Type of Interaction read out of DNA
-     */
     public InteractionType getInteractionWith(Species other) {
         return getInteraction(other.getId());
     }
-
-
-    /**
-     * Calculates a normalized double value from a subsequence of DNA elements.
-     * <p>
-     * The method first extracts an integer value from a segment of the DNA,
-     * based on the ordinal values of its elements. It then scales this value
-     * proportionally to the given `max`, resulting in a double between 0 and `max`.
-     * <p>
-     * It's basically like squeezing meaning out of bytes — except the meaning is
-     * made up, and the points don't matter.
-     *
-     * <p>D.R.E.C.K</p>
-     *
-     * @param start The index in the DNA sequence where the extraction begins.
-     * @param length How many DNA elements to consider.
-     * @param max The upper bound to scale the value to.
-     * @return A double between 0 and `max` — probably. Unless something weird happens.
+  /**
+     * returns a scaled value corresponding to a specific sequence of DNA
+     * @param start the first nucleotide to be considered
+     * @param length the amount of nucleotides to be considered
+     * @param max the maximum allowed value
+     * @return the corresponding double
      */
+  
     private double getValue(int start, int length, double max){
         double result = 0.0d;
         result += getIntValue(start, start+length);
@@ -166,22 +165,8 @@ public class DNA {
         return result;
     }
 
-
-    /**
-     * D.R.E.C.K.: Converts a segment of DNA bases to an integer value.
-     *<p>
-     * Iterates from the start to the end index (exclusive), and accumulates
-     * the ordinal values of the DNA bases. If the end index exceeds the DNA
-     * length, it returns 0 to avoid errors. (How generous!)[1]
-     *<p>
-     * [1] Yes Chat, not only makes Comments how it functions, but also how he finds
-     * it - Levi
-     * <p>
-     * @param start The starting index in the DNA sequence.
-     * @param end The exclusive end index.
-     * @return The accumulated ordinal value of the DNA bases.
-     */
     private int getIntValue(int start, int end){
+        if (end > dna.size()) return 0;
         int result = 0;
         for(int i = start; i < end; i++){
             result += dna.get(i).ordinal();
@@ -192,7 +177,7 @@ public class DNA {
     /**
      * Returns how the species should interact to other species
      * @param species The Species to interact with
-     * @return The Interaction to the Species as {@link InteractionType}
+     * @return interaction type
      */
     public InteractionType getInteraction(int species){
 
@@ -201,7 +186,7 @@ public class DNA {
             return InteractionType.NEUTRAL;
         }
         Nucleotid nuc = dna.get((INTERACTION_TYPES_POSITION + species) % dna.size());
-
+      
         switch (nuc) {
             case A -> {
                 return InteractionType.REPEL;
@@ -240,30 +225,9 @@ public class DNA {
         return 3*pow;
     }
 
-    /**
-     * Applies probabilistic mutation to the DNA sequence.
-     * <p>
-     * Each nucleotide has a chance — defined by `probability` — to mutate.
-     * Mutation is modeled as either:
-     * <ul>
-     *     <li>Replacement: The base is swapped with a randomly chosen new base.</li>
-     *     <li>Deletion (frameshift): The base is simply skipped, effectively shortening the DNA.</li>
-     *     <li>Addition: Another Base is added after the Base, effectively longening the DNA</li>
-     * </ul>
-     * This behavior is achieved by randomly selecting one of `n + 2` mutation options, with the
-     * last two options, adding or deleting a Base
-     * <p>
-     * This can lead to frame shifts, chaos, and occasional enlightenment.
-     * <p>
-     * Debug outputs are provided for your existential debugging needs.
-     *
-     * @param amount How many mutations are expected to happen (Will just call mutate with amount/dna.length)
-     * @return A mutated version of the original DNA sequence. May be shorter. May be cursed.
-     * <p> Human edited D.R.E.C.K.
-     */
     public List<Nucleotid> mutate(int amount) {
         if (dna.size() == 0) return new DNA().getDNA();
-        double probabilty = (double)amount/dna.size();
+        double probabilty = amount/dna.size();
         return mutate(probabilty);
     }
 
@@ -272,49 +236,21 @@ public class DNA {
     }
 
     /**
-     * Applies probabilistic mutation to the DNA sequence.
-     * <p>
-     * Each nucleotide has a chance — defined by `probability` — to mutate.
-     * Mutation is modeled as either:
-     * <ul>
-     *     <li>Replacement: The base is swapped with a randomly chosen new base.</li>
-     *     <li>Deletion (frameshift): The base is simply skipped, effectively shortening the DNA.</li>
-     *     <li>Addition: Another Base is added after the Base, effectively longening the DNA</li>
-     * </ul>
-     * This behavior is achieved by randomly selecting one of `n + 2` mutation options, with the
-     * last two options, adding or deleting a Base
-     * <p>
-     * This can lead to frame shifts, chaos, and occasional enlightenment.
-     * <p>
-     * Debug outputs are provided for your existential debugging needs.
-     *
-     * @param probability The chance that a given nucleotide mutates (0.0 to 1.0).
-     * @return A mutated version of the original DNA sequence. May be shorter. May be cursed.
-     * <p> Human edited D.R.E.C.K.
+     * Mutates the DNA with a given Probability
+     * @param probability the probabilty of one Nucleotid to mutate
      */
     public List<Nucleotid> mutate(double probability){
         Nucleotid[] nucVals = Nucleotid.values();
-        List<Nucleotid> newDNA = new ArrayList<>();
+        List<Nucleotid> newDNA = new LinkedList<Nucleotid>();
         Random r = new Random();
         for (int i = 0; i < dna.size(); i++){
-            double rD = r.nextDouble();
-//            System.out.print(
-//                    "Nucleotid " + i + ": rd is "
-//                            + rD + " and probability is "
-//                    + probability + "; "
-//            );
-            if(rD >= probability) {
+            if(r.nextDouble() >= probability) {
                 newDNA.add(dna.get(i));
                 continue;
             }
-            System.out.print("Mutate, YAY ");
-            int nuc = r.nextInt(nucVals.length + 2);
+            int nuc = r.nextInt(nucVals.length + 1);
             System.out.println("Random Chosen: " + nuc);
             if(nuc == nucVals.length) {
-                continue;
-            }else if(nuc > nucVals.length){
-                newDNA.add(dna.get(i));
-                newDNA.add(nucVals[r.nextInt(nucVals.length)]);
                 continue;
             }
             newDNA.add(nucVals[nuc]);
