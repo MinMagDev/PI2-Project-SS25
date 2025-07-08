@@ -21,12 +21,40 @@ public class KMeans {
         //A small Test:
         //testSame();
         //testMutated();
-        testWithRandom(4, 500);
+        //testWithRandom(4, 100);
+        testTotallyMutated(4,400);
 
         // run(new GenPoint[]{new GenPoint(new DNA())}, 1);
         //testDistance();
 
         //testBinaryVectors();
+    }
+
+    private static void testTotallyMutated(int n, int mutations) {
+        Ecosystem testSystem = new Ecosystem();
+        List<SpeciesParticle> main = new ArrayList<>();
+        List<SpeciesParticle> particles = new ArrayList<>();
+        List<Species> species = new ArrayList<>();
+        Random r = new Random();
+
+        for (int i = 0; i < n; i++){
+            SpeciesParticle p = new SpeciesParticle(0,0,
+                    new Species(new DNA(), testSystem));
+            main.add(p);
+            particles.add(p);
+        }
+
+        for (int i = 0; i < mutations; i++){
+            particles.add(particles.get(r.nextInt(particles.size())).newChild());
+        }
+
+        for(SpeciesParticle s : main){
+            System.out.println(s.getDNA().getDNA());
+            species.add(s.getSpecies());
+        }
+
+        run(particles,species);
+
     }
 
     private static void testDistance() {
@@ -118,7 +146,7 @@ public class KMeans {
         main.add(new SpeciesParticle(0,0,
                 new Species(new DNA(Nucleotid.A), testSystem)));
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             particles.add(new SpeciesParticle(0, 0, new Species(new DNA(Nucleotid.C), testSystem)));
             particles.add(new SpeciesParticle(0, 0, new Species(new DNA(Nucleotid.G), testSystem)));
             particles.add(new SpeciesParticle(0, 0, new Species(new DNA(Nucleotid.T), testSystem)));
@@ -258,8 +286,10 @@ public class KMeans {
         float b = calcSmallestMeanD(point,centroids);
         if (Float.isNaN(b)) System.out.println("b is NaN, for point: " + point.toString());
         if (a == b) return 0f;
-        float result = (a-b)/Math.max(a,b);
-        if (Float.isNaN(result)) System.out.println("result is NaN, for a = " + a + " and b = "+ b);
+
+        //AHHHHHHHHHHHHHHHHHH, b-a NICHT a-b, wie ich es lange hatte
+        float result = (b-a)/Math.max(a,b);
+        //System.out.println("result is"+ result + " for a = " + a + " and b = "+ b);
         return result;
     }
 
@@ -290,6 +320,7 @@ public class KMeans {
      */
     private static float calcSmallestMeanD(GenPoint point, ClusterCentroid[] centroids) {
         float smallestMean = Float.MAX_VALUE;
+        boolean found = false;
         for (ClusterCentroid centroid: centroids){
             if (centroid == point.getNearestClusterCentroid()) continue;
             float addedDistance = 0;
@@ -300,8 +331,10 @@ public class KMeans {
             float mean = addedDistance / others.length;
             if (smallestMean > mean) {
                 smallestMean = mean;
+                found = true;
             }
         }
+        if (!found) return 0f;
         return smallestMean;
     }
 
@@ -348,6 +381,10 @@ public class KMeans {
             nearest.addPointToCluster(point);
             if (old == null) continue;
             old.removePointFromCluster(point);
+        }
+
+        for (int i = 0; i < centroids.length; i++) {
+            System.out.println("Cluster " + i + " size: " + centroids[i].getClusteredPoints().length);
         }
 
         boolean changed = true;

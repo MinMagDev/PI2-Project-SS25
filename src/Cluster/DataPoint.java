@@ -157,6 +157,6 @@ public class DataPoint {
 
     @Override
     public String toString() {
-        return this.binaryVector.toString();
+        return asString(this.binaryVector);
     }
 }
