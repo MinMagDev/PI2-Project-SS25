@@ -21,7 +21,7 @@ public class KMeans {
         //A small Test:
         //testSame();
         //testMutated();
-        testWithRandom(5, 200);
+        testWithRandom(4, 500);
 
         // run(new GenPoint[]{new GenPoint(new DNA())}, 1);
         //testDistance();
@@ -108,12 +108,7 @@ public class KMeans {
         List<SpeciesParticle> main = new ArrayList<>();
         List<SpeciesParticle> particles = new ArrayList<>();
         List<Species> species = new ArrayList<>();
-//        for (int i = 0; i < 3; i++){
-//            SpeciesParticle mainParticle = new SpeciesParticle(0,0,
-//                    new Species(new DNA(), testSystem));
-//            particles.add(mainParticle);
-//            main.add(mainParticle);
-//        }
+
         main.add(new SpeciesParticle(0,0,
                     new Species(new DNA(Nucleotid.C), testSystem)));
         main.add(new SpeciesParticle(0,0,
@@ -134,7 +129,7 @@ public class KMeans {
             species.add(s.getSpecies());
         }
 
-        run(particles);
+        run(particles, species);
     }
 
     /**
@@ -160,20 +155,25 @@ public class KMeans {
     }
 
     public static void run(List<SpeciesParticle> particles, List<Species> species){
-        GenPoint[] genPoints = new GenPoint[particles.size()];
-        ClusterCentroid[] centroids = new ClusterCentroid[species.size()];
+
         DataPoint[][][] allClusters = new DataPoint[15][][];
-        for (int i = 0; i < genPoints.length; i++){
-            genPoints[i] = new GenPoint(particles.get(i).getDNA());
-        }
-        for (int i = 0; i < centroids.length; i++) {
-            centroids[i] = new ClusterCentroid(species.get(i).getDNA(), particles.size());
-        }
+
         int bestK = 2;
         float bestScore = -1f;
         float currentScore;
         for (int k = 2; k <= MAX_K; k++){
             System.out.println("K is " + k);
+            //Setup
+            GenPoint[] genPoints = new GenPoint[particles.size()];
+            ClusterCentroid[] centroids = new ClusterCentroid[species.size()];
+            for (int i = 0; i < genPoints.length; i++){
+                genPoints[i] = new GenPoint(particles.get(i).getDNA());
+            }
+            for (int i = 0; i < centroids.length; i++) {
+                centroids[i] = new ClusterCentroid(species.get(i).getDNA(), particles.size());
+            }
+
+            //Clustering
             if (k < centroids.length){
                 ClusterCentroid[] fewCentroids = new ClusterCentroid[k];
                 for (int i = 0; i < k; i++){
@@ -201,17 +201,20 @@ public class KMeans {
     }
 
     public static void run(List<SpeciesParticle> particles){
-        GenPoint[] genPoints = new GenPoint[particles.size()];
         DataPoint[][][] allClusters = new DataPoint[15][][];
-        for (int i = 0; i < genPoints.length; i++){
-            genPoints[i] = new GenPoint(particles.get(i).getDNA());
-        }
+
         int k = 2;
         int bestK = 2;
         float bestScore = -1f;
         float currentScore = -1f;
         float lastScore = -1f;
         while (currentScore >= lastScore){
+
+            GenPoint[] genPoints = new GenPoint[particles.size()];
+            for (int i = 0; i < genPoints.length; i++){
+                genPoints[i] = new GenPoint(particles.get(i).getDNA());
+            }
+
             lastScore = currentScore;
             DataPoint[][] pointss = run(genPoints, k);
             currentScore = meanSilhouette((GenPoint[]) pointss[0], (ClusterCentroid[]) pointss[1]);
@@ -283,7 +286,7 @@ public class KMeans {
      * Calculates the smallest mean distance, between a Point i and all other points in other clusters
      * @param point Point i
      * @param centroids Array of all Clustercentroids
-     * @return smallest Meand Distance
+     * @return smallest Mean Distance
      */
     private static float calcSmallestMeanD(GenPoint point, ClusterCentroid[] centroids) {
         float smallestMean = Float.MAX_VALUE;

@@ -28,7 +28,7 @@ public class ClusterCentroid extends DataPoint{
     }
 
     public void removePointFromCluster(GenPoint genPoint) {
-        for (int i = 0; i <= clusteredPoints.length; i++){
+        for (int i = 0; i < clusteredPoints.length; i++){
             if(clusteredPoints[i] == genPoint) {
                 clusteredPoints[i] = null;
                 clusterdPointAmount--;
@@ -63,7 +63,7 @@ public class ClusterCentroid extends DataPoint{
 
         newPosition = findMean(newPosition);
 
-        boolean changed = !compare(newPosition, this.getBinaryVector()) && !(oldClusterdPointsAmount == clusterdPointAmount);
+        boolean changed = !compare(newPosition, this.getBinaryVector()) || !(oldClusterdPointsAmount == clusterdPointAmount);
 
         oldClusterdPointsAmount = clusterdPointAmount;
         this.setBinaryVector(newPosition);

@@ -10,6 +10,11 @@ public class GenPoint extends DataPoint{
         super(dna);
     }
 
+    /**
+     * Calculates the Distance to every cluster centroid and returns the one, which is nearest.
+     * @param centroids array of all the centroids
+     * @return the centroid out of the list, which is nearest.
+     */
     public ClusterCentroid calculateNearestClusterCentroid(ClusterCentroid[] centroids){
         ClusterCentroid nearest = getNearestClusterCentroid();
         if (nearest == null) nearest = centroids[0];
