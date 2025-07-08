@@ -3,22 +3,53 @@ package Cluster;
 import Genom.DNA;
 import Genom.Nucleotid;
 
-import java.util.Vector;
-
 public class DataPoint {
     private static final int MAX_COMPARABLE_DNA_LENGTH = 160;
-    public static final int MAX_COMPARABLE_BINARY_VECOTR_LENGTH = MAX_COMPARABLE_DNA_LENGTH * 4;
+    public static final int MAX_COMPARABLE_BINARY_VECTOR_LENGTH = MAX_COMPARABLE_DNA_LENGTH * 4;
     private int[] binaryVector;
     private ClusterCentroid nearestClusterCentroid;
 
     public DataPoint(DNA dna){
-        this.binaryVector = new int[MAX_COMPARABLE_BINARY_VECOTR_LENGTH];
+        this.binaryVector = new int[MAX_COMPARABLE_BINARY_VECTOR_LENGTH];
         calculateBinaryVector(dna);
     }
 
+    /**
+     * Calculates the Distance between two points, by comparing blocks of 4 (for every Nucleotid 1) and counting changes
+     * @param p1 first point
+     * @param p2 second point
+     * @return the distance between the two points
+     */
+//    public static float distance(int[] p1, int[] p2) {
+//        float distance = 0;
+//        int oneCount = 0;
+//        for (int i = 0; i < p1.length; i += 4) {
+//            for (int j = 0; j < 4; j++) {
+//                if (p1[i + j] == 1 && 1 ==  p2[i + j]) {
+//                    oneCount++;
+//                    continue;
+//                }else if (p1[i + j] == 0 && 0 ==  p2[i + j]) continue;
+//                oneCount++;
+//                distance++;
+//                break;
+//            }
+//        }
+//        distance += p1.length/4 - oneCount;
+//        //return distance;
+//        return distance / (p1.length / 4);
+//    }
     public static float distance(int[] p1, int[] p2) {
-        int[] toOther = addBinaryVectors(p1, divideBinaryVector(p2, -1));
-        return length(toOther);
+        float distance = 0;
+        for (int i = 0; i < p1.length; i += 4) {
+            int index1 = -1;
+            int index2 = -1;
+            for (int j = 0; j < 4; j++) {
+                if (p1[i + j] == 1) index1 = j;
+                if (p2[i + j] == 1) index2 = j;
+            }
+            if (index1 != index2) distance++;
+        }
+        return distance / (p1.length / 4);
     }
 
     public static float length(int[] v){
@@ -36,7 +67,6 @@ public class DataPoint {
             binaryVector[4 * count + ordinal] = 1;
             count++;
         }
-        System.out.print("Calculated Vector");
     }
 
     public static int[] addBinaryVectors(int[] v1, int[] v2){
@@ -56,10 +86,17 @@ public class DataPoint {
         return vRes;
     }
 
+    /**
+     * Finds the mean binary Vector of a non-binary counter Vector
+     * @param v Vector v, contains counts of the Nucleotids
+     * @return Hot One Off Vector
+     */
     public static int[] findMean(int[] v){
         for (int i = 0; i < MAX_COMPARABLE_DNA_LENGTH; i++){
             int maxJ = 0;
             int maxJVal = 0;
+
+            //finds the maximum Amount of Nucleotids off a Block of 4
             for (int j = 0; j < 4; j++){
                 int val = v[i*4+j];
                 if(val > maxJVal){
@@ -67,6 +104,8 @@ public class DataPoint {
                     maxJVal = val;
                 }
             }
+
+            //Replaces the maximum value with 1, the other with 0
             for (int j = 0; j < 4; j++){
                 if(j != maxJ) {
                     v[i*4+j] = 0;
@@ -114,5 +153,10 @@ public class DataPoint {
             if (v1[i] != v2[i]) return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return this.binaryVector.toString();
     }
 }

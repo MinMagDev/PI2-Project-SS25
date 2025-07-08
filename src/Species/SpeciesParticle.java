@@ -24,7 +24,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
     private int reproductionCount = 0;
     private final int MAX_REPRO_COUNT = 200;
-    public final int EXPECTED_MUTATIONS = 1;
+    public final int EXPECTED_MUTATIONS = 4;
 
     private double interactionRadius;
 

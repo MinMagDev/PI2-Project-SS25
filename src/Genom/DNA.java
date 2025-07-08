@@ -69,6 +69,12 @@ public class DNA {
     public DNA(List<Nucleotid> dna) {
         this.dna = dna;
     }
+    public DNA(Nucleotid n) {
+        dna = new ArrayList<>();
+        for (int i = 0; i < 128; i ++){
+            dna.add(n);
+        }
+    }
 
     public static final Map<Character, Nucleotid> nucleotideDictionary = Map.ofEntries(
             entry('a', Nucleotid.A),
@@ -225,9 +231,14 @@ public class DNA {
         return 3*pow;
     }
 
+    /**
+     * Mutates the DNA, and returns it as a new List
+     * @param amount the expected amount of mutations
+     * @return the newly mutated List
+     */
     public List<Nucleotid> mutate(int amount) {
         if (dna.size() == 0) return new DNA().getDNA();
-        double probabilty = amount/dna.size();
+        double probabilty = (double) amount/dna.size();
         return mutate(probabilty);
     }
 
