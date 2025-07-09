@@ -20,24 +20,6 @@ public class DataPoint {
      * @param p2 second point
      * @return the distance between the two points
      */
-//    public static float distance(int[] p1, int[] p2) {
-//        float distance = 0;
-//        int oneCount = 0;
-//        for (int i = 0; i < p1.length; i += 4) {
-//            for (int j = 0; j < 4; j++) {
-//                if (p1[i + j] == 1 && 1 ==  p2[i + j]) {
-//                    oneCount++;
-//                    continue;
-//                }else if (p1[i + j] == 0 && 0 ==  p2[i + j]) continue;
-//                oneCount++;
-//                distance++;
-//                break;
-//            }
-//        }
-//        distance += p1.length/4 - oneCount;
-//        //return distance;
-//        return distance / (p1.length / 4);
-//    }
     public static float distance(int[] p1, int[] p2) {
         float distance = 0;
         for (int i = 0; i < p1.length; i += 4) {
@@ -49,7 +31,7 @@ public class DataPoint {
             }
             if (index1 != index2) distance++;
         }
-        return distance / (p1.length / 4);
+        return distance;
     }
 
     public static float length(int[] v){

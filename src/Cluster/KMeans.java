@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class KMeans {
 
-    final static int MAX_K = 6;
+    final static int MAX_K = 9;
 
     public static void main(String[] args) {
 
@@ -22,7 +22,7 @@ public class KMeans {
         //testSame();
         //testMutated();
         //testWithRandom(4, 100);
-        testTotallyMutated(4,400);
+        testTotallyMutated(3,5000);
 
         // run(new GenPoint[]{new GenPoint(new DNA())}, 1);
         //testDistance();
@@ -53,7 +53,7 @@ public class KMeans {
             species.add(s.getSpecies());
         }
 
-        run(particles,species);
+        run(particles, species);
 
     }
 
@@ -282,11 +282,8 @@ public class KMeans {
 
         if (point.getNearestClusterCentroid().getClusteredPoints().length == 1) return 0;
         float a = calcSameMeanD(point);
-        if (Float.isNaN(a)) System.out.println("a is NaN, for point: " + point.toString());
         float b = calcSmallestMeanD(point,centroids);
-        if (Float.isNaN(b)) System.out.println("b is NaN, for point: " + point.toString());
         if (a == b) return 0f;
-
         //AHHHHHHHHHHHHHHHHHH, b-a NICHT a-b, wie ich es lange hatte
         float result = (b-a)/Math.max(a,b);
         //System.out.println("result is"+ result + " for a = " + a + " and b = "+ b);
@@ -347,12 +344,12 @@ public class KMeans {
     }
 
     public static DataPoint[][] run(GenPoint[] genPoints, ClusterCentroid[] centroids, int k){
-        ClusterCentroid[] newCentroids = new ClusterCentroid[k + centroids.length];
-        for (int i = 0; i<k; i++){
-            newCentroids[i] = new ClusterCentroid(new DNA(), genPoints.length);
+        ClusterCentroid[] newCentroids = new ClusterCentroid[k];
+        for (int i = 0; i<centroids.length; i++){
+            newCentroids[i] = centroids[i];
         }
-        for (int i = 0; i < centroids.length; i++){
-            newCentroids[k+i] = centroids[i];
+        for (int i = 0; i < k-centroids.length; i++){
+            newCentroids[centroids.length+i] = new ClusterCentroid(new DNA(), genPoints.length);
         }
         return run(genPoints,newCentroids);
     }
