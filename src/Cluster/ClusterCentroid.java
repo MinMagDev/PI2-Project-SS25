@@ -5,6 +5,7 @@ import Genom.DNA;
 public class ClusterCentroid extends DataPoint{
 
     private GenPoint[] clusteredPoints;
+    private int clusterID;
     private int oldClusterdPointsAmount;
     private int clusterdPointAmount;
 
@@ -12,9 +13,10 @@ public class ClusterCentroid extends DataPoint{
         super(dna);
     }
 
-    public ClusterCentroid(DNA dna, int totalPoints) {
+    public ClusterCentroid(DNA dna, int totalPoints, int id) {
         super(dna);
         clusteredPoints = new GenPoint[totalPoints];
+        this.clusterID = id;
     }
 
     public void addPointToCluster(GenPoint genPoint) {
@@ -69,5 +71,13 @@ public class ClusterCentroid extends DataPoint{
         this.setBinaryVector(newPosition);
         //System.out.println("New Position: " + DataPoint.asString(newPosition));
         return changed;
+    }
+
+    public int getClusterID() {
+        return clusterID;
+    }
+
+    public void setClusterID(int clusterID) {
+        this.clusterID = clusterID;
     }
 }

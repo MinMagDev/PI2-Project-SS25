@@ -10,6 +10,7 @@ public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
     double SPRING_FORCE = 1;
 
     Species getSpecies();
+    void setSpecies(Species species);
     DNA getDNA();
 
     @Override

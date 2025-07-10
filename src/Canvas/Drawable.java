@@ -5,7 +5,6 @@ import java.awt.*;
 /**
 * Drawables can be drawn using the RendererPanel
  */
-
 public interface Drawable {
     /**
     * Instructions for drawing

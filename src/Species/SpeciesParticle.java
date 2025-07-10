@@ -16,7 +16,7 @@ import World.World;
 public class SpeciesParticle extends Particle implements SpeciesSocialEntity, DrawableParticle, ReproducingParticle {
 
 
-    private final Species species;
+    private Species species;
     private DNA dna;
 
     private boolean alive = true;
@@ -68,6 +68,12 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
     public Species getSpecies() {
         return species;
+    }
+
+    @Override
+    public void setSpecies(Species species) {
+        this.species = species;
+        this.color = species.getColor();
     }
 
     public DNA getDNA() {

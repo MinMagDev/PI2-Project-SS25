@@ -3,6 +3,9 @@ package Cluster;
 import Genom.DNA;
 import Genom.Nucleotid;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DataPoint {
     private static final int MAX_COMPARABLE_DNA_LENGTH = 160;
     public static final int MAX_COMPARABLE_BINARY_VECTOR_LENGTH = MAX_COMPARABLE_DNA_LENGTH * 4;
@@ -140,5 +143,24 @@ public class DataPoint {
     @Override
     public String toString() {
         return asString(this.binaryVector);
+    }
+
+    /**
+     * Converts the binaryVector back to a List of Nucleotids
+     * @return
+     */
+    public DNA toDNA() {
+        List<Nucleotid> newDNA = new ArrayList<>();
+        for (int i = 0; i < binaryVector.length; i += 4){
+            boolean found = false;
+            for (int j = 0; j < 4; j++) {
+                if (binaryVector[j] == 1){
+                    newDNA.add(Nucleotid.values()[j]);
+                    found = true;
+                }
+            }
+            if (!found) break;
+        }
+        return new DNA(newDNA);
     }
 }
