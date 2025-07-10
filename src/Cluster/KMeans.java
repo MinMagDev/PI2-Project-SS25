@@ -82,14 +82,12 @@ public class KMeans {
 
     public void updateParticles(DataPoint[][] cluster) {
         Ecosystem ecosystem = species.get(0).getEcosystem();
-        ecosystem.clearSpecies();
         species.clear();
         for (DataPoint c: cluster[1]){
             ClusterCentroid centroid = (ClusterCentroid) c;
             System.out.println("Add Cluster");
             Species newSpecies = new Species(centroid.toDNA(), ecosystem);
             species.add(newSpecies);
-            ecosystem.addSpecies(newSpecies);
         }
 
         particleSpecies.clear();

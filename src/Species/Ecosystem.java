@@ -30,7 +30,7 @@ public class Ecosystem {
     private double socialRadiusMultiplier;
 
 
-    public void addSpecies(Species species){
+    void addSpecies(Species species){
         this.species.add(species);
     }
     public int getSpeciesCount(){
