@@ -8,13 +8,13 @@ import Species.Ecosystem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KMeans {
+public class KMeans<S extends Specimen> {
 
-    private List<SpeciesParticle> particles;
+    private List<S> particles;
     private List<Species> species;
     private List<Species> particleSpecies;
 
-    public KMeans(List<SpeciesParticle> particles, List<Species> species){
+    public KMeans(List<S> particles, List<Species> species){
         this.particles = particles;
         this.species = species;
         particleSpecies = new ArrayList<>();
@@ -47,8 +47,11 @@ public class KMeans {
             for (int i = 0; i < genPoints.length; i++){
                 genPoints[i] = new GenPoint(particles.get(i).getDNA());
             }
+            System.out.println("init centroids");
+
             for (int i = 0; i < centroids.length; i++) {
                 centroids[i] = new ClusterCentroid(species.get(i).getDNA(), particles.size(), i);
+                System.out.println(centroids[i].toDNA());
             }
 
             //Clustering
@@ -187,7 +190,7 @@ public class KMeans {
         return changed;
     }
 
-    public static void run(List<SpeciesParticle> particles, List<Species> species){
+    public static void run(List<? extends Specimen> particles, List<Species> species){
 
         DataPoint[][][] allClusters = new DataPoint[15][][];
 

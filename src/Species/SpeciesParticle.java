@@ -1,5 +1,6 @@
 package Species;
 
+import Cluster.Specimen;
 import Genom.DNA;
 import LifeAndDeath.ReproducingParticle;
 import Particle.Vector2D;
@@ -13,7 +14,7 @@ import Canvas.*;
 import World.World;
 
 
-public class SpeciesParticle extends Particle implements SpeciesSocialEntity, DrawableParticle, ReproducingParticle {
+public class SpeciesParticle extends Particle implements SpeciesSocialEntity, DrawableParticle, ReproducingParticle, Specimen {
 
 
     private Species species;
@@ -162,7 +163,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
     @Override
     public SpeciesParticle newChild() {
-        DNA newDNA = new DNA(dna.mutate(EXPECTED_MUTATIONS));
+        DNA newDNA = dna.mutated(EXPECTED_MUTATIONS);
         if(newDNA.getDNA().isEmpty()) {
             return null;
         }

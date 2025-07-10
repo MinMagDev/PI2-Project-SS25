@@ -69,6 +69,8 @@ public class DNA {
     public DNA(List<Nucleotid> dna) {
         this.dna = dna;
     }
+
+
     public DNA(Nucleotid n) {
         dna = new ArrayList<>();
         for (int i = 0; i < 128; i ++){
@@ -100,6 +102,7 @@ public class DNA {
 
         return new DNA(nucleotides);
     }
+
 
 
     /**
@@ -254,19 +257,15 @@ public class DNA {
         Nucleotid[] nucVals = Nucleotid.values();
         List<Nucleotid> newDNA = new LinkedList<Nucleotid>();
         Random r = new Random();
-        for (int i = 0; i < dna.size(); i++){
-            if(r.nextDouble() >= probability) {
-                newDNA.add(dna.get(i));
-                continue;
+        for (Nucleotid nucleotid : dna) {
+            if (r.nextDouble() >= probability) {
+                newDNA.add(nucleotid);
+            } else {
+                int nuc = r.nextInt(nucVals.length);
+                newDNA.add(nucVals[nuc]);
             }
-            int nuc = r.nextInt(nucVals.length + 1);
-            //System.out.println("Random Chosen: " + nuc);
-            if(nuc == nucVals.length) {
-                continue;
-            }
-            newDNA.add(nucVals[nuc]);
+
         }
-        //System.out.println("New DNA: " + newDNA);
         return newDNA;
     }
 
@@ -285,4 +284,9 @@ public class DNA {
     public void print(){
         System.out.println(this);
     }
+
+    public DNA mutated(int amount) {
+        return new DNA(this.mutate(amount));
+    }
+
 }
