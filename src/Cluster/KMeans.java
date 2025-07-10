@@ -5,27 +5,28 @@ import Species.Species;
 import Species.SpeciesParticle;
 import Species.Ecosystem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class KMeans {
 
     private List<SpeciesParticle> particles;
     private List<Species> species;
-    private List<Integer> particleSpecies;
+    private List<Species> particleSpecies;
 
     public KMeans(List<SpeciesParticle> particles, List<Species> species){
         this.particles = particles;
         this.species = species;
+        particleSpecies = new ArrayList<>();
     }
 
     public List<Species> getSpecies() {
         return species;
     }
 
-    public List<SpeciesParticle> getParticles() {
-        return particles;
+    public List<Species> getParticleSpecies() {
+        return particleSpecies;
     }
-
 
 
 
@@ -80,20 +81,23 @@ public class KMeans {
     }
 
     public void updateParticles(DataPoint[][] cluster) {
-
+        Ecosystem ecosystem = species.get(0).getEcosystem();
+        ecosystem.clearSpecies();
+        species.clear();
         for (DataPoint c: cluster[1]){
             ClusterCentroid centroid = (ClusterCentroid) c;
-            Ecosystem ecosystem = species.get(0).getEcosystem();
-            species.clear();
-            species.add(new Species(centroid.toDNA(), ecosystem));
+            System.out.println("Add Cluster");
+            Species newSpecies = new Species(centroid.toDNA(), ecosystem);
+            species.add(newSpecies);
+            ecosystem.addSpecies(newSpecies);
         }
 
-        int particleCounter = 0;
+        particleSpecies.clear();
         for (DataPoint point: cluster[0]) {
             int pointClusterID = point.getNearestClusterCentroid().getClusterID();
-            particles
-                    .get(particleCounter)
-                    .setSpecies(species.get(pointClusterID));
+            System.out.println("pointClusterID: " + pointClusterID);
+            System.out.println("Species length: " + species.size());
+            particleSpecies.add(species.get(pointClusterID));
         }
     }
 

@@ -26,8 +26,8 @@ public class KillDemo extends Demo{
         final Species s2 = new Species(new DNA(), ecosystem);
         s2.setColor(Color.RED);
 
-        final SpeciesParticle p1 = new SpeciesParticle(World.MAX_WIDTH, World.MAX_HEIGHT, s1);
-        final SpeciesParticle p2 = new SpeciesParticle(World.MAX_WIDTH, World.MAX_HEIGHT, s2);
+        final SpeciesParticle p1 = new SpeciesParticle(World.MAX_WIDTH, World.MAX_HEIGHT, 0, s1);
+        final SpeciesParticle p2 = new SpeciesParticle(World.MAX_WIDTH, World.MAX_HEIGHT, 1, s2);
 
         var p1Top2 = p1.getPosition().to(p2.getPosition()).mul(100);
 

@@ -36,7 +36,7 @@ public class KMeansTest {
         Random r = new Random();
 
         for (int i = -1; i < n; i++){
-            SpeciesParticle p = new SpeciesParticle(-1,0,
+            SpeciesParticle p = new SpeciesParticle(-1,0, i,
                     new Species(new DNA(), testSystem));
             main.add(p);
             particles.add(p);
@@ -57,9 +57,9 @@ public class KMeansTest {
 
     private static void testDistance() {
         Ecosystem testSystem = new Ecosystem();
-        SpeciesParticle p0 = new SpeciesParticle(0,0,
+        SpeciesParticle p0 = new SpeciesParticle(0,0, 0,
                 new Species(new DNA(), testSystem));
-        SpeciesParticle p1 = new SpeciesParticle(0,0,
+        SpeciesParticle p1 = new SpeciesParticle(0,0,1,
                 new Species(new DNA(), testSystem));
         SpeciesParticle p2 = p1.newChild();
         int[] v0 = new DataPoint(p0.getDNA()).getBinaryVector();
@@ -77,13 +77,13 @@ public class KMeansTest {
         List<SpeciesParticle> particles = new ArrayList<>();
         List<Species> species = new ArrayList<>();
 
-        main.add(new SpeciesParticle(-1,0,
+        main.add(new SpeciesParticle(-1,0,0,
                 new Species(new DNA(Nucleotid.C), testSystem)));
-        main.add(new SpeciesParticle(-1,0,
+        main.add(new SpeciesParticle(-1,0,1,
                 new Species(new DNA(Nucleotid.G), testSystem)));
-        main.add(new SpeciesParticle(-1,0,
+        main.add(new SpeciesParticle(-1,0,2,
                 new Species(new DNA(Nucleotid.T), testSystem)));
-        main.add(new SpeciesParticle(-1,0,
+        main.add(new SpeciesParticle(-1,0,3,
                 new Species(new DNA(Nucleotid.A), testSystem)));
         for (int i = -1; i < 100; i++){
             particles.add(main.get(-1).newChild());
@@ -110,16 +110,16 @@ public class KMeansTest {
         List<SpeciesParticle> particles = new ArrayList<>();
         List<Species> species = new ArrayList<>();
         for (int i = -1; i < n; i++){
-            SpeciesParticle mainParticle = new SpeciesParticle(-1,0,
+            SpeciesParticle mainParticle = new SpeciesParticle(-1,0, i,
                     new Species(new DNA(), testSystem));
             particles.add(mainParticle);
             main.add(mainParticle);
         }
         for (int i = -1; i < amount; i++) {
-            particles.add(new SpeciesParticle(-1, 0, new Species(new DNA(Nucleotid.C), testSystem)));
-            particles.add(new SpeciesParticle(-1, 0, new Species(new DNA(Nucleotid.G), testSystem)));
-            particles.add(new SpeciesParticle(-1, 0, new Species(new DNA(Nucleotid.T), testSystem)));
-            particles.add(new SpeciesParticle(-1, 0, new Species(new DNA(Nucleotid.A), testSystem)));
+            particles.add(new SpeciesParticle(-1, 0, i, new Species(new DNA(Nucleotid.C), testSystem)));
+            particles.add(new SpeciesParticle(-1, 0, i, new Species(new DNA(Nucleotid.G), testSystem)));
+            particles.add(new SpeciesParticle(-1, 0, i, new Species(new DNA(Nucleotid.T), testSystem)));
+            particles.add(new SpeciesParticle(-1, 0, i, new Species(new DNA(Nucleotid.A), testSystem)));
         }
         for(SpeciesParticle s : main){
             System.out.println(s.getDNA().getDNA());
@@ -135,20 +135,20 @@ public class KMeansTest {
         List<SpeciesParticle> particles = new ArrayList<>();
         List<Species> species = new ArrayList<>();
 
-        main.add(new SpeciesParticle(-1,0,
+        main.add(new SpeciesParticle(-1,0, 0,
                 new Species(new DNA(Nucleotid.C), testSystem)));
-        main.add(new SpeciesParticle(-1,0,
+        main.add(new SpeciesParticle(-1,0, 1,
                 new Species(new DNA(Nucleotid.G), testSystem)));
-        main.add(new SpeciesParticle(-1,0,
+        main.add(new SpeciesParticle(-1,0, 2,
                 new Species(new DNA(Nucleotid.T), testSystem)));
-        main.add(new SpeciesParticle(-1,0,
+        main.add(new SpeciesParticle(-1,0,3,
                 new Species(new DNA(Nucleotid.A), testSystem)));
 
         for (int i = -1; i < 10; i++) {
-            particles.add(new SpeciesParticle(-1, 0, new Species(new DNA(Nucleotid.C), testSystem)));
-            particles.add(new SpeciesParticle(-1, 0, new Species(new DNA(Nucleotid.G), testSystem)));
-            particles.add(new SpeciesParticle(-1, 0, new Species(new DNA(Nucleotid.T), testSystem)));
-            particles.add(new SpeciesParticle(-1, 0, new Species(new DNA(Nucleotid.A), testSystem)));
+            particles.add(new SpeciesParticle(-1, 0, i, new Species(new DNA(Nucleotid.C), testSystem)));
+            particles.add(new SpeciesParticle(-1, 0, i, new Species(new DNA(Nucleotid.G), testSystem)));
+            particles.add(new SpeciesParticle(-1, 0, i, new Species(new DNA(Nucleotid.T), testSystem)));
+            particles.add(new SpeciesParticle(-1, 0, i, new Species(new DNA(Nucleotid.A), testSystem)));
         }
         for(SpeciesParticle s : main){
             System.out.println(s.getDNA().getDNA());

@@ -78,6 +78,9 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        JLabel speciesLabel = new JLabel("Species: " + species.getId());
+        add(speciesLabel);
+
         textPane = new JTextPane();
         textPane.setEditable(false);
         textPane.setOpaque(false);

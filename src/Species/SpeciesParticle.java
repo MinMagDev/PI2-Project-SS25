@@ -105,8 +105,8 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
 
 
-    public SpeciesParticle(double canvasWidth, double canvasHeight, Species species){
-        super(0, 0, 3);
+    public SpeciesParticle(double canvasWidth, double canvasHeight, int particleID, Species species){
+        super(0, 0, particleID, 3);
         Random random = new Random();
         this.position.setX(Math.round(random.nextDouble() * canvasWidth));
         this.position.setY(Math.round(random.nextDouble() * canvasHeight));
@@ -126,7 +126,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         if (getSize() <= 0) this.kill();
         if (Math.random() <= dna.getReproductionProbability()) reproductionCount++;
         if (reproductionCount >= MAX_REPRO_COUNT){
-            System.out.println("Reproduce");
+            //System.out.println("Reproduce");
             reproduce = true;
             reproductionCount = 0;
         }
@@ -144,8 +144,9 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         Random r = new Random();
         SpeciesParticle[] result = new SpeciesParticle[amount];
         for (int i = 0; i < amount; i++) {
-            result[i] = new SpeciesParticle(width, height, species);
+            result[i] = new SpeciesParticle(width, height, i, species);
         }
+        World.entityCount = amount;
         return result;
     }
 
@@ -166,7 +167,8 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
             return null;
         }
         Species newSpecies = getSpecies();
-        SpeciesParticle newParticle = new SpeciesParticle(0,0, newSpecies);
+        World.entityCount++;
+        SpeciesParticle newParticle = new SpeciesParticle(0,0, World.entityCount, newSpecies);
         newParticle.setDna(newDNA);
         newParticle.setPosition(position);
         return newParticle;

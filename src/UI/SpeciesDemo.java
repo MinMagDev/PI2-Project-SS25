@@ -1,5 +1,6 @@
 package UI;
 
+import Cluster.KMeans;
 import Editor.EditorWindow;
 import Genom.DNA;
 import Particle.Particle;
@@ -22,7 +23,7 @@ public class SpeciesDemo extends Demo{
     static double ZAP_FACTOR = 100d;
 
     private final JSlider socialRadiusMultiplier, speedMultiplier, speciesAmount, specimensAmount, maxSpeed;
-    private Runnable zap, pause;
+    private Runnable zap, pause, cluster;
 
     private Ecosystem ecosystem;
 
@@ -74,6 +75,13 @@ public class SpeciesDemo extends Demo{
         });
 
         buttonPanel.add(pauseButton);
+
+        JButton clusterButton = new JButton("Cluster");
+        clusterButton.addActionListener(e -> {
+            cluster.run();
+        });
+
+        buttonPanel.add(clusterButton);
 
         super.setSettings((panel) -> {
 
@@ -146,9 +154,11 @@ public class SpeciesDemo extends Demo{
     private Drawable createDemo(int species, int specimens){
 
         ArrayList<SpeciesParticle> particles = new ArrayList<>();
+        ArrayList<Species> speciesList = new ArrayList<>();
 
         for(int i = 0; i < species; i++) {
             Species s = new Species(new DNA(), ecosystem);
+            speciesList.add(s);
             particles = new ArrayList<>(Stream.concat(particles.stream(), Arrays.stream(SpeciesParticle.makeParticles(specimens, s, World.MAX_WIDTH, World.MAX_HEIGHT))).toList());
         }
 
@@ -162,7 +172,20 @@ public class SpeciesDemo extends Demo{
             });
         };
 
+        cluster = () -> {
+            List<SpeciesParticle> sParticles = renderer.getParticles();
+            KMeans kM = new KMeans(sParticles, speciesList);
 
+            kM.run();
+
+            int count = 0;
+            List<Species> particleSpecies = kM.getParticleSpecies();
+            renderer.forEachEntity(particle -> {
+                int particleID = particle.getParticleID();
+                Species s = particleSpecies.get(particleID);
+                particle.setSpecies(s);
+            });
+        };
 
         return new World(World.MAX_WIDTH, World.MAX_HEIGHT, particles, renderer);
     }

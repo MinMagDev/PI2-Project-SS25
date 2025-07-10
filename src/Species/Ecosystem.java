@@ -59,4 +59,7 @@ public class Ecosystem {
         return species.get(id);
     }
 
+    public void clearSpecies() {
+        species.clear();
+    }
 }

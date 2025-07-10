@@ -28,6 +28,7 @@ public class World<T extends Particle & ReproducingParticle> implements Drawable
     public static final int MAX_WIDTH = 1000;
     public static final int MAX_HEIGHT = 1000;
     public static final int MAX_ENTITY_COUNT = 1000;
+    public static int entityCount = 0;
 
     ArrayList<T> colliders;
 

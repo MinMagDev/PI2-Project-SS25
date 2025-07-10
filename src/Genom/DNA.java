@@ -260,13 +260,13 @@ public class DNA {
                 continue;
             }
             int nuc = r.nextInt(nucVals.length + 1);
-            System.out.println("Random Chosen: " + nuc);
+            //System.out.println("Random Chosen: " + nuc);
             if(nuc == nucVals.length) {
                 continue;
             }
             newDNA.add(nucVals[nuc]);
         }
-        System.out.println("New DNA: " + newDNA);
+        //System.out.println("New DNA: " + newDNA);
         return newDNA;
     }
 

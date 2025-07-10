@@ -26,7 +26,7 @@ public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
                         && distanceToInteractee <= 1
                         && interactee.getSize() <= this.getSize()
                 ) {
-                    System.out.println("KILL");
+                    //System.out.println("KILL");
                     interactee.kill();
                     this.growFac(interactee.getSize() * 0.1d);
                 }

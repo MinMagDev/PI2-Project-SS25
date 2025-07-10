@@ -8,6 +8,10 @@ import java.util.List;
 public abstract class Particle implements Collider, Entity {
     public static double MAX_SPEED = 3;
 
+    public int getParticleID() {
+        return particleID;
+    }
+
     private static class ForceManager {
 
 
@@ -65,6 +69,7 @@ public abstract class Particle implements Collider, Entity {
     }
 
     protected Vector2D position;
+    private int particleID;
 
 
     @Override
@@ -110,7 +115,8 @@ public abstract class Particle implements Collider, Entity {
     private final ForceManager forceManager;
 
 
-    public Particle(double x, double y, double radius){
+    public Particle(double x, double y, int particleID, double radius){
+        this.particleID = particleID;
         this.position = new Vector2D(x, y);
         this.radius = radius;
         this.forceManager = new ForceManager();
