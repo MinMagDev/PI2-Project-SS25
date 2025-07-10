@@ -12,9 +12,16 @@ public class DataPoint {
     private int[] binaryVector;
     private ClusterCentroid nearestClusterCentroid;
 
+    final private int length;
+
     public DataPoint(DNA dna){
         this.binaryVector = new int[MAX_COMPARABLE_BINARY_VECTOR_LENGTH];
         calculateBinaryVector(dna);
+        this.length = dna.getDNA().size();
+    }
+
+    public DataPoint(String dna){
+        this(DNA.fromString(dna));
     }
 
     /**
@@ -149,7 +156,7 @@ public class DataPoint {
      * Converts the binaryVector back to a List of Nucleotids
      * @return
      */
-    public DNA toDNA() {
+    /*public DNA toDNA() {
         List<Nucleotid> newDNA = new ArrayList<>();
         for (int i = 0; i < binaryVector.length; i += 4){
             boolean found = false;
@@ -160,6 +167,20 @@ public class DataPoint {
                 }
             }
             if (!found) break;
+        }
+        return new DNA(newDNA);
+    }*/
+
+    public DNA toDNA() {
+        List<Nucleotid> newDNA = new ArrayList<>();
+        for(int i = 0; i < length; i++){
+            for(int j = 0; j < 4; j++){
+               if(binaryVector[i*4+j] == 1){
+                   newDNA.add(Nucleotid.values()[j]);
+                   break;
+               }
+            }
+
         }
         return new DNA(newDNA);
     }

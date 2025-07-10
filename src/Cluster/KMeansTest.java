@@ -22,6 +22,9 @@ public class KMeansTest {
         //testWithRandom(4, 100);
         testTotallyMutated(3,1000);
 
+
+
+
         // run(new GenPoint[]{new GenPoint(new DNA())}, 1);
         //testDistance();
 
@@ -29,30 +32,24 @@ public class KMeansTest {
     }
 
     private static void testTotallyMutated(int n, int mutations) {
-        Ecosystem testSystem = new Ecosystem();
-        List<SpeciesParticle> main = new ArrayList<>();
-        List<SpeciesParticle> particles = new ArrayList<>();
+        List<DebugSpecimen> specimens = new ArrayList<>();
         List<Species> species = new ArrayList<>();
-        Random r = new Random();
 
-        for (int i = -1; i < n; i++){
-            SpeciesParticle p = new SpeciesParticle(-1,0, i,
-                    new Species(new DNA(), testSystem));
-            main.add(p);
-            particles.add(p);
-        }
+        DebugSpecimen.makeSpecimens(n, 10, true, mutations, species, specimens);
 
-        for (int i = -1; i < mutations; i++){
-            particles.add(particles.get(r.nextInt(particles.size())).newChild());
-        }
+        specimens.forEach(specimen -> {
+            System.out.println(specimen.getDNA());
+        });
 
-        for(SpeciesParticle s : main){
-            System.out.println(s.getDNA().getDNA());
-            species.add(s.getSpecies());
-        }
+        KMeans.run(specimens, species);
 
-        KMeans.run(particles, species);
+        KMeans kMeans = new KMeans(specimens, species);
 
+        kMeans.run();
+
+        species.forEach(aSpecies -> {
+            System.out.println(aSpecies.getDNA());
+        });
     }
 
     private static void testDistance() {
@@ -130,7 +127,7 @@ public class KMeansTest {
     }
 
     private static void testSame() {
-        Ecosystem testSystem = new Ecosystem();
+        /*Ecosystem testSystem = new Ecosystem();
         List<SpeciesParticle> main = new ArrayList<>();
         List<SpeciesParticle> particles = new ArrayList<>();
         List<Species> species = new ArrayList<>();
@@ -155,25 +152,46 @@ public class KMeansTest {
             species.add(s.getSpecies());
         }
 
-        KMeans.run(particles, species);
+        KMeans.run(particles, species);*/
+
+        // gibt nicht exakt die selben zentroiden wie die ursprünglichen DNAs zurück??
+
+        List<DebugSpecimen> specimens = new ArrayList<>();
+        List<Species> species = new ArrayList<>();
+
+        DebugSpecimen.makeSpecimens(2, 10, false, 0, species, specimens);
+
+        System.out.println("specimens");
+        specimens.forEach(specimen -> {
+            System.out.println(specimen.getDNA());
+        });
+        System.out.println("species");
+        species.forEach(aSpecies -> {
+            System.out.println(aSpecies.getDNA());
+        });
+
+
+        KMeans kMeans = new KMeans(specimens, species);
+
+        kMeans.run();
+
+        species.forEach(aSpecies -> {
+            System.out.println(aSpecies.getDNA());
+        });
+
+
+
     }
 
     /**
      * Test for correct Binary Vectors
      */
     private static void testBinaryVectors() {
-        List<Nucleotid> d0 = new ArrayList<>();
-        d0.add(Nucleotid.A);
-        List<Nucleotid> d1 = new ArrayList<>();
-        d1.add(Nucleotid.T);
-        List<Nucleotid> d2 = new ArrayList<>();
-        d2.add(Nucleotid.G);
-        List<Nucleotid> d3 = new ArrayList<>();
-        d3.add(Nucleotid.C);
-        DataPoint da0 = new DataPoint(new DNA(d0));
-        DataPoint da1 = new DataPoint(new DNA(d1));
-        DataPoint da2 = new DataPoint(new DNA(d2));
-        DataPoint da3 = new DataPoint(new DNA(d3));
+        DataPoint da0 = new DataPoint("ATGCTA");
+        DataPoint da1 = new DataPoint("T");
+        DataPoint da2 = new DataPoint("G");
+        DataPoint da3 = new DataPoint("C");
+        System.out.println(da0.toDNA());
         System.out.println(DataPoint.asString(da0.getBinaryVector()));
         System.out.println(DataPoint.asString(da1.getBinaryVector()));
         System.out.println(DataPoint.asString(da2.getBinaryVector()));
