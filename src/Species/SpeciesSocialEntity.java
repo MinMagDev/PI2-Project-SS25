@@ -9,8 +9,14 @@ public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
 
     double SPRING_FORCE = 1;
 
+    /**
+     * @return this entity's species
+     */
     Species getSpecies();
-    void setSpecies(Species species);
+
+    /**
+     * @return this entity's DNA
+     */
     DNA getDNA();
 
     @Override
@@ -26,7 +32,6 @@ public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
                         && distanceToInteractee <= 1
                         && interactee.getSize() <= this.getSize()
                 ) {
-                    //System.out.println("KILL");
                     interactee.kill();
                     this.growFac(interactee.getSize() * 0.1d);
                 }
@@ -44,16 +49,17 @@ public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
             case SPRING:
                 final double force = (distanceToInteractee - getDNA().getSpeed()) * SPRING_FORCE;
                 toInteractee.mul(force/distanceToInteractee);
-                //interactee.addForce(toInteractee);
                 this.addForce(toInteractee.mul(-1));
                 break;
         }
     }
 
-    boolean isAlive();
     void kill();
 
-
+    /**
+     * @param other the other entity
+     * @return the interaction with the other entity
+     */
     default InteractionType getInteractionTypeWith(SpeciesSocialEntity other){
         return getDNA().getInteractionWith(other.getSpecies());
     }

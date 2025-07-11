@@ -20,23 +20,15 @@ public class KMeans<S extends Specimen> {
 
     private final List<S> specimens;
     private final List<Species> species;
-    private final List<Species> particleSpecies;
 
     public KMeans(List<S> specimens, List<Species> species){
         this.specimens = specimens;
         this.species = species;
-        particleSpecies = new ArrayList<>();
     }
 
     public List<Species> getSpecies() {
         return species;
     }
-
-    public List<Species> getParticleSpecies() {
-        return particleSpecies;
-    }
-
-
 
     final static int MAX_K = 9;
 
@@ -90,23 +82,6 @@ public class KMeans<S extends Specimen> {
     }
 
     public void updateParticles(Run run) {
-        /*Ecosystem ecosystem = species.get(0).getEcosystem();
-        species.clear();
-        for (DataPoint c: run.centroids){
-            ClusterCentroid centroid = (ClusterCentroid) c;
-            System.out.println("Add Cluster");
-            Species newSpecies = new Species(centroid.toDNA(), ecosystem);
-            species.add(newSpecies);
-        }
-
-        particleSpecies.clear();
-        for (DataPoint point: run.dataPoints) {
-            int pointClusterID = point.getNearestClusterCentroid().getClusterID();
-            System.out.println("pointClusterID: " + pointClusterID);
-            System.out.println("Species length: " + species.size());
-            particleSpecies.add(species.get(pointClusterID));
-        }*/
-
         System.out.println("UPDATE");
 
         Ecosystem ecosystem;
@@ -161,43 +136,6 @@ public class KMeans<S extends Specimen> {
             specimen.updateColor();
         }
 
-    }
-
-    public static void run(List<SpeciesParticle> particles){
-        Run[] allRuns = new Run[15];
-
-        int k = 2;
-        int bestK = 2;
-        float bestScore = -1f;
-        float currentScore = -1f;
-        float lastScore = -1f;
-        while (currentScore >= lastScore){
-
-            GenPoint[] genPoints = new GenPoint[particles.size()];
-            for (int i = 0; i < genPoints.length; i++){
-                genPoints[i] = new GenPoint(particles.get(i).getDNA());
-            }
-
-            lastScore = currentScore;
-            Run run = run(genPoints, k);
-            currentScore = Silhouette.meanSilhouette((GenPoint[]) run.dataPoints, (ClusterCentroid[]) run.centroids);
-            System.out.println("k = " + k + " with silhouette of: " + currentScore);
-            if(currentScore > bestScore) {
-                bestScore = currentScore;
-                bestK = k;
-            }
-            allRuns[k] = run;
-            k++;
-        }
-        System.out.println("Best k found: " + bestK);
-    }
-
-    public static Run run(GenPoint[] genPoints, int k){
-        ClusterCentroid[] centroids = new ClusterCentroid[k];
-        for (int i = 0; i<k; i++){
-            centroids[i] = new ClusterCentroid(new DNA(), genPoints.length, i);
-        }
-        return run(genPoints,centroids);
     }
 
     public static Run run(GenPoint[] genPoints, ClusterCentroid[] centroids, int k){

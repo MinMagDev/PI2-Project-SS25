@@ -16,8 +16,7 @@ import World.World;
 
 public class SpeciesParticle extends Particle implements SpeciesSocialEntity, DrawableParticle, ReproducingParticle, Specimen {
 
-
-    private Species species;
+    private final Species species;
     private DNA dna;
 
     private boolean alive = true;
@@ -71,16 +70,9 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         return species;
     }
 
-    @Override
-    public void setSpecies(Species species) {
-        this.species = species;
-        this.color = species.getColor();
-    }
-
     public DNA getDNA() {
         return dna;
     }
-
 
     public double getSize() {
         return radius;
@@ -106,8 +98,8 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
 
 
-    public SpeciesParticle(double canvasWidth, double canvasHeight, int particleID, Species species){
-        super(0, 0, particleID, 3);
+    public SpeciesParticle(double canvasWidth, double canvasHeight, Species species){
+        super(0, 0, 3);
         Random random = new Random();
         this.position.setX(Math.round(random.nextDouble() * canvasWidth));
         this.position.setY(Math.round(random.nextDouble() * canvasHeight));
@@ -145,9 +137,8 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         Random r = new Random();
         SpeciesParticle[] result = new SpeciesParticle[amount];
         for (int i = 0; i < amount; i++) {
-            result[i] = new SpeciesParticle(width, height, i, species);
+            result[i] = new SpeciesParticle(width, height, species);
         }
-        World.entityCount = amount;
         return result;
     }
 
@@ -168,8 +159,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
             return null;
         }
         Species newSpecies = getSpecies();
-        World.entityCount++;
-        SpeciesParticle newParticle = new SpeciesParticle(0,0, World.entityCount, newSpecies);
+        SpeciesParticle newParticle = new SpeciesParticle(0,0, newSpecies);
         newParticle.setDNA(newDNA);
         newParticle.setPosition(position);
         return newParticle;

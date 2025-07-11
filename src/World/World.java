@@ -3,12 +3,8 @@ package World;
 import Canvas.*;
 import LifeAndDeath.EntityManager;
 import LifeAndDeath.ReproducingParticle;
-import Particle.DebugParticle;
 import Particle.Particle;
 import Particle.Vector2D;
-import Genom.DNA;
-import Social.SocialParticleRenderer;
-import Species.Species;
 import Species.SpeciesParticle;
 
 
@@ -19,30 +15,49 @@ import java.util.function.Consumer;
 
 /**
   * A drawable class that simulates the very crude "physics" involved
+ * and also manages the reproduction and life cycle aspects of the simulation
  */
 
 public class World<T extends Particle & ReproducingParticle> implements Drawable, EntityManager<T> {
+    /**
+     * the worlds width in px
+     */
     private final int width;
+    /**
+     * the worlds height in px
+     */
     private final int height;
 
-    public static final int MAX_WIDTH = 1000;
-    public static final int MAX_HEIGHT = 1000;
+    /**
+     * worlds default width in px
+     */
+    public static final int DEFAULT_WIDTH = 1000;
+    /**
+     * worlds default height in px
+     */
+    public static final int DEFAULT_HEIGHT = 1000;
+    /**
+     * the max number of entities managed by this world instance
+     */
     public static final int MAX_ENTITY_COUNT = 1000;
-    public static int entityCount = 0;
 
-    ArrayList<T> colliders;
+    /**
+     * the entities managed by this world
+     */
+    ArrayList<T> entities;
 
     private final Drawable renderer;
 
-    public World(int width, int height, ArrayList<T> colliders, Drawable renderer) {
+    public World(int width, int height, ArrayList<T> entities, Drawable renderer) {
         this.width = width;
         this.height = height;
-        this.colliders = colliders;
+        this.entities = entities;
         this.renderer = renderer;
     }
 
     @Override
     public void draw(Graphics g) {
+        // configure background
         g.setColor(Color.DARK_GRAY);
         g.fillRect(0,0,width,height);
         g.setColor(Color.black);
@@ -72,7 +87,7 @@ public class World<T extends Particle & ReproducingParticle> implements Drawable
      */
     private void updateParticles() {
         List<Runnable> actions = new LinkedList<>();
-        for(var particle : colliders) {
+        for(var particle : entities) {
             if(!particle.isAlive()){
                 actions.add(() -> this.removeEntity(particle));
                 continue;
@@ -83,7 +98,7 @@ public class World<T extends Particle & ReproducingParticle> implements Drawable
                 if(child != null){
                     child.updateValues();
                     actions.add(() -> {
-                        if(colliders.size() < MAX_ENTITY_COUNT) {
+                        if(entities.size() < MAX_ENTITY_COUNT) {
                             this.addEntity(child);
                         }
                     });
@@ -99,7 +114,6 @@ public class World<T extends Particle & ReproducingParticle> implements Drawable
 
 
 
-    static final double speedFactor = .2;
     /**
      * adds a collision force to a collider upon collision with the world border
      * @param collider the collider
@@ -125,7 +139,6 @@ public class World<T extends Particle & ReproducingParticle> implements Drawable
             collider.setY(0 + collider.getRadius());
         }
 
-
         collider.addForce(force);
     }
 
@@ -133,9 +146,9 @@ public class World<T extends Particle & ReproducingParticle> implements Drawable
      * simulates collisions
      */
     private void simulateCollisions() {
-        for (Collider collider1 : colliders) {
+        for (Collider collider1 : entities) {
             addBorderCollisionForce(collider1);
-            for (Collider collider2 : colliders) {
+            for (Collider collider2 : entities) {
                 collider1.checkCollision(collider2);
             }
 
@@ -144,12 +157,12 @@ public class World<T extends Particle & ReproducingParticle> implements Drawable
 
     @Override
     public void addEntity(T e) {
-        colliders.add(e);
+        entities.add(e);
     }
 
     @Override
     public void removeEntity(T e) {
-        colliders.remove(e);
+        entities.remove(e);
     }
 
     @Override
@@ -159,6 +172,6 @@ public class World<T extends Particle & ReproducingParticle> implements Drawable
 
     @Override
     public void forEachEntity(Consumer<T> action) {
-        colliders.forEach(action);
+        entities.forEach(action);
     }
 }

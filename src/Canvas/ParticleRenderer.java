@@ -1,17 +1,11 @@
 package Canvas;
 
-import Genom.DNA;
 import LifeAndDeath.EntityManager;
 import Particle.DebugParticle;
-import Particle.Vector2D;
-import Species.Species;
-import Species.SpeciesParticle;
 import World.World;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.function.Consumer;
 import Particle.Entity;
@@ -35,7 +29,7 @@ public class ParticleRenderer<T extends DrawableParticle & Entity> implements Dr
      * @return the example renderer
      */
     public static ParticleRenderer createExample(){
-        return new ParticleRenderer(Arrays.stream(DebugParticle.createExampleArray(10, World.MAX_WIDTH, World.MAX_HEIGHT)).toList());
+        return new ParticleRenderer(Arrays.stream(DebugParticle.createExampleArray(10, World.DEFAULT_WIDTH, World.DEFAULT_HEIGHT)).toList());
     }
 
     public void draw(Graphics g) {
