@@ -16,7 +16,7 @@ import World.World;
 
 public class SpeciesParticle extends Particle implements SpeciesSocialEntity, DrawableParticle, ReproducingParticle, Specimen {
 
-    private final Species species;
+    private Species species;
     private DNA dna;
 
     private boolean alive = true;
@@ -167,12 +167,22 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
     public void updateValues(){
         interactionRadius = dna.getRadius();
-        //color = dna.getColor();
+
     }
 
     @Override
-    public void updateColor() {
-        color = species.getColor();
+    public void updateSpecies(Species species) {
+            boolean update = !species.getColor().equals(color);
+            if(update){
+                System.out.println("updateSpecies");
+                System.out.println(Ecosystem.colorText(color, "old"));
+            }
+
+            this.species = species;
+            this.color = species.getColor();
+            if(update){
+                System.out.println(Ecosystem.colorText(species.getColor(), "new"));
+            }
     }
 
     public void setDNA(DNA dna) {

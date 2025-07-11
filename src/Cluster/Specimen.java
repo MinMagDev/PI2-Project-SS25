@@ -1,8 +1,9 @@
 package Cluster;
 
 import Genom.DNA;
+import Species.Species;
 
 public interface Specimen {
     DNA getDNA();
-    default void updateColor() {}
+    default void updateSpecies(Species species) {}
 }

@@ -49,8 +49,6 @@ public class Species {
 
         ecosystem.addSpecies(this);
         id = ecosystem.getSpeciesCount() - 1;
-
-        ecosystem.updateInteractionMatrix();
     }
 
     private final int id;
@@ -88,8 +86,6 @@ public class Species {
         this.color = dna.getColor();
         this.speed = dna.getSpeed() * ecosystem.getSpeedMultiplier();
         this.interactionRadius = dna.getRadius() * ecosystem.getSpeedMultiplier();
-
-        ecosystem.updateInteractionMatrix();
     }
 
     public Object[] getInteractionMatrixRow() {

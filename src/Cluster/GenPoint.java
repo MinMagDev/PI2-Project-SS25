@@ -1,14 +1,24 @@
 package Cluster;
 
 import Genom.DNA;
+import Species.Species;
+
+import java.util.function.Consumer;
 
 public class GenPoint extends DataPoint{
 
     private float distanceToNearestCluster;
 
-    public GenPoint(DNA dna) {
+    public GenPoint(DNA dna, Consumer<Species> updateSpecies) {
         super(dna);
+        this.updateSpecies = updateSpecies;
     }
+
+    public GenPoint(DNA dna) {
+        this(dna, null);
+    }
+
+    private final Consumer<Species> updateSpecies;
 
     /**
      * Calculates the Distance to every cluster centroid and returns the one, which is nearest.
@@ -31,6 +41,10 @@ public class GenPoint extends DataPoint{
         setNearestClusterCentroid(nearest);
         this.distanceToNearestCluster = distToNearest;
         return nearest;
+    }
+
+    public void updateSpecies(Species species){
+     this.updateSpecies.accept(species);
     }
 
     public float getDistanceToNearestCluster() {

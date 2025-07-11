@@ -130,7 +130,7 @@ public class SpeciesDemo extends Demo{
             Particle.MAX_SPEED = (double) this.maxSpeed.getValue() / 10;
 
             ecosystem.setSpeedMultiplier((double) this.speedMultiplier.getValue() / 5);
-            ecosystem.setSocialRadiusMultiplier((double) this.socialRadiusMultiplier.getValue());
+            //ecosystem.setSocialRadiusMultiplier((double) this.socialRadiusMultiplier.getValue());
 
             super.setScene(() -> createDemo(speciesAmount.getValue(), specimensAmount.getValue()));
 
@@ -200,7 +200,7 @@ public class SpeciesDemo extends Demo{
         };
 
         cluster = () -> {
-            KMeans.run(renderer.getParticles(), speciesList);
+            ecosystem.updateSpecies(renderer.getParticles());
             repaint.run();
         };
 
