@@ -111,7 +111,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         Random random = new Random();
         this.position.setX(Math.round(random.nextDouble() * canvasWidth));
         this.position.setY(Math.round(random.nextDouble() * canvasHeight));
-        this.color =  species.getColor();
+        this.color = species.getColor();
         this.interactionRadius = species.getInteractionRadius();
         this.addForce(new Vector2D());
         this.species = species;
@@ -170,7 +170,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         Species newSpecies = getSpecies();
         World.entityCount++;
         SpeciesParticle newParticle = new SpeciesParticle(0,0, World.entityCount, newSpecies);
-        newParticle.setDna(newDNA);
+        newParticle.setDNA(newDNA);
         newParticle.setPosition(position);
         return newParticle;
     }
@@ -180,8 +180,14 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         //color = dna.getColor();
     }
 
-    public void setDna(DNA dna) {
+    @Override
+    public void updateColor() {
+        color = species.getColor();
+    }
+
+    public void setDNA(DNA dna) {
         this.dna = dna;
+        updateValues();
     }
 }
 

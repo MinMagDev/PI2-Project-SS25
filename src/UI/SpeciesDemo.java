@@ -23,7 +23,7 @@ public class SpeciesDemo extends Demo{
     static double ZAP_FACTOR = 100d;
 
     private final JSlider socialRadiusMultiplier, speedMultiplier, speciesAmount, specimensAmount, maxSpeed;
-    private Runnable zap, pause, cluster;
+    private Runnable zap, pause, cluster, repaint;
 
     private Ecosystem ecosystem;
 
@@ -120,6 +120,10 @@ public class SpeciesDemo extends Demo{
 
         Reference<Boolean> isRunning = new Reference<>(true);
 
+        repaint = () -> {
+            panel.repaint();
+        };
+
         pause = () -> {
             if (isRunning.get()) {
                 panel.pause();
@@ -141,7 +145,7 @@ public class SpeciesDemo extends Demo{
                 SpeciesParticle particle = getRenderer().getEntityAt(Vector2D.fromPoint(relativeClickPosition));
                 if(particle != null) {
                     new EditorWindow(particle, (dna) -> {
-                        panel.repaint();
+                       repaint.run();
                     });
                 }
                 super.mouseClicked(e);
@@ -178,13 +182,9 @@ public class SpeciesDemo extends Demo{
 
             kM.run();
 
-            int count = 0;
-            List<Species> particleSpecies = kM.getParticleSpecies();
-            renderer.forEachEntity(particle -> {
-                int particleID = particle.getParticleID();
-                Species s = particleSpecies.get(particleID);
-                particle.setSpecies(s);
-            });
+
+            repaint.run();
+
         };
 
         return new World(World.MAX_WIDTH, World.MAX_HEIGHT, particles, renderer);

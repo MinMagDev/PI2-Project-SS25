@@ -19,7 +19,7 @@ public class Species {
     private double speed;
 
 
-    private final DNA dna;
+    private DNA dna;
 
     public void setColor(Color color) {
         this.color = color;
@@ -83,6 +83,8 @@ public class Species {
     }
 
     public void setDNA(DNA dna) {
+        this.dna = dna;
+
         this.color = dna.getColor();
         this.speed = dna.getSpeed() * ecosystem.getSpeedMultiplier();
         this.interactionRadius = dna.getRadius() * ecosystem.getSpeedMultiplier();

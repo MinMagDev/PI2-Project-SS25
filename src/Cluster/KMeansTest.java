@@ -53,17 +53,12 @@ public class KMeansTest {
     }
 
     private static void testDistance() {
-        Ecosystem testSystem = new Ecosystem();
-        SpeciesParticle p0 = new SpeciesParticle(0,0, 0,
-                new Species(new DNA(), testSystem));
-        SpeciesParticle p1 = new SpeciesParticle(0,0,1,
-                new Species(new DNA(), testSystem));
-        SpeciesParticle p2 = p1.newChild();
-        int[] v0 = new DataPoint(p0.getDNA()).getBinaryVector();
-        int[] v1 = new DataPoint(p1.getDNA()).getBinaryVector();
-        int[] v2 = new DataPoint(p2.getDNA()).getBinaryVector();
+        int[] v0 = new DataPoint("AAT").getBinaryVector();
+        int[] v1 = new DataPoint("CC").getBinaryVector();
+        int[] v2 = new DataPoint("TGC").getBinaryVector();
 
         System.out.println("d(0,1) = " + DataPoint.distance(v0,v0));
+        System.out.println("d(0,1) = " + DataPoint.distance(v0,v1));
         System.out.println("d(0,2) = " + DataPoint.distance(v0,v1));
         System.out.println("d(0,3) = " + DataPoint.distance(v0,v2));
     }
