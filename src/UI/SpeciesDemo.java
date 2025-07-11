@@ -19,24 +19,44 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class SpeciesDemo extends Demo{
-    static double ZAP_FACTOR = 100d;
 
+/**
+ * drawing instructions for the particle simulation
+ */
+public class SpeciesDemo extends Demo{
+    /**
+     * the length of the vector used for the zap force
+     */
+    static double ZAP_FACTOR = 100d;
+    
+    // sliders for the settings
     private final JSlider socialRadiusMultiplier, speedMultiplier, speciesAmount, specimensAmount, maxSpeed;
+    // actions for the different buttons
     private Runnable zap, pause, cluster, repaint;
 
+    /**
+     * the simulated ecosystem 
+     */
     private Ecosystem ecosystem;
 
+    /**
+     * the renderer for the simulation
+     */
+    private SocialParticleRenderer<SpeciesParticle> renderer;
+
+    /**
+     * @return the renderer for the simulation
+     */
     public SocialParticleRenderer<SpeciesParticle> getRenderer() {
         return renderer;
     }
 
-    private SocialParticleRenderer<SpeciesParticle> renderer;
+    
 
     public SpeciesDemo(Runnable renderer, int species, int specimens, int socialRadiusMultiplier, int speedMultiplier) {
         this.ecosystem = new Ecosystem();
-
-
+        
+        // create settings UI
         this.socialRadiusMultiplier = new JSlider(JSlider.HORIZONTAL, 1, 100, socialRadiusMultiplier);
         this.speedMultiplier = new JSlider(JSlider.HORIZONTAL, 1, 100, speedMultiplier);
         this.maxSpeed = new JSlider(JSlider.HORIZONTAL, 1, 100, (int) Particle.MAX_SPEED * 10);
@@ -44,19 +64,7 @@ public class SpeciesDemo extends Demo{
         this.speciesAmount = new JSlider(JSlider.HORIZONTAL, 0, 10, species);
         this.specimensAmount = new JSlider(JSlider.HORIZONTAL, 1, 100, specimens);
 
-        JButton restartButton = new JButton("(Re)start simulation");
-        restartButton.addActionListener(e -> {
-            ecosystem = new Ecosystem();
-
-            Particle.MAX_SPEED = (double) this.maxSpeed.getValue() / 10;
-
-            ecosystem.setSpeedMultiplier((double) this.speedMultiplier.getValue() / 5);
-            ecosystem.setSocialRadiusMultiplier((double) this.socialRadiusMultiplier.getValue());
-
-            super.setScene(() -> createDemo(speciesAmount.getValue(), specimensAmount.getValue()));
-
-            renderer.run();
-        });
+        JButton restartButton = makeRestartButton(renderer);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
@@ -114,15 +122,30 @@ public class SpeciesDemo extends Demo{
 
     }
 
+    private JButton makeRestartButton(Runnable renderer) {
+        JButton restartButton = new JButton("(Re)start simulation");
+        restartButton.addActionListener(e -> {
+            ecosystem = new Ecosystem();
+
+            Particle.MAX_SPEED = (double) this.maxSpeed.getValue() / 10;
+
+            ecosystem.setSpeedMultiplier((double) this.speedMultiplier.getValue() / 5);
+            //ecosystem.setSocialRadiusMultiplier((double) this.socialRadiusMultiplier.getValue());
+
+            super.setScene(() -> createDemo(speciesAmount.getValue(), specimensAmount.getValue()));
+
+            renderer.run();
+        });
+        return restartButton;
+    }
+
     @Override
     public RendererPanel getScene() {
         RendererPanel panel = super.getScene();
 
         Reference<Boolean> isRunning = new Reference<>(true);
 
-        repaint = () -> {
-            panel.repaint();
-        };
+        repaint = panel::repaint;
 
         pause = () -> {
             if (isRunning.get()) {
@@ -163,7 +186,7 @@ public class SpeciesDemo extends Demo{
         for(int i = 0; i < species; i++) {
             Species s = new Species(new DNA(), ecosystem);
             speciesList.add(s);
-            particles = new ArrayList<>(Stream.concat(particles.stream(), Arrays.stream(SpeciesParticle.makeParticles(specimens, s, World.MAX_WIDTH, World.MAX_HEIGHT))).toList());
+            particles = new ArrayList<>(Stream.concat(particles.stream(), Arrays.stream(SpeciesParticle.makeParticles(specimens, s, World.DEFAULT_WIDTH, World.DEFAULT_HEIGHT))).toList());
         }
 
 
@@ -177,16 +200,10 @@ public class SpeciesDemo extends Demo{
         };
 
         cluster = () -> {
-            List<SpeciesParticle> sParticles = renderer.getParticles();
-            KMeans kM = new KMeans(sParticles, speciesList);
-
-            kM.run();
-
-
+            ecosystem.updateSpecies(renderer.getParticles());
             repaint.run();
-
         };
 
-        return new World(World.MAX_WIDTH, World.MAX_HEIGHT, particles, renderer);
+        return new World<SpeciesParticle>(World.DEFAULT_WIDTH, World.DEFAULT_HEIGHT, particles, renderer);
     }
 }

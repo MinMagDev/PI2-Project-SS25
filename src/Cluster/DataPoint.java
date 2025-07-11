@@ -153,24 +153,8 @@ public class DataPoint {
     }
 
     /**
-     * Converts the binaryVector back to a List of Nucleotids
-     * @return
+     * converts this data point back into DNA
      */
-    /*public DNA toDNA() {
-        List<Nucleotid> newDNA = new ArrayList<>();
-        for (int i = 0; i < binaryVector.length; i += 4){
-            boolean found = false;
-            for (int j = 0; j < 4; j++) {
-                if (binaryVector[j] == 1){
-                    newDNA.add(Nucleotid.values()[j]);
-                    found = true;
-                }
-            }
-            if (!found) break;
-        }
-        return new DNA(newDNA);
-    }*/
-
     public DNA toDNA() {
         List<Nucleotid> newDNA = new ArrayList<>();
         for(int i = 0; i < length; i++){

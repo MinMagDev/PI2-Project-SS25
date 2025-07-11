@@ -63,11 +63,11 @@ public class DebugParticle extends Particle implements DrawableParticle, SocialE
     public Color color;
 
     public DebugParticle(int x, int y, int radius, Color color){
-        super(x, y, 0, radius);
+        super(x, y, radius);
         this.color = color;
     }
     public DebugParticle(double canvasWidth, double canvasHeight){
-        super(0, 0, 0, 5);
+        super(0, 0, 5);
         Random random = new Random();
         this.position.setX(Math.round(random.nextDouble() * canvasWidth));
         this.position.setY(Math.round(random.nextDouble() * canvasHeight));

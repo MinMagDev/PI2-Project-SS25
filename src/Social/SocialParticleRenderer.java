@@ -23,7 +23,7 @@ public class SocialParticleRenderer<T extends DrawableParticle & SocialEntity> e
     private final SocialSystem<T> socialSystem;
 
     public static SocialParticleRenderer<DebugParticle> createExample(){
-        return new SocialParticleRenderer<>(Arrays.stream(DebugParticle.createExampleArray(10, World.MAX_WIDTH, World.MAX_HEIGHT)).toList());
+        return new SocialParticleRenderer<>(Arrays.stream(DebugParticle.createExampleArray(10, World.DEFAULT_WIDTH, World.DEFAULT_HEIGHT)).toList());
     }
 
     @Override

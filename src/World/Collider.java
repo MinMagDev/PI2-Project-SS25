@@ -26,13 +26,6 @@ public interface Collider {
 
 
     // active methods
-
-    /**
-     * sets the movement speed of the collider
-     * @param speed the new length for the velocity vector
-     */
-    void setSpeed(double speed);
-
     /**
      * adds a force to the collider
      * @param force the force
@@ -45,11 +38,29 @@ public interface Collider {
      */
     void checkCollision(Collider collider);
 
+
+    /**
+     * sets the colliders x position
+     * @param x the new x position
+     */
     void setX(double x);
+
+    /**
+     * sets the colliders y position
+     * @param y new y position
+     */
     void setY(double y);
 
+    /**
+     * sets the colliders position
+     */
     void setPosition(Vector2D position);
 
+    /**
+     * adds a force to the collider which is not checked by MAX_SPEED
+     * used for the zap button
+     * @param force the force vector
+     */
     void addUnlimitedForce(Vector2D force);
 
 }

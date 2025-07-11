@@ -86,11 +86,6 @@ public abstract class Particle implements Collider, Entity {
     }
 
     @Override
-    public void setSpeed(double speed) {
-        forceManager.setSpeed(speed);
-    }
-
-    @Override
     public void checkCollision(Collider collider) {
         if(collider.equals(this)){
             return;
@@ -115,8 +110,7 @@ public abstract class Particle implements Collider, Entity {
     private final ForceManager forceManager;
 
 
-    public Particle(double x, double y, int particleID, double radius){
-        this.particleID = particleID;
+    public Particle(double x, double y, double radius){
         this.position = new Vector2D(x, y);
         this.radius = radius;
         this.forceManager = new ForceManager();
