@@ -33,7 +33,7 @@ public class EditorWindow extends JFrame {
     public EditorWindow(SpeciesParticle particle, Consumer<DNA> confirmEditHandler) {
         var species = particle.getSpecies();
         var display = new DNADisplay(species, particle.getDNA(), confirmEditHandler.andThen((dna) -> {
-            particle.setDna(dna);
+            particle.setDNA(dna);
             dispose();
         }), () -> {
             particle.setColor(Color.CYAN);

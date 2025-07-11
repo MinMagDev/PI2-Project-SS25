@@ -27,6 +27,10 @@ public class DebugSpecimen implements Specimen {
         setDNA(dna.mutated(amount));
     }
 
+    public DataPoint dataPoint(){
+        return new DataPoint(dna);
+    }
+
     static void makeSpecimens(int nSpecies, int nSpecimens, boolean mutated, int muatationAmnt, List<Species> species, List<DebugSpecimen> specimens) {
         Ecosystem ecosystem = Ecosystem.createExampleEcosystem(nSpecies);
         ecosystem.forEachSpecies((aSpecies) -> {
@@ -40,6 +44,13 @@ public class DebugSpecimen implements Specimen {
             }
         });
 
+    }
+
+    static List<DebugSpecimen> makeSpecimens(int n, int nSpecies, boolean mutated, int muatationAmnt){
+        List<DebugSpecimen> specimens = new ArrayList<>();
+        List<Species> species = new ArrayList<>();
+        makeSpecimens(nSpecies, n, mutated, muatationAmnt, species, specimens);
+        return specimens;
     }
 
 }
