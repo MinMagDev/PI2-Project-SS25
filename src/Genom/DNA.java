@@ -159,6 +159,7 @@ public class DNA {
     public InteractionType getInteractionWith(Species other) {
         return getInteraction(other.getId());
     }
+
   /**
      * returns a scaled value corresponding to a specific sequence of DNA
      * @param start the first nucleotide to be considered
@@ -166,7 +167,6 @@ public class DNA {
      * @param max the maximum allowed value
      * @return the corresponding double
      */
-  
     private double getValue(int start, int length, double max){
         double result = 0.0d;
         result += getIntValue(start, start+length);
