@@ -1,7 +1,7 @@
 package Cluster;
 
 import Genom.DNA;
-import Genom.Nucleotid;
+import Genom.Nucleotide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +54,8 @@ public class DataPoint {
 
     private void calculateBinaryVector(DNA dna) {
         int count = 0;
-        for (Nucleotid nucleotid: dna.getDNA()){
-            int ordinal = nucleotid.ordinal();
+        for (Nucleotide nucleotide : dna.getDNA()){
+            int ordinal = nucleotide.ordinal();
             binaryVector[4 * count + ordinal] = 1;
             count++;
         }
@@ -156,11 +156,11 @@ public class DataPoint {
      * converts this data point back into DNA
      */
     public DNA toDNA() {
-        List<Nucleotid> newDNA = new ArrayList<>();
+        List<Nucleotide> newDNA = new ArrayList<>();
         for(int i = 0; i < length; i++){
             for(int j = 0; j < 4; j++){
                if(binaryVector[i*4+j] == 1){
-                   newDNA.add(Nucleotid.values()[j]);
+                   newDNA.add(Nucleotide.values()[j]);
                    break;
                }
             }

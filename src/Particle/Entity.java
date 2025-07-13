@@ -1,5 +1,8 @@
 package Particle;
 
+/**
+ * interface for a basic entity with position and size
+ */
 public interface Entity {
 
     Vector2D getPosition();
@@ -8,6 +11,4 @@ public interface Entity {
     double getSize();
     void setSize(double size);
 
-    void growConst(double size);
-    void growFac(double factor);
 }

@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * simulates social interactions
+ * @param <T> the entities' class
+ */
+
 public class SocialSystem<T extends SocialEntity> implements EntityManager<T> {
 
    /**
@@ -22,7 +27,7 @@ public class SocialSystem<T extends SocialEntity> implements EntityManager<T> {
     */
    public void triggerInteractions() {
       for (int i = 0; i < entities.size(); i++) {
-         var interactor = entities.get(i);
+         T interactor = entities.get(i);
          for (int j = 0; j < entities.size(); j++) {
             if (i == j) {
                continue;

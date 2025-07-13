@@ -8,6 +8,10 @@ import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * manages a simulation's species
+ */
+
 public class Ecosystem {
     private final List<Species> species = new ArrayList<Species>();
 

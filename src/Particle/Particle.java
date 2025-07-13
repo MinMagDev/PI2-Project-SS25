@@ -5,6 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 
+/**
+ * handles the physics part of a particle
+ */
+
 public abstract class Particle implements Collider, Entity {
     public static double MAX_SPEED = 3;
 

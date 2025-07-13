@@ -21,12 +21,15 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     private boolean reproduce = false;
 
     private int reproductionCount = 0;
-    private static final int MAX_REPRO_COUNT = 200;
+    private static final int MAX_REPRODUCTION_COUNT = 200;
     public static final int EXPECTED_MUTATIONS = 4;
     static final int RADIATION_MUTATIONS = 200;
 
 
-    private double speed, interactionRadius, speedMultiplier, interactionRadiusMultiplier;
+    private final double speed;
+    private double interactionRadius;
+    private double speedMultiplier;
+    private final double interactionRadiusMultiplier;
 
     @Override
     public int getXForDrawing() {
@@ -55,7 +58,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
     @Override
     public double getSpeed() {
-        return 0;
+        return speed;
     }
 
     @Override
@@ -125,7 +128,7 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
         growConst(-dna.getHunger());
         if (getSize() <= 0) this.kill();
         if (Math.random() <= dna.getReproductionProbability()) reproductionCount++;
-        if (reproductionCount >= MAX_REPRO_COUNT){
+        if (reproductionCount >= MAX_REPRODUCTION_COUNT){
             //System.out.println("Reproduce");
             reproduce = true;
             reproductionCount = 0;
@@ -141,7 +144,6 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     }
 
     public static SpeciesParticle[] makeParticles(int amount, Species species, int width, int height) {
-        Random r = new Random();
         SpeciesParticle[] result = new SpeciesParticle[amount];
         for (int i = 0; i < amount; i++) {
             result[i] = new SpeciesParticle(width, height, species);

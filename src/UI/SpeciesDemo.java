@@ -72,7 +72,7 @@ public class SpeciesDemo extends Demo{
         this.speedMultiplier = new SettingsSlider("Speed Multiplier", 1, 100, 50){
             @Override
             public double getValue() {
-                return super.getValue() / 5;
+                return super.getValue() / 25;
             }
         };
         this.interactionRadiusMultiplier = new SettingsSlider("Interaction Radius", 1, 100, 50){

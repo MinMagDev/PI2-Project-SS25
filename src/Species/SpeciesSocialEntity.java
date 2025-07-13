@@ -5,9 +5,17 @@ import Genom.InteractionType;
 import Particle.Vector2D;
 import Social.SocialEntity;
 
+/**
+ * manages interaction between particles of different species
+ */
+
 public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
 
     double SPRING_FORCE = 1;
+
+    void growConst(double size);
+
+    void growFac(double factor);
 
     /**
      * @return this entity's species
@@ -29,7 +37,7 @@ public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
                 break;
             case ATTRACT:
                 if(interactee.getSpecies() != this.getSpecies()
-                        && distanceToInteractee <= 1
+                        && distanceToInteractee <= 1 // verhindert, dass Partikel zu gross werden
                         && interactee.getSize() <= this.getSize()
                 ) {
                     interactee.kill();

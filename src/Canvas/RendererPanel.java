@@ -13,7 +13,7 @@ public class RendererPanel extends JPanel implements ActionListener {
     /**
      * the timer updates the JPanel periodically
      */
-    private Timer timer;
+    private final Timer timer;
 
     private Drawable drawable;
 

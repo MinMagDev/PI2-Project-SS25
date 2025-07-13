@@ -1,12 +1,15 @@
 package LifeAndDeath;
 
-import Particle.Particle;
-import Species.SpeciesParticle;
+/**
+ * interface for the lifecycle of a particle
+ */
 
 public interface ReproducingParticle {
 
+    /**
+     * update values after childbirth
+     */
     void updateValues();
-
 
     /**
      *
@@ -48,5 +51,6 @@ public interface ReproducingParticle {
     default <T> T newChild(){
         return null;
     }
+
 
 }

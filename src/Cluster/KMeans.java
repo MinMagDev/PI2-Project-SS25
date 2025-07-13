@@ -71,18 +71,6 @@ public class KMeans<S extends Specimen> {
     }
 
 
-    public static Run run(GenPoint[] genPoints, ClusterCentroid[] centroids, int k){
-        ClusterCentroid[] newCentroids = new ClusterCentroid[k];
-        for (int i = 0; i<centroids.length; i++){
-            newCentroids[i] = centroids[i];
-        }
-        for (int i = 0; i < k-centroids.length; i++){
-            int pos = centroids.length + i;
-            newCentroids[pos] = new ClusterCentroid(new DNA(), genPoints.length, pos);
-        }
-        return run(genPoints,newCentroids);
-    }
-
     public static Run run(GenPoint[] genPoints, ClusterCentroid[] centroids){
         int i = 0;
         boolean next = true;
@@ -118,7 +106,7 @@ public class KMeans<S extends Specimen> {
         for (ClusterCentroid centroid: centroids) {
             if (!centroid.updatePosition()) changed = false;
         }
-        //System.out.println("Changed? :" + changed);
+
         return changed;
     }
 

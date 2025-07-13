@@ -10,6 +10,10 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.Arrays;
 
+/**
+ * the table showing this particles interaction with other species
+ */
+
 public class InteractionMatrixDisplay extends JPanel {
     Object[][] interactionMatrix;
     Ecosystem ecosystem;
