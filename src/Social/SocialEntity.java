@@ -7,7 +7,7 @@ import Species.Species;
 
 public interface SocialEntity<Interactee extends SocialEntity> extends Entity {
 
-    double SPEED_MULTIPLIER = 1.0;
+    double getSpeed();
 
     /**
      * @return the entity's position in space (to calculate in whose interaction radius it is)
@@ -21,7 +21,7 @@ public interface SocialEntity<Interactee extends SocialEntity> extends Entity {
     default void interactWith(Interactee interactee) {
         Vector2D toInteractee = getPosition().to(interactee.getPosition());
         toInteractee.normalize();
-        toInteractee.mul(SPEED_MULTIPLIER);
+        toInteractee.mul(getSpeed());
         this.addForce(toInteractee);
     }
 

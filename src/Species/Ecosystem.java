@@ -12,14 +12,28 @@ public class Ecosystem {
     private final List<Species> species = new ArrayList<Species>();
 
     public double getSpeedMultiplier() {
+        System.out.println("SpeedMultiplier" + speedMultiplier);
         return speedMultiplier;
     }
 
     public void setSpeedMultiplier(double speedMultiplier) {
         this.speedMultiplier = speedMultiplier;
+        System.out.println(" set Speed Multiplier: " + speedMultiplier);
     }
 
     private double speedMultiplier;
+
+    public double getInteractionRadiusMultiplier() {
+        System.out.println(" get Interaction Radius Multiplier: " + interactionRadiusMultiplier);
+        return interactionRadiusMultiplier;
+    }
+
+    public void setInteractionRadiusMultiplier(double interactionRadiusMultiplier) {
+        this.interactionRadiusMultiplier = interactionRadiusMultiplier;
+        System.out.println("set Interaction Radius Multiplier: " + interactionRadiusMultiplier);
+    }
+
+    private double interactionRadiusMultiplier;
 
     void addSpecies(Species species){
         this.species.add(species);

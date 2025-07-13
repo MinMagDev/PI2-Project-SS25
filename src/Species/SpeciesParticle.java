@@ -8,10 +8,8 @@ import Particle.Vector2D;
 import Particle.Particle;
 
 import java.awt.*;
-import java.util.List;
 import java.util.Random;
 import Canvas.*;
-import World.World;
 
 
 public class SpeciesParticle extends Particle implements SpeciesSocialEntity, DrawableParticle, ReproducingParticle, Specimen {
@@ -23,10 +21,12 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     private boolean reproduce = false;
 
     private int reproductionCount = 0;
-    private final int MAX_REPRO_COUNT = 200;
-    public final int EXPECTED_MUTATIONS = 4;
+    private static final int MAX_REPRO_COUNT = 200;
+    public static final int EXPECTED_MUTATIONS = 4;
+    static final int RADIATION_MUTATIONS = 200;
 
-    private double interactionRadius;
+
+    private double speed, interactionRadius, speedMultiplier, interactionRadiusMultiplier;
 
     @Override
     public int getXForDrawing() {
@@ -54,11 +54,15 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     }
 
     @Override
+    public double getSpeed() {
+        return 0;
+    }
+
+    @Override
     public void setPosition(Vector2D position) {
         this.position = position;
     }
 
-    public static double SPEED_MULTIPLIER = 10;
 
 
     @Override
@@ -100,14 +104,17 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
     public SpeciesParticle(double canvasWidth, double canvasHeight, Species species){
         super(0, 0, 3);
+        this.dna = species.getDNA();
         Random random = new Random();
         this.position.setX(Math.round(random.nextDouble() * canvasWidth));
         this.position.setY(Math.round(random.nextDouble() * canvasHeight));
         this.color = species.getColor();
-        this.interactionRadius = species.getInteractionRadius();
-        this.addForce(new Vector2D());
+        this.interactionRadiusMultiplier = species.getInteractionRadiusMultiplier();
+        this.speedMultiplier = species.getSpeedMultiplier();
+        this.interactionRadius = dna.getRadius() * interactionRadiusMultiplier;
+        this.speed = dna.getSpeed() * speedMultiplier;
+        this.addForce(Vector2D.random());
         this.species = species;
-        this.dna = species.getDNA();
     }
 
 
@@ -166,8 +173,8 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     }
 
     public void updateValues(){
-        interactionRadius = dna.getRadius();
-
+        interactionRadius = dna.getRadius() * interactionRadiusMultiplier;
+        speedMultiplier = dna.getSpeed() * speedMultiplier;
     }
 
     @Override
@@ -188,6 +195,11 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
     public void setDNA(DNA dna) {
         this.dna = dna;
         updateValues();
+    }
+
+    public void irradiate(){
+        DNA newDNA = dna.mutated(RADIATION_MUTATIONS);
+        setDNA(newDNA);
     }
 }
 

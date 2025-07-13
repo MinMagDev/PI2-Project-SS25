@@ -166,11 +166,6 @@ public class World<T extends Particle & ReproducingParticle> implements Drawable
     }
 
     @Override
-    public void massRemoveEntities(List<T> es) {
-
-    }
-
-    @Override
     public void forEachEntity(Consumer<T> action) {
         entities.forEach(action);
     }

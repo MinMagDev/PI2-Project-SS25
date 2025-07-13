@@ -11,7 +11,9 @@ import java.awt.*;
 
 public class DemoPanel extends JPanel {
 
-    private final SpeciesDemo demo = new SpeciesDemo(this::rerender, 5, 50, 50, 50);
+    public static int SETTINGS_PANEL_WIDTH = 275;
+
+    private final SpeciesDemo demo = new SpeciesDemo(this::rerender, 5, 50);
 
     private final JPanel contentPanel;
     private final JPanel settingsPanel;
@@ -23,7 +25,7 @@ public class DemoPanel extends JPanel {
         add(contentPanel, BorderLayout.CENTER);
 
         settingsPanel = new JPanel(new BorderLayout());
-        settingsPanel.setPreferredSize(new Dimension(200, 0));
+        settingsPanel.setPreferredSize(new Dimension(275, 0));
         add(settingsPanel, BorderLayout.EAST);
 
         rerender();

@@ -20,13 +20,6 @@ public interface EntityManager<T extends Entity> {
      */
     void removeEntity(T e);
 
-
-
-    /**
-     * Removes all given entites
-     * @param es List of Entities
-     */
-    void massRemoveEntities(List<T> es);
     void forEachEntity(Consumer<T> action);
 
     default T getEntityAt(Vector2D pos) {
@@ -42,6 +35,19 @@ public interface EntityManager<T extends Entity> {
         });
 
         return entities.isEmpty() ? null : entities.getFirst();
+    }
+
+    default List<T> getEntitiesInCircle(Vector2D center, double radius) {
+
+        ArrayList<T> entities = new ArrayList<>();
+
+        forEachEntity((entity) -> {
+            if(entity.getPosition().distanceTo(center) <= radius){
+                entities.add(entity);
+            }
+        });
+
+        return entities;
     }
 
 
