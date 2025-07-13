@@ -32,7 +32,6 @@ public interface EntityManager<T extends Entity> {
 
 
         forEachEntity((entity) -> {
-            Vector2D v = entity.getPosition();
             if(entity.getPosition().distanceTo(pos) <= entity.getSize()){
                 entities.add(entity);
             }

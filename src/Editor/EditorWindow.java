@@ -1,7 +1,6 @@
 package Editor;
 
 import Genom.DNA;
-import Species.Ecosystem;
 import Species.*;
 
 import javax.swing.*;
@@ -18,9 +17,7 @@ public class EditorWindow extends JFrame {
         var display = new DNADisplay(species, particle.getDNA(), confirmEditHandler.andThen((dna) -> {
             particle.setDNA(dna);
             dispose();
-        }), () -> {
-            particle.setColor(Color.CYAN);
-        });
+        }), () -> particle.setColor(Color.CYAN));
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));

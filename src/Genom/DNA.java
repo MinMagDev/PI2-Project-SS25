@@ -55,13 +55,13 @@ public class DNA {
     public static final int INTERACTION_TYPES_POSITION = 24;
 
 
-    private final int MAX_SPEED = 10;
-    private final int MAX_FIELD_RADIUS = 40;
-    private final double MAX_HUNGER = 0.005;
+    private static final int MAX_SPEED = 10;
+    private static final int MAX_FIELD_RADIUS = 40;
+    private static final double MAX_HUNGER = 0.005;
 
-    private final double ZERO_SPEED_THREASHOLD = 0.3d;
+    private static final double ZERO_SPEED_THRESHOLD = 0.3d;
 
-    private InteractionType[] interactions = new InteractionType[9];
+    private final InteractionType[] interactions = new InteractionType[9];
 
 
     public DNA() {
@@ -113,7 +113,7 @@ public class DNA {
      * @return The new DNA-Strang
      */
     public static List<Nucleotide> generateRandomDNA(int size) {
-        List<Nucleotide> result = new LinkedList<Nucleotide>();
+        List<Nucleotide> result = new LinkedList<>();
         Random r = new Random();
         Nucleotide[] nucVals = Nucleotide.values();
         for (int i = 0; i < size; i++) {
@@ -130,29 +130,26 @@ public class DNA {
     public double getSpeed(){
         double result = getValue(SPEED_DNA_POSITION, SPEED_DNA_LENGTH, MAX_SPEED);
       
-        if (result <= ZERO_SPEED_THREASHOLD) return 0.0d;
+        if (result <= ZERO_SPEED_THRESHOLD) return 0.0d;
         return result/10;
     }
 
     /**
-     * Returns the Radius for the Force Field from the dna
-     * @return forcefield Radius
+     * @return the radius for social interaction
      */
     public double getRadius(){
         return getValue(INTERACTION_RADIUS_DNA_POSITION, INTERACTION_RADIUS_DNA_LENGTH, MAX_FIELD_RADIUS);
     }
 
     /**
-     * Returns how fast hunger accumulates
-     * @return
+     * @return how fast hunger accumulates
      */
     public double getHunger(){
         return getValue(HUNGER_DNA_POSITION, 6, MAX_HUNGER);
     }
 
     /**
-     * Returns the probability of reproductin
-     * @return
+     * @return the probability of reproduction
      */
     public double getReproductionProbability(){
         return getValue(REPRODUCTION_PROBABILITY_DNA_POSITION,6,1);
@@ -196,7 +193,7 @@ public class DNA {
      */
     public InteractionType getInteraction(int species){
 
-        if (dna.size() == 0) {
+        if (dna.isEmpty()) {
             System.out.println("DNA SIZE IS ZERO, from DNA: " + this);
             return InteractionType.NEUTRAL;
         }
@@ -225,7 +222,7 @@ public class DNA {
      */
     public Color getColor(){
         int dnaLength = dna.size();
-        int parts = (int)dnaLength/3;
+        int parts = dnaLength/3;
         float h = getIntValue(0,parts);
         float s = getIntValue(parts, 2*parts);
         float b = getIntValue(2*parts,dnaLength);
@@ -246,9 +243,9 @@ public class DNA {
      * @return the newly mutated List
      */
     public List<Nucleotide> mutate(int amount) {
-        if (dna.size() == 0) return new DNA().getDNA();
-        double probabilty = (double) amount/dna.size();
-        return mutate(probabilty);
+        if (dna.isEmpty()) return new DNA().getDNA();
+        double probability = (double) amount/dna.size();
+        return mutate(probability);
     }
 
     public List<Nucleotide> getDNA() {
@@ -261,7 +258,7 @@ public class DNA {
      */
     public List<Nucleotide> mutate(double probability){
         Nucleotide[] nucVals = Nucleotide.values();
-        List<Nucleotide> newDNA = new LinkedList<Nucleotide>();
+        List<Nucleotide> newDNA = new LinkedList<>();
         Random r = new Random();
         for (Nucleotide nucleotide : dna) {
             if (r.nextDouble() >= probability) {
@@ -280,15 +277,11 @@ public class DNA {
      */
     @Override
     public String toString() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (Nucleotide nuc: dna){
-            result += nuc;
+            result.append(nuc);
         }
-        return result;
-    }
-
-    public void print(){
-        System.out.println(this);
+        return result.toString();
     }
 
     public DNA mutated(int amount) {

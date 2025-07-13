@@ -15,7 +15,7 @@ public class SocialParticleRenderer<T extends DrawableParticle & SocialEntity> e
 
     public SocialParticleRenderer(List<T> particles) {
         super(particles);
-        socialSystem = new SocialSystem<T>(particles);
+        socialSystem = new SocialSystem<>(particles);
     }
 
     private final SocialSystem<T> socialSystem;

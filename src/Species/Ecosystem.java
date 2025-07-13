@@ -51,14 +51,6 @@ public class Ecosystem {
         species.forEach(consumer);
     }
 
-    public static Ecosystem createExampleEcosystem(int speciesCount){
-        Ecosystem ecosystem = new Ecosystem();
-        for(int i = 0; i < speciesCount; i++){
-         new Species(new DNA(), ecosystem);
-        }
-        return ecosystem;
-    }
-
     public Species getSpecies(int id){
         return species.get(id);
     }
@@ -101,9 +93,7 @@ public class Ecosystem {
                 currentSpecies = new Species(newDNA, this);
             }
             System.out.println("new DNA: " + coloredDNAText(currentSpecies.getDNA()));
-            Arrays.stream(centroid.getClusteredPoints()).forEach(point -> {
-                point.updateSpecies(currentSpecies);
-            });
+            Arrays.stream(centroid.getClusteredPoints()).forEach(point -> point.updateSpecies(currentSpecies));
             System.out.println("–––––––––––––––");
             i++;
         }

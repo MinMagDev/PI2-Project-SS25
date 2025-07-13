@@ -22,9 +22,7 @@ public class SpeciesInteractionDNASite extends InterestingDNASite {
     public static List<SpeciesInteractionDNASite> fromEcosystem(Ecosystem ecosystem) {
         List<SpeciesInteractionDNASite> sites = new ArrayList<>();
 
-        ecosystem.forEachSpecies(species -> {
-            sites.add(new SpeciesInteractionDNASite(species.getId(), species.getColor()));
-        });
+        ecosystem.forEachSpecies(species -> sites.add(new SpeciesInteractionDNASite(species.getId(), species.getColor())));
 
         return sites;
     }

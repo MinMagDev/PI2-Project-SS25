@@ -1,10 +1,8 @@
 package Canvas;
 
 import LifeAndDeath.EntityManager;
-import World.World;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import Particle.Entity;
@@ -20,7 +18,7 @@ public class ParticleRenderer<T extends DrawableParticle & Entity> implements Dr
         return particles;
     }
 
-    private List<T> particles;
+    private final List<T> particles;
 
     public ParticleRenderer(List<T> particles) {
         this.particles = particles;

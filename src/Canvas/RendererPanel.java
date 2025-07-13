@@ -35,10 +35,6 @@ public class RendererPanel extends JPanel implements ActionListener {
         repaint();
     }
 
-    public void setDrawable(Drawable drawable) {
-        this.drawable = drawable;
-        repaint();
-    }
 
     public void pause(){
         timer.stop();

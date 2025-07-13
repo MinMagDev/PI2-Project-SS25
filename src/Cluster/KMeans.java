@@ -1,12 +1,6 @@
 package Cluster;
 
-import Genom.DNA;
 import Species.Species;
-import Species.SpeciesParticle;
-import Species.Ecosystem;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class KMeans<S extends Specimen> {
@@ -55,8 +49,8 @@ public class KMeans<S extends Specimen> {
             }
 
             //Clustering
-            Run run = run(genPoints, centroids);;
-            currentScore = Silhouette.meanSilhouette((GenPoint[]) run.dataPoints, (ClusterCentroid[]) run.centroids);
+            Run run = run(genPoints, centroids);
+            currentScore = Silhouette.meanSilhouette(run.dataPoints, run.centroids);
             allRuns[k] = run;
 
             System.out.println("k = " + k + " with silhouette of: " + currentScore);

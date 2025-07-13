@@ -20,9 +20,6 @@ public class DataPoint {
         this.length = dna.getDNA().size();
     }
 
-    public DataPoint(String dna){
-        this(DNA.fromString(dna));
-    }
 
     /**
      * Calculates the Distance between two points, by comparing blocks of 4 (for every Nucleotid 1) and counting changes
@@ -131,12 +128,12 @@ public class DataPoint {
     }
 
     public static String asString(int[] v){
-        String res = "[";
+        StringBuilder res = new StringBuilder("[");
         for (int x: v){
-            res += x;
-            res += ", ";
+            res.append(x);
+            res.append(", ");
         }
-        return res += "]";
+        return res.append("]").toString();
     }
 
     public static Boolean compare(int[] v1, int[] v2){

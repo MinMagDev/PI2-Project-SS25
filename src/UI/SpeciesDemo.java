@@ -209,16 +209,12 @@ public class SpeciesDemo extends Demo{
                 }
 
                 if(isIrradiating.get()) {
-                    getRenderer().getEntitiesInCircle(relativeClickPosition, (double) IRRADIATION_RANGE / 2).forEach((particle) -> {
-                        particle.irradiate();
-                    });
+                    getRenderer().getEntitiesInCircle(relativeClickPosition, (double) IRRADIATION_RANGE / 2).forEach((particle) -> particle.irradiate());
 
                 } else {
                     SpeciesParticle particle = getRenderer().getEntityAt(relativeClickPosition);
                     if(particle != null) {
-                        new EditorWindow(particle, (dna) -> {
-                            repaint.get().run();
-                        });
+                        new EditorWindow(particle, (dna) -> repaint.get().run());
                     }
                 }
 
@@ -232,11 +228,9 @@ public class SpeciesDemo extends Demo{
     private Drawable createDemo(int species, int specimens){
 
         ArrayList<SpeciesParticle> particles = new ArrayList<>();
-        ArrayList<Species> speciesList = new ArrayList<>();
 
         for(int i = 0; i < species; i++) {
             Species s = new Species(new DNA(), ecosystem);
-            speciesList.add(s);
             particles = new ArrayList<>(Stream.concat(particles.stream(), Arrays.stream(SpeciesParticle.makeParticles(specimens, s, World.DEFAULT_WIDTH, World.DEFAULT_HEIGHT))).toList());
         }
 
@@ -244,11 +238,7 @@ public class SpeciesDemo extends Demo{
 
         this.renderer = new SocialParticleRenderer<SpeciesParticle>(particles);
 
-        zap.set(() -> {
-            renderer.forEachEntity(particle -> {
-                particle.addUnlimitedForce(Vector2D.random().mul(ZAP_FACTOR));
-            });
-        });
+        zap.set(() -> renderer.forEachEntity(particle -> particle.addUnlimitedForce(Vector2D.random().mul(ZAP_FACTOR))));
 
         cluster.set(() -> {
             ecosystem.updateSpecies(renderer.getParticles());

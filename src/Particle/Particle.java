@@ -1,10 +1,6 @@
 package Particle;
 import World.Collider;
 
-import java.util.LinkedList;
-import java.util.List;
-
-
 /**
  * handles the physics part of a particle
  */
