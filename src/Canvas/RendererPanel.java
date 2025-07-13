@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * a JPanel for showing animated content
+ */
+
 public class RendererPanel extends JPanel implements ActionListener {
     /**
      * the timer updates the JPanel periodically

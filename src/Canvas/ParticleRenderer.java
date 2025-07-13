@@ -11,7 +11,10 @@ import java.util.function.Consumer;
 import Particle.Entity;
 
 
-
+/**
+ * renders particles wooow
+ * @param <T> the class that represents the particles
+ */
 public class ParticleRenderer<T extends DrawableParticle & Entity> implements Drawable, EntityManager<T> {
 
     public List<T> getParticles() {
@@ -37,7 +40,7 @@ public class ParticleRenderer<T extends DrawableParticle & Entity> implements Dr
         for (final DrawableParticle particle : particles) {
             g.setColor(particle.getColor());
             final int particleDiameter = particle.getRadiusForDrawing() * 2;
-            g.fillOval(particle.getXForDrawing() - particle.getRadiusForDrawing(), particle.getYForDrawing() - particle.getRadiusForDrawing(), particleDiameter, particleDiameter);
+            g.fillOval(particle.getXForDrawing(), particle.getYForDrawing(), particleDiameter, particleDiameter);
         }
     }
 
@@ -56,14 +59,6 @@ public class ParticleRenderer<T extends DrawableParticle & Entity> implements Dr
     public void removeEntity(T e) {
         particles.remove(e);
     }
-
-    @Override
-    public void massRemoveEntities(List<T> es) {
-        for (T e: es){
-            removeEntity(e);
-        }
-    }
-
 
     @Override
     public void forEachEntity(Consumer<T> action) {

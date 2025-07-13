@@ -30,12 +30,12 @@ public class SpeciesParticle extends Particle implements SpeciesSocialEntity, Dr
 
     @Override
     public int getXForDrawing() {
-        return (int) position.getX();
+        return (int) position.getX() - getRadiusForDrawing();
     }
 
     @Override
     public int getYForDrawing() {
-        return (int) position.getY();
+        return (int) position.getY() - getRadiusForDrawing();
     }
 
     @Override

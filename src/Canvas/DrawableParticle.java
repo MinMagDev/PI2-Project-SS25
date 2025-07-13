@@ -1,7 +1,5 @@
 package Canvas;
 
-import Species.SpeciesParticle;
-
 import java.awt.*;
 
 public interface DrawableParticle {
