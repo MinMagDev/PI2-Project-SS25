@@ -15,7 +15,7 @@ public class RendererPanel extends JPanel implements ActionListener {
      */
     private final Timer timer;
 
-    private Drawable drawable;
+    private final Drawable drawable;
 
     public RendererPanel(int width, int height, Drawable drawable) {
         this.drawable = drawable;

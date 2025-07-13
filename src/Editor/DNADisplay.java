@@ -130,9 +130,7 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
 
         JButton markButton = new JButton("Mark");
         buttonPanel.add(markButton);
-        markButton.addActionListener(e -> this.confirmEditHandler.set(confirmEditHandler.andThen((_dna) -> {
-            markAction.run();
-        })));
+        markButton.addActionListener(e -> this.confirmEditHandler.set(confirmEditHandler.andThen((_dna) -> markAction.run())));
 
         JButton confirmButton = new JButton("Confirm");
         confirmButton.addActionListener(e -> this.confirmEditHandler.get().accept(currentDNA));
