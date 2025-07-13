@@ -43,11 +43,11 @@ public interface SpeciesSocialEntity extends SocialEntity<SpeciesSocialEntity> {
                 break;
             case REPEL:
                 toInteractee.normalize();
-                toInteractee.mul(-1 * getDNA().getSpeed() * 1/distanceToInteractee);
+                toInteractee.mul(-1 * getSpeed() * 1/distanceToInteractee);
                 this.addForce(toInteractee);
                 break;
             case SPRING:
-                final double force = (distanceToInteractee - getDNA().getSpeed()) * SPRING_FORCE;
+                final double force = (distanceToInteractee - getSpeed()) * SPRING_FORCE;
                 toInteractee.mul(force/distanceToInteractee);
                 this.addForce(toInteractee.mul(-1));
                 break;

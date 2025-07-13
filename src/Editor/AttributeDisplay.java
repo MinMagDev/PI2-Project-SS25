@@ -6,6 +6,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
 
+/**
+ * the table view for the attributes of a particle
+ */
 public class AttributeDisplay extends JPanel {
     private final AttributeDNASite[] attributes;
     private final DefaultTableModel model;
@@ -52,6 +55,10 @@ public class AttributeDisplay extends JPanel {
 
 
     }
+
+    /**
+     * updates the table view
+     */
 
     public void updateTable() {
         Object[][] data = new Object[attributes.length][];

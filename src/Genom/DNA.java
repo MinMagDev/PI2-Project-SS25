@@ -59,7 +59,7 @@ public class DNA {
 
     private final double ZERO_SPEED_THREASHOLD = 0.3d;
 
-    private InteractionType[] interactions;
+    private InteractionType[] interactions = new InteractionType[9];
 
 
     public DNA() {
@@ -157,7 +157,11 @@ public class DNA {
     }
 
     public InteractionType getInteractionWith(Species other) {
-        return getInteraction(other.getId());
+        final int speciesID = other.getId();
+        if(interactions[speciesID] == null){
+            interactions[speciesID] = getInteraction(speciesID);
+        }
+        return interactions[speciesID];
     }
 
   /**

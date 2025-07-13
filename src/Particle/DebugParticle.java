@@ -34,6 +34,11 @@ public class DebugParticle extends Particle implements DrawableParticle, SocialE
     }
 
     @Override
+    public double getSpeed() {
+        return 1;
+    }
+
+    @Override
     public void setPosition(Vector2D position) {
         this.position = position;
     }

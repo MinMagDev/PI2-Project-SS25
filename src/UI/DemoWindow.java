@@ -23,7 +23,7 @@ public class DemoWindow extends JFrame {
             }
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setContentPane(new DemoPanel());
-            frame.setSize(World.DEFAULT_WIDTH + 400, World.DEFAULT_HEIGHT +75);
+            frame.setSize(World.DEFAULT_WIDTH + DemoPanel.SETTINGS_PANEL_WIDTH, World.DEFAULT_HEIGHT);
             frame.setVisible(true);
         });
     }

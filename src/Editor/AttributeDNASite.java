@@ -1,10 +1,11 @@
 package Editor;
 
-import Genom.DNA;
-import UI.Reference;
-
 import java.awt.*;
 import java.util.function.Supplier;
+
+/**
+ * a class representing a dna site which changes a particles attribute
+ */
 
 public class AttributeDNASite extends InterestingDNASite {
     private final Supplier<String>  attribute;
