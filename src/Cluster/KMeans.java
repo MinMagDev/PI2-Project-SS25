@@ -1,12 +1,6 @@
 package Cluster;
 
-import Genom.DNA;
 import Species.Species;
-import Species.SpeciesParticle;
-import Species.Ecosystem;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class KMeans<S extends Specimen> {
@@ -55,8 +49,8 @@ public class KMeans<S extends Specimen> {
             }
 
             //Clustering
-            Run run = run(genPoints, centroids);;
-            currentScore = Silhouette.meanSilhouette((GenPoint[]) run.dataPoints, (ClusterCentroid[]) run.centroids);
+            Run run = run(genPoints, centroids);
+            currentScore = Silhouette.meanSilhouette(run.dataPoints, run.centroids);
             allRuns[k] = run;
 
             System.out.println("k = " + k + " with silhouette of: " + currentScore);
@@ -70,18 +64,6 @@ public class KMeans<S extends Specimen> {
         return allRuns[bestK];
     }
 
-
-    public static Run run(GenPoint[] genPoints, ClusterCentroid[] centroids, int k){
-        ClusterCentroid[] newCentroids = new ClusterCentroid[k];
-        for (int i = 0; i<centroids.length; i++){
-            newCentroids[i] = centroids[i];
-        }
-        for (int i = 0; i < k-centroids.length; i++){
-            int pos = centroids.length + i;
-            newCentroids[pos] = new ClusterCentroid(new DNA(), genPoints.length, pos);
-        }
-        return run(genPoints,newCentroids);
-    }
 
     public static Run run(GenPoint[] genPoints, ClusterCentroid[] centroids){
         int i = 0;
@@ -118,7 +100,7 @@ public class KMeans<S extends Specimen> {
         for (ClusterCentroid centroid: centroids) {
             if (!centroid.updatePosition()) changed = false;
         }
-        //System.out.println("Changed? :" + changed);
+
         return changed;
     }
 

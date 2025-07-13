@@ -1,11 +1,9 @@
 package Social;
 
-import Genom.InteractionType;
 import Particle.Entity;
 import Particle.Vector2D;
-import Species.Species;
 
-public interface SocialEntity<Interactee extends SocialEntity> extends Entity {
+public interface SocialEntity<Interactee extends SocialEntity<Interactee>> extends Entity {
 
     double getSpeed();
 

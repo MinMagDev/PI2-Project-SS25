@@ -1,11 +1,8 @@
 package Canvas;
 
 import LifeAndDeath.EntityManager;
-import Particle.DebugParticle;
-import World.World;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import Particle.Entity;
@@ -21,19 +18,13 @@ public class ParticleRenderer<T extends DrawableParticle & Entity> implements Dr
         return particles;
     }
 
-    private List<T> particles;
+    private final List<T> particles;
 
     public ParticleRenderer(List<T> particles) {
         this.particles = particles;
     }
 
-    /**
-     *  creates an example with 10 particles in a 400x400 area
-     * @return the example renderer
-     */
-    public static ParticleRenderer createExample(){
-        return new ParticleRenderer(Arrays.stream(DebugParticle.createExampleArray(10, World.DEFAULT_WIDTH, World.DEFAULT_HEIGHT)).toList());
-    }
+
 
     public void draw(Graphics g) {
         //Nicht das schönste aber funktioniert

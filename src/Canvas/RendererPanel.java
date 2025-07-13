@@ -13,9 +13,9 @@ public class RendererPanel extends JPanel implements ActionListener {
     /**
      * the timer updates the JPanel periodically
      */
-    private Timer timer;
+    private final Timer timer;
 
-    private Drawable drawable;
+    private final Drawable drawable;
 
     public RendererPanel(int width, int height, Drawable drawable) {
         this.drawable = drawable;
@@ -35,10 +35,6 @@ public class RendererPanel extends JPanel implements ActionListener {
         repaint();
     }
 
-    public void setDrawable(Drawable drawable) {
-        this.drawable = drawable;
-        repaint();
-    }
 
     public void pause(){
         timer.stop();

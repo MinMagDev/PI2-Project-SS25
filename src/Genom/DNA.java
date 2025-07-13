@@ -11,7 +11,9 @@ import static java.util.Map.entry;
 
 
 public class DNA {
-    private List<Nucleotid> dna;
+
+    private final List<Nucleotide> dna;
+
     /**
      * the index of the first nucleotide relevant for speed value calculation
      */
@@ -53,45 +55,45 @@ public class DNA {
     public static final int INTERACTION_TYPES_POSITION = 24;
 
 
-    private final int MAX_SPEED = 10;
-    private final int MAX_FIELD_RADIUS = 40;
-    private final double MAX_HUNGER = 0.005;
+    private static final int MAX_SPEED = 10;
+    private static final int MAX_FIELD_RADIUS = 40;
+    private static final double MAX_HUNGER = 0.005;
 
-    private final double ZERO_SPEED_THREASHOLD = 0.3d;
+    private static final double ZERO_SPEED_THRESHOLD = 0.3d;
 
-    private InteractionType[] interactions = new InteractionType[9];
+    private final InteractionType[] interactions = new InteractionType[9];
 
 
     public DNA() {
         dna = generateRandomDNA(128);
     }
 
-    public DNA(List<Nucleotid> dna) {
+    public DNA(List<Nucleotide> dna) {
         this.dna = dna;
     }
 
 
-    public DNA(Nucleotid n) {
+    public DNA(Nucleotide n) {
         dna = new ArrayList<>();
         for (int i = 0; i < 128; i ++){
             dna.add(n);
         }
     }
 
-    public static final Map<Character, Nucleotid> nucleotideDictionary = Map.ofEntries(
-            entry('a', Nucleotid.A),
-            entry('c', Nucleotid.C),
-            entry('g', Nucleotid.G),
-            entry('t', Nucleotid.T),
-            entry('A', Nucleotid.A),
-            entry('C', Nucleotid.C),
-            entry('G', Nucleotid.G),
-            entry('T', Nucleotid.T)
+    public static final Map<Character, Nucleotide> nucleotideDictionary = Map.ofEntries(
+            entry('a', Nucleotide.A),
+            entry('c', Nucleotide.C),
+            entry('g', Nucleotide.G),
+            entry('t', Nucleotide.T),
+            entry('A', Nucleotide.A),
+            entry('C', Nucleotide.C),
+            entry('G', Nucleotide.G),
+            entry('T', Nucleotide.T)
     );
 
     public static DNA fromString(String dna) {
         dna = dna.trim();
-        List<Nucleotid> nucleotides = new ArrayList<>();
+        List<Nucleotide> nucleotides = new ArrayList<>();
 
         for(char c: dna.toCharArray()) {
             if(!nucleotideDictionary.containsKey(c)) {
@@ -110,10 +112,10 @@ public class DNA {
      * @param size The length of the strang
      * @return The new DNA-Strang
      */
-    public static List<Nucleotid> generateRandomDNA(int size) {
-        List<Nucleotid> result = new LinkedList<Nucleotid>();
+    public static List<Nucleotide> generateRandomDNA(int size) {
+        List<Nucleotide> result = new LinkedList<>();
         Random r = new Random();
-        Nucleotid[] nucVals = Nucleotid.values();
+        Nucleotide[] nucVals = Nucleotide.values();
         for (int i = 0; i < size; i++) {
             int nuc = r.nextInt(4);
             result.add(nucVals[nuc]);
@@ -128,29 +130,26 @@ public class DNA {
     public double getSpeed(){
         double result = getValue(SPEED_DNA_POSITION, SPEED_DNA_LENGTH, MAX_SPEED);
       
-        if (result <= ZERO_SPEED_THREASHOLD) return 0.0d;
+        if (result <= ZERO_SPEED_THRESHOLD) return 0.0d;
         return result/10;
     }
 
     /**
-     * Returns the Radius for the Force Field from the dna
-     * @return forcefield Radius
+     * @return the radius for social interaction
      */
     public double getRadius(){
         return getValue(INTERACTION_RADIUS_DNA_POSITION, INTERACTION_RADIUS_DNA_LENGTH, MAX_FIELD_RADIUS);
     }
 
     /**
-     * Returns how fast hunger accumulates
-     * @return
+     * @return how fast hunger accumulates
      */
     public double getHunger(){
         return getValue(HUNGER_DNA_POSITION, 6, MAX_HUNGER);
     }
 
     /**
-     * Returns the probability of reproductin
-     * @return
+     * @return the probability of reproduction
      */
     public double getReproductionProbability(){
         return getValue(REPRODUCTION_PROBABILITY_DNA_POSITION,6,1);
@@ -194,11 +193,11 @@ public class DNA {
      */
     public InteractionType getInteraction(int species){
 
-        if (dna.size() == 0) {
+        if (dna.isEmpty()) {
             System.out.println("DNA SIZE IS ZERO, from DNA: " + this);
             return InteractionType.NEUTRAL;
         }
-        Nucleotid nuc = dna.get((INTERACTION_TYPES_POSITION + species) % dna.size());
+        Nucleotide nuc = dna.get((INTERACTION_TYPES_POSITION + species) % dna.size());
       
         switch (nuc) {
             case A -> {
@@ -223,7 +222,7 @@ public class DNA {
      */
     public Color getColor(){
         int dnaLength = dna.size();
-        int parts = (int)dnaLength/3;
+        int parts = dnaLength/3;
         float h = getIntValue(0,parts);
         float s = getIntValue(parts, 2*parts);
         float b = getIntValue(2*parts,dnaLength);
@@ -243,13 +242,13 @@ public class DNA {
      * @param amount the expected amount of mutations
      * @return the newly mutated List
      */
-    public List<Nucleotid> mutate(int amount) {
-        if (dna.size() == 0) return new DNA().getDNA();
-        double probabilty = (double) amount/dna.size();
-        return mutate(probabilty);
+    public List<Nucleotide> mutate(int amount) {
+        if (dna.isEmpty()) return new DNA().getDNA();
+        double probability = (double) amount/dna.size();
+        return mutate(probability);
     }
 
-    public List<Nucleotid> getDNA() {
+    public List<Nucleotide> getDNA() {
         return dna;
     }
 
@@ -257,13 +256,13 @@ public class DNA {
      * Mutates the DNA with a given Probability
      * @param probability the probabilty of one Nucleotid to mutate
      */
-    public List<Nucleotid> mutate(double probability){
-        Nucleotid[] nucVals = Nucleotid.values();
-        List<Nucleotid> newDNA = new LinkedList<Nucleotid>();
+    public List<Nucleotide> mutate(double probability){
+        Nucleotide[] nucVals = Nucleotide.values();
+        List<Nucleotide> newDNA = new LinkedList<>();
         Random r = new Random();
-        for (Nucleotid nucleotid : dna) {
+        for (Nucleotide nucleotide : dna) {
             if (r.nextDouble() >= probability) {
-                newDNA.add(nucleotid);
+                newDNA.add(nucleotide);
             } else {
                 int nuc = r.nextInt(nucVals.length);
                 newDNA.add(nucVals[nuc]);
@@ -278,15 +277,11 @@ public class DNA {
      */
     @Override
     public String toString() {
-        String result = "";
-        for (Nucleotid nuc: dna){
-            result += nuc;
+        StringBuilder result = new StringBuilder();
+        for (Nucleotide nuc: dna){
+            result.append(nuc);
         }
-        return result;
-    }
-
-    public void print(){
-        System.out.println(this);
+        return result.toString();
     }
 
     public DNA mutated(int amount) {

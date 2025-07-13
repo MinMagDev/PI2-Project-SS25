@@ -12,22 +12,19 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+/**
+ * the main JPanel of the DNA editor, does a lot
+ */
 
 public class DNADisplay extends JPanel implements KeyListener, MouseListener {
-    private InterestingDNASite[] interestingDNASites;
+    private final InterestingDNASite[] interestingDNASites;
 
     private static final SimpleAttributeSet standardAttributeSet = new SimpleAttributeSet();
     private static final Font DNAFont = new Font(Font.SANS_SERIF, Font.PLAIN, 25);
-
-    private final Ecosystem ecosystem;
-    private Species species;
-
 
 
     private final JTextPane textPane;
@@ -44,15 +41,9 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
     private final Reference<Consumer<DNA>> confirmEditHandler = new Reference<>(null);
     private DNA currentDNA;
 
-    public DNADisplay(Species species, DNA dna, Consumer<DNA> confirmEditHandler) {
-        this(species, dna, confirmEditHandler, () -> {});
-    }
-
 
     public DNADisplay(Species species, DNA dna, Consumer<DNA> confirmEditHandler, Runnable markAction) {
         this.confirmEditHandler.set(confirmEditHandler);
-
-        this.species = species;
 
         if (dna == null) {
             dna = species.getDNA();
@@ -61,7 +52,7 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
         currentDNA = dna;
 
 
-        this.ecosystem = species.getEcosystem();
+        Ecosystem ecosystem = species.getEcosystem();
 
         var fixedSites = new AttributeDNASite[]{
                 new AttributeDNASite("speed", Color.CYAN,  DNA.SPEED_DNA_POSITION, DNA.SPEED_DNA_LENGTH, () -> String.valueOf(currentDNA.getSpeed())),
@@ -71,7 +62,7 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
         };
 
         var fixedSitesStream = Arrays.stream(fixedSites);
-        var interactionSites = SpeciesInteractionNucleotidePosition.fromEcosystem(ecosystem);
+        var interactionSites = SpeciesInteractionDNASite.fromEcosystem(ecosystem);
         var interactionSitesStream = interactionSites.stream();
 
         interestingDNASites = Stream.concat(fixedSitesStream, interactionSitesStream).toArray(InterestingDNASite[]::new);
@@ -104,7 +95,7 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
                 doc.insertString(doc.getLength(), String.valueOf(c), getAttributeSetFor(i));
             }
         } catch (BadLocationException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         textPane.addMouseListener(this);
         textPane.addKeyListener(this);
@@ -139,16 +130,10 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
 
         JButton markButton = new JButton("Mark");
         buttonPanel.add(markButton);
-        markButton.addActionListener(e -> {
-            this.confirmEditHandler.set(confirmEditHandler.andThen((_dna) -> {
-                markAction.run();
-            }));
-        });
+        markButton.addActionListener(e -> this.confirmEditHandler.set(confirmEditHandler.andThen((_dna) -> markAction.run())));
 
         JButton confirmButton = new JButton("Confirm");
-        confirmButton.addActionListener(e -> {
-            this.confirmEditHandler.get().accept(currentDNA);
-        });
+        confirmButton.addActionListener(e -> this.confirmEditHandler.get().accept(currentDNA));
         buttonPanel.add(confirmButton);
         return buttonPanel;
     }
@@ -185,7 +170,7 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
             doc.insertString(pos, String.valueOf(newChar).toUpperCase(), getAttributeSetFor(pos));
         }
         catch (BadLocationException ex) {
-            ex.printStackTrace();
+           throw new RuntimeException(ex);
         }
         text = text.substring(0, pos) + newChar + text.substring(pos + 1);
     }
@@ -225,7 +210,6 @@ public class DNADisplay extends JPanel implements KeyListener, MouseListener {
         }
         int pos = textPane.viewToModel2D(e.getPoint());
         if (pos >= 0 && pos < text.length()) {
-            char clickedChar = text.charAt(pos);
             lastClickedPos = pos;
             editable = true;
 

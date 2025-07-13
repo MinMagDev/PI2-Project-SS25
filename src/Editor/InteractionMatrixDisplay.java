@@ -10,6 +10,10 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.Arrays;
 
+/**
+ * the table showing this particles interaction with other species
+ */
+
 public class InteractionMatrixDisplay extends JPanel {
     Object[][] interactionMatrix;
     Ecosystem ecosystem;
@@ -69,9 +73,7 @@ public class InteractionMatrixDisplay extends JPanel {
     private void updateTable(DNA dna) {
         Object[] header = createTableHeader(ecosystem.getSpeciesCount());
         this.interactionMatrix = new Object[1][header.length];
-        ecosystem.forEachSpecies(species -> {
-            interactionMatrix[0][species.getId()] = dna.getInteraction(species.getId()).toString();
-        });
+        ecosystem.forEachSpecies(species -> interactionMatrix[0][species.getId()] = dna.getInteraction(species.getId()).toString());
 
         model.setDataVector(interactionMatrix, header);
     }

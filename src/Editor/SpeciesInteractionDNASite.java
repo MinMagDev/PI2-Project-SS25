@@ -9,17 +9,21 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpeciesInteractionNucleotidePosition extends InterestingDNASite {
+/**
+ * represents a DNA position changing how this particle interacts with other particles
+ */
 
-    public SpeciesInteractionNucleotidePosition(int speciesID, Color color) {
+public class SpeciesInteractionDNASite extends InterestingDNASite {
+
+    public SpeciesInteractionDNASite(int speciesID, Color color) {
         super("interaction", color, DNA.INTERACTION_TYPES_POSITION + speciesID, 1);
     }
 
-    public static List<SpeciesInteractionNucleotidePosition> fromEcosystem(Ecosystem ecosystem) {
-        List<SpeciesInteractionNucleotidePosition> sites = new ArrayList<>();
-        ecosystem.forEachSpecies(species -> {
-            sites.add(new SpeciesInteractionNucleotidePosition(species.getId(), species.getColor()));
-        });
+    public static List<SpeciesInteractionDNASite> fromEcosystem(Ecosystem ecosystem) {
+        List<SpeciesInteractionDNASite> sites = new ArrayList<>();
+
+        ecosystem.forEachSpecies(species -> sites.add(new SpeciesInteractionDNASite(species.getId(), species.getColor())));
+
         return sites;
     }
 

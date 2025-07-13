@@ -1,6 +1,6 @@
 package Genom;
 
-public enum Nucleotid {
+public enum Nucleotide {
     A,
     C,
     G,

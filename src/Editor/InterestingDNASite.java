@@ -4,10 +4,14 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import java.awt.*;
 
+/**
+ * represents a colored DNA position in the editor
+ */
 public class InterestingDNASite {
-    private String name;
-    private Color color;
-    private int start, length;
+    private final String name;
+    private final Color color;
+    private final int start;
+    private final int length;
 
     public InterestingDNASite(String name, Color color, int start, int length) {
         this.name = name;

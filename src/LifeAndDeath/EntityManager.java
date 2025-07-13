@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * an interface for managing a list of particles
+ * @param <T>
+ */
 public interface EntityManager<T extends Entity> {
     /**
      * Adds an Entity to the List of entities, i.e. particles
@@ -28,7 +32,6 @@ public interface EntityManager<T extends Entity> {
 
 
         forEachEntity((entity) -> {
-            Vector2D v = entity.getPosition();
             if(entity.getPosition().distanceTo(pos) <= entity.getSize()){
                 entities.add(entity);
             }
