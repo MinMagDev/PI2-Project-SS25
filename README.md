@@ -1,4 +1,4 @@
-# Cluster Simulation
+# Evolving Clusters
 A particle Simulation inspired by the [Ventrella Cluster](https://www.ventrella.com/Clusters/intro.html) Algorithm.
 With added functionality for dying, reproduction and mutation.
 
@@ -9,9 +9,13 @@ Starting the **main** Method in the DemoWindow class, will open up a
 clear window with some settings on the side. 
 
 The buttons on top are used while the simulation is running:
-- *Lightning*: "Zap". Applies a random force to all particle
-- *Pause*: Pauses the Simulation for viewing and editing the particle
-- *Cluster*: Starts a KMeans Algorithm with each particle and species, may create a new species from the mutated specimens
+- ⚡: "Zap". Applies a random force to all particles.
+- ⏯: Pauses the simulation for viewing and editing the particle
+- ☢ - Irradiate: Your cursor becomes a big red circle, and when you click, evey particle covered will mutate a lot. To return to a normal cursor, click the button again.
+
+####
+
+- *Recalculate species*: Starts a KMeans Algorithm with each particle and species, may create a new species from the mutated specimens
 
 The sliders below the buttons are used for changing the start parameters
 - *Max Speed*: Sets the maximum speed at which the particle can move
@@ -38,13 +42,14 @@ The first 4 groups of 6 Nucleotides are the stats of the Particle:
 The Nucleotide sets how much is added to value by increasing amounts: A C G T. Whilst A adds nothing, T adds the most.
 
 All Positions after that sets how the particle interacts to other particles:
-- *A*: Gets **repeled** by that type
+- *A*: Gets **repelled** by that type
 - *C*: Is **neutral** towards that type
 - *G*: Trys to create a **spring** to that type (Always stays at a specific distance)
 - *T*: Gets **attracted** by that species, and if not of the same, trys to eat it.
-- 
 
-Clicking on a Nucleotide and the pressing either A,C,G,T changes the highlighted Nucleotid to the chosen.
+
+Clicking on a Nucleotide and the pressing either A,C,G,T changes the highlighted nucleotide to the chosen.
+Pressing escape unselects the nucleotide.
 
 
 
